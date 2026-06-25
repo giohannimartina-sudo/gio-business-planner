@@ -70,11 +70,11 @@ th{background:var(--geel)}
 <div id="loginScreen" class="loginScreen">
   <div class="loginBox">
     <h1>GIO Business Planner</h1>
-    <p>Testomgeving</p>
+    <p>PRO LIVE werkversie</p>
     <label>Gebruiker</label><select id="loginUser"><option value="GIOMAR82">GIOMAR82 - Werkvloer</option><option value="SAMMAR88">SAMMAR88 - Administratie</option></select>
     <label>Pincode test</label><input id="loginPin" type="password" placeholder="1234">
     <button class="btn" onclick="login()">Inloggen</button>
-    <p style="font-size:13px;opacity:.75">Test pincode: 1234</p>
+    <p style="font-size:13px;opacity:.75">GIO Klusbaas live werkversie</p>
   </div>
 </div>
 
@@ -96,6 +96,10 @@ th{background:var(--geel)}
 </aside>
 
 <main>
+<div id="UPDATE1_KLANTEN_PRO" class="card" style="border-left:7px solid #f4c400;background:#fffbe6">
+  <h2>✅ Update 1 actief: Klanten PRO</h2>
+  <p>Toegevoegd: Privé/Zakelijk, contactpersoon, factuur e-mail, KvK, BTW en klant wijzigen.</p>
+</div>
 <div class="userbar">
   <div><b>Ingelogd als: <span id="currentUserLabel">-</span></b><br><small>Laatste update: <span id="lastSync">-</span></small></div>
   <div><button class="btn2" onclick="refreshData()">🔄 Verversen</button><button class="btn2" onclick="logout()">Uitloggen</button></div>
@@ -128,12 +132,17 @@ th{background:var(--geel)}
  <div class="card">
   <h2>👥 Klant toevoegen</h2>
   <div class="row">
+   <div><label>Type klant</label><select id="klantType"><option>Privé</option><option>Zakelijk</option></select></div>
    <div><label>Naam</label><input id="klantNaam"></div>
+   <div><label>Contactpersoon</label><input id="klantContact"></div>
    <div><label>Adres</label><input id="klantAdres"></div>
    <div><label>Postcode</label><input id="klantPostcode"></div>
    <div><label>Plaats</label><input id="klantPlaats"></div>
    <div><label>Telefoon</label><input id="klantTelefoon"></div>
    <div><label>E-mail</label><input id="klantEmail"></div>
+   <div><label>Factuur e-mail</label><input id="klantFactuurEmail"></div>
+   <div><label>KvK</label><input id="klantKvk"></div>
+   <div><label>BTW nummer</label><input id="klantBtw"></div>
   </div>
   <label>Opmerking</label><textarea id="klantOpmerking"></textarea>
   <button class="btn" onclick="addKlant()">+ Klant opslaan</button>
@@ -141,7 +150,7 @@ th{background:var(--geel)}
  <div class="card">
   <h2>Klantenbestand</h2>
   <table>
-    <thead><tr><th>Klantnr.</th><th>Naam</th><th>Adres</th><th>Plaats</th><th>Telefoon</th><th>E-mail</th><th></th></tr></thead>
+    <thead><tr><th>Klantnr.</th><th>Type</th><th>Naam</th><th>Contact</th><th>Plaats</th><th>Telefoon</th><th>E-mail</th><th>KvK/BTW</th><th>Wijzig</th><th></th></tr></thead>
     <tbody id="klantenList"></tbody>
   </table>
  </div>
@@ -647,6 +656,79 @@ function resetAlles(){if(confirm('Alle testdata verwijderen?')){localStorage.rem
 window.addEventListener("storage",e=>{if(e.key==="gioTestBetaald"||e.key==="gioPlannerLastUpdate")refreshData()});
 document.addEventListener('DOMContentLoaded',()=>{load();berekenUren();editUrenModal.addEventListener('click',e=>{if(e.target===editUrenModal)closeUrenEdit()})});
 
+function addKlant(){
+ if(!data.klanten)data.klanten=[];
+ let naam=klantNaam.value.trim();
+ if(!naam){alert('Vul een klantnaam in');return;}
+ data.klanten.push({
+  klantNr:nextKlantNumber(),
+  type:(document.getElementById('klantType')?klantType.value:'Privé'),
+  naam,
+  contact:(document.getElementById('klantContact')?klantContact.value:''),
+  adres:klantAdres.value,
+  postcode:klantPostcode.value,
+  plaats:klantPlaats.value,
+  telefoon:klantTelefoon.value,
+  email:klantEmail.value,
+  factuurEmail:(document.getElementById('klantFactuurEmail')?klantFactuurEmail.value:''),
+  kvk:(document.getElementById('klantKvk')?klantKvk.value:''),
+  btw:(document.getElementById('klantBtw')?klantBtw.value:''),
+  opmerking:klantOpmerking.value,
+  aangemaaktOp:new Date().toLocaleString('nl-NL')
+ });
+ ['klantNaam','klantContact','klantAdres','klantPostcode','klantPlaats','klantTelefoon','klantEmail','klantFactuurEmail','klantKvk','klantBtw','klantOpmerking'].forEach(id=>{let el=document.getElementById(id);if(el)el.value='';});
+ if(document.getElementById('klantType'))klantType.value='Privé';
+ save(); render();
+}
+function renderKlanten(){
+ if(!document.getElementById('klantenList'))return;
+ if(!data.klanten)data.klanten=[];
+ klantenDatalist.innerHTML=data.klanten.map(k=>`<option value="${k.naam}">`).join('');
+ klantenList.innerHTML=data.klanten.map((k,i)=>`<tr>
+ <td>${k.klantNr||'-'}</td>
+ <td><span class="status-pill">${k.type||'Privé'}</span></td>
+ <td><b>${k.naam||'-'}</b>${k.gewijzigdOp?`<br><small>Gewijzigd: ${k.gewijzigdOp}</small>`:''}</td>
+ <td>${k.contact||'-'}</td>
+ <td>${k.plaats||'-'}<br><small>${k.adres||''} ${k.postcode||''}</small></td>
+ <td>${k.telefoon||'-'}</td>
+ <td>${k.email||'-'}${k.factuurEmail?`<br><small>Factuur: ${k.factuurEmail}</small>`:''}</td>
+ <td>${k.kvk?`KvK: ${k.kvk}`:'-'}${k.btw?`<br>BTW: ${k.btw}`:''}</td>
+ <td><button class="editBtn" onclick="openKlantEdit(${i})">✏️</button></td>
+ <td><button class="del" onclick="del('klanten',${i})">🗑️</button></td>
+ </tr>`).join('');
+}
+function openKlantEdit(i){
+ let k=data.klanten[i]; if(!k)return;
+ editKlantIndex.value=i;
+ editKlantNr.value=k.klantNr||'';
+ editKlantType.value=k.type||'Privé';
+ editKlantNaam.value=k.naam||'';
+ editKlantContact.value=k.contact||'';
+ editKlantAdres.value=k.adres||'';
+ editKlantPostcode.value=k.postcode||'';
+ editKlantPlaats.value=k.plaats||'';
+ editKlantTelefoon.value=k.telefoon||'';
+ editKlantEmail.value=k.email||'';
+ editKlantFactuurEmail.value=k.factuurEmail||'';
+ editKlantKvk.value=k.kvk||'';
+ editKlantBtw.value=k.btw||'';
+ editKlantOpmerking.value=k.opmerking||'';
+ editKlantModal.style.display='flex';
+}
+function closeKlantEdit(){editKlantModal.style.display='none'}
+function saveKlantEdit(){
+ let i=parseInt(editKlantIndex.value,10); if(!data.klanten[i])return;
+ let oldName=data.klanten[i].naam;
+ data.klanten[i]={...data.klanten[i],klantNr:editKlantNr.value,type:editKlantType.value,naam:editKlantNaam.value,contact:editKlantContact.value,adres:editKlantAdres.value,postcode:editKlantPostcode.value,plaats:editKlantPlaats.value,telefoon:editKlantTelefoon.value,email:editKlantEmail.value,factuurEmail:editKlantFactuurEmail.value,kvk:editKlantKvk.value,btw:editKlantBtw.value,opmerking:editKlantOpmerking.value,gewijzigdOp:new Date().toLocaleString('nl-NL')};
+ if(oldName && oldName!==editKlantNaam.value){
+   data.projecten.forEach(p=>{if(p.klant===oldName)p.klant=editKlantNaam.value});
+   data.planning.forEach(p=>{if(p.klant===oldName)p.klant=editKlantNaam.value});
+   data.uren.forEach(u=>{if(u.klant===oldName)u.klant=editKlantNaam.value});
+ }
+ closeKlantEdit(); save(); render();
+}
+
+
 let gioPwaInstallPrompt=null;
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));
@@ -669,5 +751,30 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 
 </script>
+
+<div id="editKlantModal" class="modalOverlay">
+  <div class="modalBox">
+    <h2>✏️ Klant aanpassen</h2>
+    <input type="hidden" id="editKlantIndex">
+    <div class="row">
+      <div><label>Klantnr.</label><input id="editKlantNr" readonly></div>
+      <div><label>Type klant</label><select id="editKlantType"><option>Privé</option><option>Zakelijk</option></select></div>
+      <div><label>Naam</label><input id="editKlantNaam"></div>
+      <div><label>Contactpersoon</label><input id="editKlantContact"></div>
+      <div><label>Adres</label><input id="editKlantAdres"></div>
+      <div><label>Postcode</label><input id="editKlantPostcode"></div>
+      <div><label>Plaats</label><input id="editKlantPlaats"></div>
+      <div><label>Telefoon</label><input id="editKlantTelefoon"></div>
+      <div><label>E-mail</label><input id="editKlantEmail"></div>
+      <div><label>Factuur e-mail</label><input id="editKlantFactuurEmail"></div>
+      <div><label>KvK</label><input id="editKlantKvk"></div>
+      <div><label>BTW nummer</label><input id="editKlantBtw"></div>
+    </div>
+    <label>Opmerking</label><textarea id="editKlantOpmerking"></textarea>
+    <button class="btn" onclick="saveKlantEdit()">💾 Opslaan</button>
+    <button class="btn2" onclick="closeKlantEdit()">Annuleren</button>
+  </div>
+</div>
+
 </body>
 </html>

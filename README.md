@@ -1,3 +1,3 @@
-GIO Business Planner PRO LIVE PWA
+# GIO Business Planner PRO - Update 1 Klanten
 
-Installeerbaar op Windows en Android.
+Toegevoegd: Privé/Zakelijk, contactpersoon, factuur e-mail, KvK, BTW-nummer, klant wijzigen en PWA.
