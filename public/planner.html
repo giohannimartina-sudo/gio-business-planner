@@ -51,17 +51,30 @@ th{background:var(--geel)}
 .project-paid{background:#d8f5dc!important}
 .project-paid td:nth-child(2){text-decoration:line-through;font-weight:900}
 .paid-badge{color:#2e7d32;font-weight:900}
+
+.installBanner{position:sticky;top:0;z-index:999999;background:#111;color:#fff;border-bottom:4px solid var(--geel);padding:10px 16px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.installBanner b{color:var(--geel)}
+.installBtn{background:var(--geel);color:#000;border:0;border-radius:9px;padding:9px 12px;font-weight:900;cursor:pointer}
 </style>
+
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#f4c400">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="GIO Planner">
 </head>
 <body>
+<div class="installBanner">
+  <div><b>GIO Business Planner PRO</b> — live werkversie voor desktop en telefoon.</div>
+  <button id="installAppBtn" class="installBtn">📲 App installeren</button>
+</div>
 <div id="loginScreen" class="loginScreen">
   <div class="loginBox">
     <h1>GIO Business Planner</h1>
-    <p>PRO LIVE werkversie</p>
+    <p>Testomgeving</p>
     <label>Gebruiker</label><select id="loginUser"><option value="GIOMAR82">GIOMAR82 - Werkvloer</option><option value="SAMMAR88">SAMMAR88 - Administratie</option></select>
     <label>Pincode test</label><input id="loginPin" type="password" placeholder="1234">
     <button class="btn" onclick="login()">Inloggen</button>
-    <p style="font-size:13px;opacity:.75">GIO Klusbaas live werkversie</p>
+    <p style="font-size:13px;opacity:.75">Test pincode: 1234</p>
   </div>
 </div>
 
@@ -83,11 +96,6 @@ th{background:var(--geel)}
 </aside>
 
 <main>
-<div class="card" style="border-left:7px solid #f4c400;background:#fffbe6">
-  <h2>✅ GIO Business Planner PRO LIVE</h2>
-  <p><b>Werk vanaf nu hier.</b> Maak dagelijks een back-up via <b>Export → Back-up maken JSON</b>.</p>
-  <p>Deze versie bevat: dashboard, planning, klanten, projecten, uren, materiaal, uitgaven, vrije dagen, balans, export, projecttotalen, factuurstatus en betaalstatus.</p>
-</div>
 <div class="userbar">
   <div><b>Ingelogd als: <span id="currentUserLabel">-</span></b><br><small>Laatste update: <span id="lastSync">-</span></small></div>
   <div><button class="btn2" onclick="refreshData()">🔄 Verversen</button><button class="btn2" onclick="logout()">Uitloggen</button></div>
@@ -133,7 +141,7 @@ th{background:var(--geel)}
  <div class="card">
   <h2>Klantenbestand</h2>
   <table>
-    <thead><tr><th>Klantnr.</th><th>Naam</th><th>Adres</th><th>Plaats</th><th>Telefoon</th><th>E-mail</th><th>Wijzig</th><th></th></tr></thead>
+    <thead><tr><th>Klantnr.</th><th>Naam</th><th>Adres</th><th>Plaats</th><th>Telefoon</th><th>E-mail</th><th></th></tr></thead>
     <tbody id="klantenList"></tbody>
   </table>
  </div>
@@ -281,7 +289,7 @@ th{background:var(--geel)}
  <div class="card"><h2>Excel uitdraai</h2><p>Download CSV. Deze kun je openen in Excel.</p><button class="btn" onclick="exportCSV()">📥 Exporteren</button><button class="btn2" onclick="resetAlles()">Reset testdata</button></div>
 
  <div class="card">
-  <h2>💾 Back-up / gegevens meenemen</h2><div class="card" style="background:#fff7d1"><b>Veiligheid:</b> er wordt elke minuut automatisch een lokale noodback-up gemaakt. Download daarnaast dagelijks een JSON-back-up.</div>
+  <h2>💾 Back-up / gegevens meenemen</h2>
   <p>Gebruik dit om gegevens van v14 naar deze versie te halen of om later veilig over te zetten.</p>
   <button class="btn" onclick="backupJSON()">💾 Back-up maken JSON</button>
   <label style="margin-top:12px;">Back-up terugzetten</label>
@@ -393,8 +401,6 @@ function renderProjecten(){
  <td><span class="totalKlant">${euro(totaalKlant)}</span></td>
  <td>
   <button class="btn2" onclick="projectDetailSelect.value='${p.naam.replace(/'/g,"\\'")}';renderProjectDetails()">Bekijk</button>
-  <button class="btn2" onclick="printProjectFactuur('${p.naam.replace(/'/g,"\\'")}')">Factuur/PDF</button>
-  <button class="btn2" onclick="printWerkbon('${p.naam.replace(/'/g,"\\'")}')">Werkbon</button>
   <button class="btn2 statusDone" onclick="setProjectStatus(${i},'Werk done')">Werk done</button>
   <button class="btn2 statusInvoice" onclick="setProjectStatus(${i},'Factureren')">Factureren</button>
   <button class="btn2 statusInvoice" onclick="setProjectStatus(${i},'Factuur verzonden')">Factuur verzonden</button>
@@ -525,16 +531,7 @@ function renderKlanten(){
  if(!document.getElementById('klantenList'))return;
  if(!data.klanten)data.klanten=[];
  klantenDatalist.innerHTML=data.klanten.map(k=>`<option value="${k.naam}">`).join('');
- klantenList.innerHTML=data.klanten.map((k,i)=>`<tr>
- <td>${k.klantNr||'-'}</td>
- <td>${k.naam||'-'}${k.gewijzigdOp?`<br><small>Gewijzigd: ${k.gewijzigdOp}</small>`:''}</td>
- <td>${k.adres||'-'} ${k.postcode||''}</td>
- <td>${k.plaats||'-'}</td>
- <td>${k.telefoon||'-'}</td>
- <td>${k.email||'-'}</td>
- <td><button class="editBtn" onclick="openKlantEdit(${i})">✏️</button></td>
- <td><button class="del" onclick="del('klanten',${i})">🗑️</button></td>
- </tr>`).join('');
+ klantenList.innerHTML=data.klanten.map((k,i)=>`<tr><td>${k.klantNr}</td><td>${k.naam}</td><td>${k.adres||'-'} ${k.postcode||''}</td><td>${k.plaats||'-'}</td><td>${k.telefoon||'-'}</td><td>${k.email||'-'}</td><td><button class="del" onclick="del('klanten',${i})">🗑️</button></td></tr>`).join('');
 }
 function projectTotalForStatus(statusList){
  return (data.projecten||[]).filter(p=>statusList.includes(p.status)).reduce((s,p)=>s+projectTotals(p.naam).totaal,0);
@@ -650,71 +647,27 @@ function resetAlles(){if(confirm('Alle testdata verwijderen?')){localStorage.rem
 window.addEventListener("storage",e=>{if(e.key==="gioTestBetaald"||e.key==="gioPlannerLastUpdate")refreshData()});
 document.addEventListener('DOMContentLoaded',()=>{load();berekenUren();editUrenModal.addEventListener('click',e=>{if(e.target===editUrenModal)closeUrenEdit()})});
 
-function openKlantEdit(i){
- let k=data.klanten[i]; if(!k)return;
- editKlantIndex.value=i; editKlantNr.value=k.klantNr||''; editKlantNaam.value=k.naam||'';
- editKlantAdres.value=k.adres||''; editKlantPostcode.value=k.postcode||''; editKlantPlaats.value=k.plaats||'';
- editKlantTelefoon.value=k.telefoon||''; editKlantEmail.value=k.email||''; editKlantOpmerking.value=k.opmerking||'';
- editKlantModal.style.display='flex';
+let gioPwaInstallPrompt=null;
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));
 }
-function closeKlantEdit(){editKlantModal.style.display='none'}
-function saveKlantEdit(){
- let i=parseInt(editKlantIndex.value,10); if(!data.klanten[i])return;
- let oldName=data.klanten[i].naam;
- data.klanten[i]={...data.klanten[i],klantNr:editKlantNr.value,naam:editKlantNaam.value,adres:editKlantAdres.value,postcode:editKlantPostcode.value,plaats:editKlantPlaats.value,telefoon:editKlantTelefoon.value,email:editKlantEmail.value,opmerking:editKlantOpmerking.value,gewijzigdOp:new Date().toLocaleString('nl-NL')};
- if(oldName && oldName!==editKlantNaam.value){
-   data.projecten.forEach(p=>{if(p.klant===oldName)p.klant=editKlantNaam.value});
-   data.planning.forEach(p=>{if(p.klant===oldName)p.klant=editKlantNaam.value});
-   data.uren.forEach(u=>{if(u.klant===oldName)u.klant=editKlantNaam.value});
- }
- closeKlantEdit(); save(); render();
-}
-function printProjectFactuur(naam){
- let p=(data.projecten||[]).find(x=>x.naam===naam)||{};
- let t=projectTotals(naam);
- let win=window.open('','_blank');
- win.document.write(`<html><head><title>Factuur ${p.factuurNr||p.projectNr||''}</title><style>body{font-family:Arial;padding:35px}h1{border-bottom:4px solid #111;padding-bottom:12px}table{width:100%;border-collapse:collapse;margin-top:20px}td,th{border-bottom:1px solid #ddd;padding:10px;text-align:left}th{background:#f4c400}.total{font-size:24px;font-weight:900}</style></head><body>
- <h1>FACTUUR / PROJECTOVERZICHT</h1>
- <p><b>Project:</b> ${p.projectNr||''} - ${naam}<br><b>Klant:</b> ${p.klant||''}<br><b>Factuurnummer:</b> ${p.factuurNr||'concept'}<br><b>Datum:</b> ${new Date().toLocaleDateString('nl-NL')}</p>
- <table><tr><th>Omschrijving</th><th>Bedrag</th></tr><tr><td>Arbeid (${t.urenSom.toFixed(2)} uur)</td><td>${euro(t.arbeid)}</td></tr><tr><td>Materiaal</td><td>${euro(t.materiaal)}</td></tr><tr><th>Totaal klant</th><th class="total">${euro(t.totaal)}</th></tr></table>
- <p style="margin-top:40px">GIO Klusbaas</p></body></html>`);
- win.document.close(); win.print();
-}
-function printWerkbon(naam){
- let p=(data.projecten||[]).find(x=>x.naam===naam)||{};
- let win=window.open('','_blank');
- win.document.write(`<html><head><title>Werkbon ${p.projectNr||''}</title><style>body{font-family:Arial;padding:35px}h1{border-bottom:4px solid #111;padding-bottom:12px}.box{border:1px solid #ddd;padding:15px;margin:15px 0}</style></head><body>
- <h1>WERKBON</h1><div class="box"><b>Project:</b> ${p.projectNr||''} - ${naam}<br><b>Klant:</b> ${p.klant||''}<br><b>Status:</b> ${p.status||''}<br><b>Datum:</b> ${new Date().toLocaleDateString('nl-NL')}</div>
- <h3>Werkzaamheden</h3><p>${p.notitie||'Werkzaamheden uitgevoerd volgens afspraak.'}</p>
- <p style="margin-top:60px">Handtekening klant: __________________________</p></body></html>`);
- win.document.close(); win.print();
-}
-function autoBackUp(){
- try{
-  localStorage.setItem('gioBusinessPlannerAutoBackup',JSON.stringify({gemaaktOp:new Date().toISOString(),data:data}));
- }catch(e){}
-}
-setInterval(autoBackUp,60000);
+window.addEventListener('beforeinstallprompt',(e)=>{
+  e.preventDefault();
+  gioPwaInstallPrompt=e;
+});
+document.addEventListener('DOMContentLoaded',()=>{
+  const btn=document.getElementById('installAppBtn');
+  if(btn)btn.addEventListener('click',async()=>{
+    if(gioPwaInstallPrompt){
+      gioPwaInstallPrompt.prompt();
+      await gioPwaInstallPrompt.userChoice;
+      gioPwaInstallPrompt=null;
+    }else{
+      alert('Android: Chrome menu ⋮ → Toevoegen aan startscherm. Windows: Chrome/Edge adresbalk → Installeren.');
+    }
+  });
+});
 
 </script>
-
-<div id="editKlantModal" class="modalOverlay">
-  <div class="modalBox">
-    <h2>✏️ Klant aanpassen</h2>
-    <input type="hidden" id="editKlantIndex">
-    <div class="row">
-      <div><label>Klantnr.</label><input id="editKlantNr" readonly></div>
-      <div><label>Naam</label><input id="editKlantNaam"></div>
-      <div><label>Adres</label><input id="editKlantAdres"></div>
-      <div><label>Postcode</label><input id="editKlantPostcode"></div>
-      <div><label>Plaats</label><input id="editKlantPlaats"></div>
-      <div><label>Telefoon</label><input id="editKlantTelefoon"></div>
-      <div><label>E-mail</label><input id="editKlantEmail"></div>
-    </div>
-    <label>Opmerking</label><textarea id="editKlantOpmerking"></textarea>
-    <button class="btn" onclick="saveKlantEdit()">💾 Opslaan</button>
-    <button class="btn2" onclick="closeKlantEdit()">Annuleren</button>
-  </div>
-</div>
 </body>
 </html>
