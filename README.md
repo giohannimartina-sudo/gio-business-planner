@@ -1,21 +1,22 @@
-# GIO Business Planner v1.0 testbaar
+# GIO Business Planner v1.0 LIVE
 
-Next.js versie voor Vercel.
+Direct bruikbare Next.js versie voor Vercel + Supabase.
 
-## Installatie
+## Stappen
 
-```bash
-npm install
-npm run dev
-```
+1. Zet `database/schema.sql` in Supabase SQL Editor en voer uit.
+2. Commit en push deze bestanden naar GitHub.
+3. Vercel bouwt automatisch.
+4. Open de app en maak een account aan.
+5. Importeer je oude JSON-back-up via Back-up / Import.
 
-## Vercel
-Importeer deze repository in Vercel.
+## Supabase environment variables
 
-Environment variables:
+Vercel moet deze hebben:
 - NEXT_PUBLIC_SUPABASE_URL
 - NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-## Data
-Deze versie gebruikt nog localStorage + JSON import/back-up.
-Daarmee kan jouw testdata veilig worden meegenomen.
+## Data-opslag
+
+Deze versie gebruikt een veilige Supabase tabel `planner_data` met Row Level Security.
+Iedere gebruiker ziet alleen zijn eigen data.
