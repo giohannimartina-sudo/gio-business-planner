@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>GIO Business Planner LIVE</title>
+<title>GIO Business Planner PRO LIVE</title>
 <style>
 :root{--geel:#f4c400;--zwart:#101010;--bg:#f4f4f4;--groen:#d8f5dc}
 *{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:#111}
@@ -57,11 +57,11 @@ th{background:var(--geel)}
 <div id="loginScreen" class="loginScreen">
   <div class="loginBox">
     <h1>GIO Business Planner</h1>
-    <p>LIVE werkversie</p>
+    <p>PRO LIVE werkversie</p>
     <label>Gebruiker</label><select id="loginUser"><option value="GIOMAR82">GIOMAR82 - Werkvloer</option><option value="SAMMAR88">SAMMAR88 - Administratie</option></select>
     <label>Pincode test</label><input id="loginPin" type="password" placeholder="1234">
     <button class="btn" onclick="login()">Inloggen</button>
-    <p style="font-size:13px;opacity:.75">Gebruik alleen voor GIO Klusbaas</p>
+    <p style="font-size:13px;opacity:.75">GIO Klusbaas live werkversie</p>
   </div>
 </div>
 
@@ -83,10 +83,10 @@ th{background:var(--geel)}
 </aside>
 
 <main>
-<div id="LIVE_PRO_BANNER" class="card" style="border-left:6px solid #f4c400;background:#fffbe6;">
-  <h2>✅ GIO Business Planner LIVE werkversie</h2>
-  <p><b>Belangrijk:</b> werk hier vanaf nu in. Maak regelmatig een back-up via <b>Export → Back-up maken JSON</b>.</p>
-  <p>Deze versie is gebaseerd op jouw juiste v20-bestand en bevat de hoofdmodules: dashboard, planning, klanten, projecten, uren, materiaal, uitgaven, vrijedagen, balans en export.</p>
+<div class="card" style="border-left:7px solid #f4c400;background:#fffbe6">
+  <h2>✅ GIO Business Planner PRO LIVE</h2>
+  <p><b>Werk vanaf nu hier.</b> Maak dagelijks een back-up via <b>Export → Back-up maken JSON</b>.</p>
+  <p>Deze versie bevat: dashboard, planning, klanten, projecten, uren, materiaal, uitgaven, vrije dagen, balans, export, projecttotalen, factuurstatus en betaalstatus.</p>
 </div>
 <div class="userbar">
   <div><b>Ingelogd als: <span id="currentUserLabel">-</span></b><br><small>Laatste update: <span id="lastSync">-</span></small></div>
@@ -281,7 +281,7 @@ th{background:var(--geel)}
  <div class="card"><h2>Excel uitdraai</h2><p>Download CSV. Deze kun je openen in Excel.</p><button class="btn" onclick="exportCSV()">📥 Exporteren</button><button class="btn2" onclick="resetAlles()">Reset testdata</button></div>
 
  <div class="card">
-  <h2>💾 Back-up / gegevens meenemen</h2><div class="card" style="background:#fff7d1"><b>Automatische veiligheidscontrole:</b> maak minimaal elke werkdag een JSON-back-up voordat je afsluit.</div>
+  <h2>💾 Back-up / gegevens meenemen</h2><div class="card" style="background:#fff7d1"><b>Veiligheid:</b> er wordt elke minuut automatisch een lokale noodback-up gemaakt. Download daarnaast dagelijks een JSON-back-up.</div>
   <p>Gebruik dit om gegevens van v14 naar deze versie te halen of om later veilig over te zetten.</p>
   <button class="btn" onclick="backupJSON()">💾 Back-up maken JSON</button>
   <label style="margin-top:12px;">Back-up terugzetten</label>
@@ -393,6 +393,8 @@ function renderProjecten(){
  <td><span class="totalKlant">${euro(totaalKlant)}</span></td>
  <td>
   <button class="btn2" onclick="projectDetailSelect.value='${p.naam.replace(/'/g,"\\'")}';renderProjectDetails()">Bekijk</button>
+  <button class="btn2" onclick="printProjectFactuur('${p.naam.replace(/'/g,"\\'")}')">Factuur/PDF</button>
+  <button class="btn2" onclick="printWerkbon('${p.naam.replace(/'/g,"\\'")}')">Werkbon</button>
   <button class="btn2 statusDone" onclick="setProjectStatus(${i},'Werk done')">Werk done</button>
   <button class="btn2 statusInvoice" onclick="setProjectStatus(${i},'Factureren')">Factureren</button>
   <button class="btn2 statusInvoice" onclick="setProjectStatus(${i},'Factuur verzonden')">Factuur verzonden</button>
@@ -650,34 +652,16 @@ document.addEventListener('DOMContentLoaded',()=>{load();berekenUren();editUrenM
 
 function openKlantEdit(i){
  let k=data.klanten[i]; if(!k)return;
- editKlantIndex.value=i;
- editKlantNr.value=k.klantNr||'';
- editKlantNaam.value=k.naam||'';
- editKlantAdres.value=k.adres||'';
- editKlantPostcode.value=k.postcode||'';
- editKlantPlaats.value=k.plaats||'';
- editKlantTelefoon.value=k.telefoon||'';
- editKlantEmail.value=k.email||'';
- editKlantOpmerking.value=k.opmerking||'';
+ editKlantIndex.value=i; editKlantNr.value=k.klantNr||''; editKlantNaam.value=k.naam||'';
+ editKlantAdres.value=k.adres||''; editKlantPostcode.value=k.postcode||''; editKlantPlaats.value=k.plaats||'';
+ editKlantTelefoon.value=k.telefoon||''; editKlantEmail.value=k.email||''; editKlantOpmerking.value=k.opmerking||'';
  editKlantModal.style.display='flex';
 }
 function closeKlantEdit(){editKlantModal.style.display='none'}
 function saveKlantEdit(){
  let i=parseInt(editKlantIndex.value,10); if(!data.klanten[i])return;
  let oldName=data.klanten[i].naam;
- data.klanten[i]={
-   ...data.klanten[i],
-   klantNr:editKlantNr.value,
-   naam:editKlantNaam.value,
-   adres:editKlantAdres.value,
-   postcode:editKlantPostcode.value,
-   plaats:editKlantPlaats.value,
-   telefoon:editKlantTelefoon.value,
-   email:editKlantEmail.value,
-   opmerking:editKlantOpmerking.value,
-   gewijzigdOp:new Date().toLocaleString('nl-NL'),
-   gewijzigdDoor:currentUser||'-'
- };
+ data.klanten[i]={...data.klanten[i],klantNr:editKlantNr.value,naam:editKlantNaam.value,adres:editKlantAdres.value,postcode:editKlantPostcode.value,plaats:editKlantPlaats.value,telefoon:editKlantTelefoon.value,email:editKlantEmail.value,opmerking:editKlantOpmerking.value,gewijzigdOp:new Date().toLocaleString('nl-NL')};
  if(oldName && oldName!==editKlantNaam.value){
    data.projecten.forEach(p=>{if(p.klant===oldName)p.klant=editKlantNaam.value});
    data.planning.forEach(p=>{if(p.klant===oldName)p.klant=editKlantNaam.value});
@@ -685,6 +669,32 @@ function saveKlantEdit(){
  }
  closeKlantEdit(); save(); render();
 }
+function printProjectFactuur(naam){
+ let p=(data.projecten||[]).find(x=>x.naam===naam)||{};
+ let t=projectTotals(naam);
+ let win=window.open('','_blank');
+ win.document.write(`<html><head><title>Factuur ${p.factuurNr||p.projectNr||''}</title><style>body{font-family:Arial;padding:35px}h1{border-bottom:4px solid #111;padding-bottom:12px}table{width:100%;border-collapse:collapse;margin-top:20px}td,th{border-bottom:1px solid #ddd;padding:10px;text-align:left}th{background:#f4c400}.total{font-size:24px;font-weight:900}</style></head><body>
+ <h1>FACTUUR / PROJECTOVERZICHT</h1>
+ <p><b>Project:</b> ${p.projectNr||''} - ${naam}<br><b>Klant:</b> ${p.klant||''}<br><b>Factuurnummer:</b> ${p.factuurNr||'concept'}<br><b>Datum:</b> ${new Date().toLocaleDateString('nl-NL')}</p>
+ <table><tr><th>Omschrijving</th><th>Bedrag</th></tr><tr><td>Arbeid (${t.urenSom.toFixed(2)} uur)</td><td>${euro(t.arbeid)}</td></tr><tr><td>Materiaal</td><td>${euro(t.materiaal)}</td></tr><tr><th>Totaal klant</th><th class="total">${euro(t.totaal)}</th></tr></table>
+ <p style="margin-top:40px">GIO Klusbaas</p></body></html>`);
+ win.document.close(); win.print();
+}
+function printWerkbon(naam){
+ let p=(data.projecten||[]).find(x=>x.naam===naam)||{};
+ let win=window.open('','_blank');
+ win.document.write(`<html><head><title>Werkbon ${p.projectNr||''}</title><style>body{font-family:Arial;padding:35px}h1{border-bottom:4px solid #111;padding-bottom:12px}.box{border:1px solid #ddd;padding:15px;margin:15px 0}</style></head><body>
+ <h1>WERKBON</h1><div class="box"><b>Project:</b> ${p.projectNr||''} - ${naam}<br><b>Klant:</b> ${p.klant||''}<br><b>Status:</b> ${p.status||''}<br><b>Datum:</b> ${new Date().toLocaleDateString('nl-NL')}</div>
+ <h3>Werkzaamheden</h3><p>${p.notitie||'Werkzaamheden uitgevoerd volgens afspraak.'}</p>
+ <p style="margin-top:60px">Handtekening klant: __________________________</p></body></html>`);
+ win.document.close(); win.print();
+}
+function autoBackUp(){
+ try{
+  localStorage.setItem('gioBusinessPlannerAutoBackup',JSON.stringify({gemaaktOp:new Date().toISOString(),data:data}));
+ }catch(e){}
+}
+setInterval(autoBackUp,60000);
 
 </script>
 
@@ -693,7 +703,7 @@ function saveKlantEdit(){
     <h2>✏️ Klant aanpassen</h2>
     <input type="hidden" id="editKlantIndex">
     <div class="row">
-      <div><label>Klantnummer</label><input id="editKlantNr" readonly></div>
+      <div><label>Klantnr.</label><input id="editKlantNr" readonly></div>
       <div><label>Naam</label><input id="editKlantNaam"></div>
       <div><label>Adres</label><input id="editKlantAdres"></div>
       <div><label>Postcode</label><input id="editKlantPostcode"></div>
@@ -706,6 +716,5 @@ function saveKlantEdit(){
     <button class="btn2" onclick="closeKlantEdit()">Annuleren</button>
   </div>
 </div>
-
 </body>
 </html>
