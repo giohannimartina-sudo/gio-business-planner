@@ -1,0 +1,711 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GIO Business Planner LIVE</title>
+<style>
+:root{--geel:#f4c400;--zwart:#101010;--bg:#f4f4f4;--groen:#d8f5dc}
+*{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:#111}
+.wrap{display:grid;grid-template-columns:245px 1fr;min-height:100vh}
+aside{background:#0b0b0b;color:#fff;padding:20px}
+.logo{color:var(--geel);font-weight:900;font-size:24px;margin-bottom:18px}
+nav button{width:100%;display:block;margin:8px 0;padding:12px;border-radius:10px;border:1px solid #333;background:#161616;color:#fff;text-align:left;font-weight:700;cursor:pointer}
+nav button.active,nav button:hover{background:var(--geel);color:#000}
+main{padding:22px}.page{display:none}.page.active{display:block}
+.card{background:#fff;border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 6px 18px #0001}
+.dark{background:#111;color:#fff;border:2px solid var(--geel)} .dark h2{color:var(--geel)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.kpi{background:#111;color:#fff;padding:16px;border-radius:14px;border-bottom:5px solid var(--geel)}
+.kpi small{display:block;opacity:.75}.kpi b{color:var(--geel);font-size:23px}
+label{display:block;font-weight:700;font-size:13px;margin:8px 0 4px}
+input,select,textarea{width:100%;padding:11px;border:1px solid #ccc;border-radius:9px;font-size:15px}
+textarea{min-height:70px}.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.btn,.urenBtn{background:var(--geel);border:0;border-radius:9px;padding:11px 14px;font-weight:900;cursor:pointer;margin-top:12px;color:#000}
+.btn2{background:#111;color:#fff;border:0;border-radius:9px;padding:10px 12px;font-weight:900;cursor:pointer;margin:3px}
+.del{background:#fff;color:#b00020;border:1px solid #b00020;border-radius:8px;padding:7px 10px;cursor:pointer;font-weight:900}
+.editBtn{background:#fff7cc;border:1px solid #c49a00;border-radius:8px;padding:7px 9px;font-weight:900;cursor:pointer}
+table{width:100%;border-collapse:collapse;margin-top:12px;background:#fff}
+th,td{border-bottom:1px solid #ddd;padding:10px;text-align:left;font-size:14px;vertical-align:top}
+th{background:var(--geel)}
+.receipt{max-width:55px;max-height:55px;border-radius:7px}
+.urenBtn.inActive{background:#2e7d32!important;color:#fff}.urenBtn.outActive{background:#c62828!important;color:#fff}
+.urenBtn.calcHover:hover{background:#81d4fa!important;transform:translateY(-1px)}.urenBtn.calcActive{background:#fb8c00!important}
+.urenBtn.saved{background:#2e7d32!important;color:#fff}.urenStatusBox{margin-top:10px;padding:10px 12px;border-radius:10px;background:#fff7d1;font-weight:800;display:inline-block}
+.status-pill{display:inline-block;padding:6px 10px;border-radius:999px;font-weight:900;font-size:12px;background:#eee}
+.status-onderweg{background:#fff176}.status-gestart{background:#a5d6a7}.status-pauze{background:#ffcc80}.status-gereed{background:#90caf9}.status-wacht{background:#e0e0e0}.status-vrij{background:#d1c4e9}
+.moneyMinus{color:#c62828;font-weight:900}.moneyPlus{color:#2e7d32;font-weight:900}
+.project-paid{background:var(--groen)!important}.project-paid td:first-child{text-decoration:line-through;font-weight:900}.paid-badge{color:#2e7d32;font-weight:900}
+.statusDone{background:#2e7d32!important;color:#fff}.statusInvoice{background:#f4c400!important;color:#000}.statusPaid{background:#b9f6ca!important;color:#0b5d1e!important;border:1px solid #2e7d32}
+.modalOverlay{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;z-index:99999}
+.modalBox{background:#fff;width:min(560px,94vw);border-radius:18px;padding:20px;box-shadow:0 20px 60px #0008}
+.loginScreen{position:fixed;inset:0;background:#0b0b0b;color:#fff;display:flex;align-items:center;justify-content:center;z-index:999999}
+.loginBox{width:min(420px,92vw);background:#151515;border:2px solid var(--geel);border-radius:18px;padding:24px}.loginBox h1{color:var(--geel)}
+.userbar{background:#fff;border-radius:14px;padding:12px 16px;margin-bottom:14px;display:flex;justify-content:space-between;gap:10px;align-items:center;box-shadow:0 4px 14px #0001}
+@media(max-width:800px){.wrap{grid-template-columns:1fr} aside{position:relative}}
+
+.pdfLink{display:inline-block;background:#eef;border:1px solid #99c;border-radius:8px;padding:5px 8px;font-weight:800;text-decoration:none;color:#111;margin-top:4px}
+
+.openMoney{color:#c62828;font-weight:900}
+.totalKlant{font-weight:900;color:#111}
+.project-paid{background:#d8f5dc!important}
+.project-paid td:nth-child(2){text-decoration:line-through;font-weight:900}
+.paid-badge{color:#2e7d32;font-weight:900}
+</style>
+</head>
+<body>
+<div id="loginScreen" class="loginScreen">
+  <div class="loginBox">
+    <h1>GIO Business Planner</h1>
+    <p>LIVE werkversie</p>
+    <label>Gebruiker</label><select id="loginUser"><option value="GIOMAR82">GIOMAR82 - Werkvloer</option><option value="SAMMAR88">SAMMAR88 - Administratie</option></select>
+    <label>Pincode test</label><input id="loginPin" type="password" placeholder="1234">
+    <button class="btn" onclick="login()">Inloggen</button>
+    <p style="font-size:13px;opacity:.75">Gebruik alleen voor GIO Klusbaas</p>
+  </div>
+</div>
+
+<div class="wrap">
+<aside>
+ <div class="logo">GIO Business Planner</div>
+ <nav>
+  <button class="active" onclick="show('dashboard',this)">🏠 Dashboard</button>
+  <button onclick="show('planning',this)">📅 Planning</button>
+  <button onclick="show('klanten',this)">👥 Klanten</button>
+  <button onclick="show('projecten',this)">📁 Projecten</button>
+  <button onclick="show('uren',this)">⏱ Uren</button>
+  <button onclick="show('materiaal',this)">🧰 Materiaal</button>
+  <button onclick="show('uitgaven',this)">💸 Uitgave / Investeren</button>
+  <button onclick="show('vrijedagen',this)">🏖️ Vrijedagen</button>
+  <button onclick="show('rapport',this)">📈 Balans</button>
+  <button onclick="show('export',this)">📊 Export</button>
+ </nav>
+</aside>
+
+<main>
+<div id="LIVE_PRO_BANNER" class="card" style="border-left:6px solid #f4c400;background:#fffbe6;">
+  <h2>✅ GIO Business Planner LIVE werkversie</h2>
+  <p><b>Belangrijk:</b> werk hier vanaf nu in. Maak regelmatig een back-up via <b>Export → Back-up maken JSON</b>.</p>
+  <p>Deze versie is gebaseerd op jouw juiste v20-bestand en bevat de hoofdmodules: dashboard, planning, klanten, projecten, uren, materiaal, uitgaven, vrijedagen, balans en export.</p>
+</div>
+<div class="userbar">
+  <div><b>Ingelogd als: <span id="currentUserLabel">-</span></b><br><small>Laatste update: <span id="lastSync">-</span></small></div>
+  <div><button class="btn2" onclick="refreshData()">🔄 Verversen</button><button class="btn2" onclick="logout()">Uitloggen</button></div>
+</div>
+<h1 id="titel">Dashboard</h1>
+
+<section id="dashboard" class="page active">
+ <div class="grid">
+  <div class="kpi"><small>Omzet vandaag</small><b id="kOmzetDag">€0,00</b></div>
+  <div class="kpi"><small>Uitgaven vandaag</small><b id="kUitDag">€0,00</b></div>
+  <div class="kpi"><small>Winst vandaag</small><b id="kWinstDag">€0,00</b></div>
+  <div class="kpi"><small>Betaald deze maand</small><b id="kBetaaldMaand">€0,00</b></div>
+  <div class="kpi"><small>Te factureren</small><b id="kNogFactureren">€0,00</b></div>
+  <div class="kpi"><small>Facturen verzonden</small><b id="kOpenFacturen">€0,00</b></div>
+  <div class="kpi"><small>Open materiaal</small><b id="kNogOntvangen">€0,00</b></div>
+ </div>
+ <div class="card dark">
+  <h2>👷 Huidige status GIOMAR82</h2>
+  <div class="grid"><div class="kpi"><small>Status</small><b id="gioStatusDash">Wacht</b></div><div class="kpi"><small>Klant</small><b id="gioKlantDash">-</b></div><div class="kpi"><small>Project</small><b id="gioProjectDash">-</b></div><div class="kpi"><small>Sinds</small><b id="gioSindsDash">-</b></div></div>
+ </div>
+ <div class="grid">
+  <div class="card"><h2>📅 Planning vandaag</h2><table><thead><tr><th>Tijd</th><th>Klant</th><th>Project</th><th>Status</th></tr></thead><tbody id="dashVandaag"></tbody></table></div>
+  <div class="card"><h2>📅 Planning morgen</h2><table><thead><tr><th>Tijd</th><th>Klant</th><th>Project</th><th>Status</th></tr></thead><tbody id="dashMorgen"></tbody></table></div>
+  <div class="card"><h2>📅 Planning volgende week</h2><table><thead><tr><th>Datum</th><th>Tijd</th><th>Klant</th><th>Project</th></tr></thead><tbody id="dashWeek"></tbody></table></div>
+ </div>
+</section>
+
+
+<section id="klanten" class="page">
+ <div class="card">
+  <h2>👥 Klant toevoegen</h2>
+  <div class="row">
+   <div><label>Naam</label><input id="klantNaam"></div>
+   <div><label>Adres</label><input id="klantAdres"></div>
+   <div><label>Postcode</label><input id="klantPostcode"></div>
+   <div><label>Plaats</label><input id="klantPlaats"></div>
+   <div><label>Telefoon</label><input id="klantTelefoon"></div>
+   <div><label>E-mail</label><input id="klantEmail"></div>
+  </div>
+  <label>Opmerking</label><textarea id="klantOpmerking"></textarea>
+  <button class="btn" onclick="addKlant()">+ Klant opslaan</button>
+ </div>
+ <div class="card">
+  <h2>Klantenbestand</h2>
+  <table>
+    <thead><tr><th>Klantnr.</th><th>Naam</th><th>Adres</th><th>Plaats</th><th>Telefoon</th><th>E-mail</th><th>Wijzig</th><th></th></tr></thead>
+    <tbody id="klantenList"></tbody>
+  </table>
+ </div>
+</section>
+
+<section id="planning" class="page">
+ <div class="card">
+  <h2>Planning plaatsen</h2>
+  <div class="row"><div><label>Datum</label><input type="date" id="pDatum"></div><div><label>Tijd</label><input type="time" id="pTijd"></div><div><label>Klant</label><input id="pKlant" list="klantenDatalist"></div><div><label>Project</label><input id="pProject" list="projectenList"></div></div>
+  <label>Notitie</label><textarea id="pNotitie"></textarea><button class="btn" onclick="addPlanning()">+ Toevoegen</button>
+ </div>
+ <div class="card"><h2>Planning lijst</h2><table><thead><tr><th>Datum</th><th>Tijd</th><th>Klant</th><th>Project</th><th>Notitie</th><th>Ingezet door</th><th>Status</th><th>Actie</th></tr></thead><tbody id="planningList"></tbody></table></div>
+</section>
+
+<section id="projecten" class="page">
+ <div class="card">
+  <h2>📁 Project toevoegen</h2><p><b>Volgend projectnummer:</b> <span id="nextProjectNr">-</span></p>
+  <div class="row"><div><label>Projectnaam</label><input id="projNaam" placeholder="Bijv. Badkamer Jansen"></div><div><label>Klant</label><input id="projKlant" list="klantenDatalist"></div><div><label>Status</label><select id="projStatus"><option>Offerte</option><option>Gepland</option><option>In uitvoering</option><option>Werk done</option><option>Factureren</option><option>Factuur verzonden</option><option>Betaald</option></select></div><div><label>Startdatum</label><input type="date" id="projStart"></div></div>
+  <label>Project notitie</label><textarea id="projNotitie"></textarea><label>PDF toevoegen bij project</label><input type="file" id="projPdf" accept="application/pdf" onchange="previewProjectPDF(event)"><p id="projPdfNaam" style="font-size:13px;font-weight:700;"></p><button class="btn" onclick="addProject()">+ Project toevoegen</button>
+ </div>
+ <div class="card">
+  <h2>📊 Project overzicht voor facturatie</h2>
+  <table><thead><tr><th>Projectnr.</th><th>Project</th><th>Klant</th><th>Status</th><th>Uren</th><th>Arbeid</th><th>Materiaal</th><th>Open</th><th>Totaal klant</th><th>Actie</th></tr></thead><tbody id="projectList"></tbody></table>
+ </div>
+ <div class="card">
+  <h2>📄 Project details</h2>
+  <label>Kies project</label><select id="projectDetailSelect" onchange="renderProjectDetails()"></select>
+  <div id="projectDetailsBox"></div>
+ </div>
+</section>
+
+<section id="uren" class="page">
+ <div class="card dark">
+  <h2>In- en uitklokken</h2>
+  <div class="row"><div><label>Klant</label><input id="uKlant" list="klantenDatalist" value="Bert"></div><div><label>Project</label><input id="uProject" list="projectenList"></div><div><label>Datum</label><input type="date" id="uDatum"></div><div><label>Start</label><input type="time" id="uStart" value="13:00"></div><div><label>Einde</label><input type="time" id="uEinde" value="20:30"></div><div><label>Tarief</label><input type="number" id="uTarief" value="35" step="0.01"></div></div>
+  <button id="clockInBtn" class="urenBtn" onclick="clockIn()">▶ Inklokken nu</button>
+  <button id="clockOutBtn" class="urenBtn" onclick="clockOut()">■ Uitklokken nu</button>
+  <button id="berekenBtn" class="urenBtn calcHover" onclick="berekenUren()">Bereken</button>
+  <button id="saveUrenBtn" class="urenBtn" onclick="saveUren()">Opslaan</button>
+  <div id="urenStatusTekst" class="urenStatusBox">Status: klaar om in te klokken</div>
+  <div class="grid" style="margin-top:14px"><div class="kpi"><small>Uren</small><b id="uUren">0,00 u</b></div><div class="kpi"><small>Arbeid bedrag</small><b id="uBedrag">€0,00</b></div></div>
+ </div>
+ <div class="card"><h2>Urenlijst</h2><table><thead><tr><th>Datum</th><th>Klant</th><th>Project</th><th>Start</th><th>Einde</th><th>Uren</th><th>Bedrag</th><th>Wijzig</th><th></th></tr></thead><tbody id="urenList"></tbody></table></div>
+</section>
+
+<section id="materiaal" class="page">
+ <div class="card">
+  <h2>Materiaal en bon</h2>
+  <div class="row"><div><label>Project</label><input id="mProject" list="projectenList"></div><div><label>Leverancier</label><input id="mLev" list="leveranciers"><datalist id="leveranciers"></datalist></div><div><label>Materiaal</label><input id="mOms" list="materialen"><datalist id="materialen"></datalist></div><div><label>Bedrag</label><input type="number" id="mBedrag" value="0.00" step="0.01"></div><div><label>Bonnummer</label><input id="mBonNr"></div><div><label>Bon foto</label><input type="file" accept="image/*" capture="environment" id="mFoto" onchange="previewBon(event)"></div><div><label>PDF bon/document</label><input type="file" accept="application/pdf" id="mPdf" onchange="previewMateriaalPDF(event)"></div></div>
+  <div id="bonPrevBox" style="display:none;margin-top:10px"><img id="bonPrev" class="receipt" style="max-width:150px;max-height:150px"></div>
+  <button class="btn" onclick="addMateriaal()">+ Materiaal toevoegen</button>
+ </div>
+ <div class="card"><h2>Materiaal lijst</h2><table><thead><tr><th>Datum</th><th>Project</th><th>Leverancier</th><th>Materiaal</th><th>Bon</th><th>Bedrag</th><th>Foto</th><th>PDF</th><th></th></tr></thead><tbody id="matList"></tbody></table></div>
+</section>
+
+
+<section id="uitgaven" class="page">
+ <div class="card">
+  <h2>💸 Uitgave / Investeren</h2>
+  <p>Los van materialen voor klanten. Gebruik dit voor benzine, gereedschap, auto-onderhoud, parkeerkosten, telefoon, kleding, enz.</p>
+  <div class="row">
+   <div><label>Datum</label><input type="date" id="uitDatum"></div>
+   <div><label>Categorie</label>
+    <select id="uitCategorie">
+      <option>⛽ Benzine / Tanken</option>
+      <option>🔌 Auto laden</option>
+      <option>🚗 Auto onderhoud</option>
+      <option>🚘 Auto huur</option>
+      <option>🛞 Banden</option>
+      <option>🧼 Auto wassen</option>
+      <option>🅿️ Parkeren</option>
+      <option>🛣️ Tolwegen</option>
+      <option>✈️ Vlucht</option>
+      <option>🚕 Taxi</option>
+      <option>🚆 Openbaar vervoer</option>
+      <option>🚢 Veerboot</option>
+      <option>🏨 Overnachting / Hotel</option>
+      <option>🏠 Airbnb</option>
+      <option>🍔 Eten onderweg</option>
+      <option>☕ Koffie / Lunch</option>
+      <option>🍽️ Zakelijk diner</option>
+      <option>🥤 Drankjes onderweg</option>
+      <option>🔧 Gereedschap</option>
+      <option>🪚 Machines</option>
+      <option>🔩 Verbruiksartikelen</option>
+      <option>🦺 Werkkleding</option>
+      <option>📱 Telefoon</option>
+      <option>🌐 Internet</option>
+      <option>💻 Software / Abonnementen</option>
+      <option>🖨️ Kantoorartikelen</option>
+      <option>📋 Administratie</option>
+      <option>🏦 Bankkosten</option>
+      <option>📦 Overige bedrijfskosten</option>
+    </select>
+   </div>
+   <div><label>Leverancier</label><input id="uitLeverancier" placeholder="Bijv. Shell, Toolstation, garage"></div>
+   <div><label>Omschrijving</label><input id="uitOmschrijving" placeholder="Bijv. tankbeurt, boormachine, onderhoud"></div>
+   <div><label>Bedrag incl. btw</label><input type="number" id="uitBedrag" value="0.00" step="0.01"></div>
+   <div><label>BTW %</label><input type="number" id="uitBtw" value="21" step="1"></div>
+   <div><label>Bon foto</label><input type="file" accept="image/*" capture="environment" id="uitFoto" onchange="previewUitgaveBon(event)"></div><div><label>PDF bon/document</label><input type="file" accept="application/pdf" id="uitPdf" onchange="previewUitgavePDF(event)"></div>
+  </div>
+  <div id="uitBonBox" style="display:none;margin-top:10px"><img id="uitBonPrev" class="receipt" style="max-width:150px;max-height:150px"></div>
+  <button class="btn" onclick="addUitgave()">+ Uitgave toevoegen</button>
+ </div>
+
+ <div class="card">
+  <h2>📊 Uitgaven / investeringen overzicht</h2>
+  <div class="grid">
+    <div class="kpi"><small>Uitgaven vandaag</small><b id="uitVandaag">€0,00</b></div>
+    <div class="kpi"><small>Uitgaven deze maand</small><b id="uitMaand">€0,00</b></div>
+    <div class="kpi"><small>Uitgaven dit jaar</small><b id="uitJaar">€0,00</b></div>
+  </div>
+  <table>
+    <thead><tr><th>Datum</th><th>Categorie</th><th>Leverancier</th><th>Omschrijving</th><th>Bedrag</th><th>BTW</th><th>Bon</th><th>PDF</th><th></th></tr></thead>
+    <tbody id="uitgavenList"></tbody>
+  </table>
+ </div>
+
+  <div class="card">
+   <h2>📂 Uitgaven per categorie</h2>
+   <table>
+    <thead><tr><th>Categorie</th><th>Totaal</th></tr></thead>
+    <tbody id="uitgavenCategorieList"></tbody>
+   </table>
+  </div>
+
+</section>
+
+<section id="vrijedagen" class="page">
+ <div class="card">
+  <h2>🏖️ Vrijedagen inplannen</h2>
+  <div class="row"><div><label>Medewerker</label><select id="vMedewerker"><option>GIOMAR82</option><option>SAMMAR88</option></select></div><div><label>Van</label><input type="date" id="vStart"></div><div><label>Tot</label><input type="date" id="vEind"></div><div><label>Soort</label><select id="vSoort"><option>Vrije dag</option><option>Vakantie</option><option>Ziek</option><option>Privé afspraak</option></select></div></div>
+  <label>Notitie</label><textarea id="vNotitie"></textarea><button class="btn" onclick="addVrijeDag()">+ Vrije dag toevoegen</button>
+ </div>
+ <div class="card"><h2>Vrijedagen overzicht</h2><table><thead><tr><th>Medewerker</th><th>Van</th><th>Tot</th><th>Soort</th><th>Notitie</th><th>Ingezet door</th><th></th></tr></thead><tbody id="vrijList"></tbody></table></div>
+</section>
+
+<section id="rapport" class="page">
+ <div class="card"><h2>📊 Balans filter</h2><div class="row"><div><label>Jaar</label><select id="balansJaar" onchange="render()"></select></div><div><label>Kwartaal</label><select id="balansKwartaal" onchange="render()"><option value="all">Heel jaar</option><option value="1">1e kwartaal</option><option value="2">2e kwartaal</option><option value="3">3e kwartaal</option><option value="4">4e kwartaal</option></select></div><div><label>Maand</label><select id="balansMaand" onchange="render()"><option value="all">Alle maanden</option><option value="01">Januari</option><option value="02">Februari</option><option value="03">Maart</option><option value="04">April</option><option value="05">Mei</option><option value="06">Juni</option><option value="07">Juli</option><option value="08">Augustus</option><option value="09">September</option><option value="10">Oktober</option><option value="11">November</option><option value="12">December</option></select></div></div></div>
+ <div class="grid"><div class="kpi"><small>Omzet filter</small><b id="balansOmzet">€0,00</b></div><div class="kpi"><small>Materiaal klant</small><b id="balansUitgaven">€0,00</b></div><div class="kpi"><small>Uitgave / investering</small><b id="balansInvestering">€0,00</b></div><div class="kpi"><small>Resultaat filter</small><b id="balansResultaat">€0,00</b></div></div>
+ <div class="card"><h2>Resultaat</h2><table><thead><tr><th>Periode</th><th>Omzet</th><th>Uitgave</th><th>Resultaat</th></tr></thead><tbody id="resultTable"></tbody></table></div>
+</section>
+
+<section id="export" class="page">
+ <div class="card"><h2>Excel uitdraai</h2><p>Download CSV. Deze kun je openen in Excel.</p><button class="btn" onclick="exportCSV()">📥 Exporteren</button><button class="btn2" onclick="resetAlles()">Reset testdata</button></div>
+
+ <div class="card">
+  <h2>💾 Back-up / gegevens meenemen</h2><div class="card" style="background:#fff7d1"><b>Automatische veiligheidscontrole:</b> maak minimaal elke werkdag een JSON-back-up voordat je afsluit.</div>
+  <p>Gebruik dit om gegevens van v14 naar deze versie te halen of om later veilig over te zetten.</p>
+  <button class="btn" onclick="backupJSON()">💾 Back-up maken JSON</button>
+  <label style="margin-top:12px;">Back-up terugzetten</label>
+  <input type="file" accept=".json" onchange="importJSON(event)">
+  <button class="btn2" onclick="migreerOudeData()">🔄 Haal gegevens uit v14 opslag</button>
+ </div>
+
+</section>
+
+<datalist id="projectenList"></datalist>
+<datalist id="klantenDatalist"></datalist>
+</main>
+</div>
+
+<div id="editUrenModal" class="modalOverlay">
+  <div class="modalBox">
+    <h2>✏️ Uren aanpassen</h2><input type="hidden" id="editUrenIndex">
+    <div class="row"><div><label>Datum</label><input type="date" id="editUrenDatum"></div><div><label>Klant</label><input id="editUrenKlant"></div><div><label>Project</label><input id="editUrenProject" list="projectenList"></div><div><label>Start</label><input type="time" id="editUrenStart"></div><div><label>Einde</label><input type="time" id="editUrenEinde"></div><div><label>Tarief</label><input type="number" id="editUrenTarief" value="35" step="0.01"></div></div>
+    <button class="btn" onclick="saveUrenEdit()">💾 Opslaan</button><button class="btn2" onclick="closeUrenEdit()">Annuleren</button>
+  </div>
+</div>
+
+<script>
+let data={planning:[],uren:[],materiaal:[],leveranciers:[],materialen:[],vrijedagen:[],projecten:[],uitgaven:[],klanten:[]};
+let bonData="", currentUser=localStorage.getItem("gioCurrentUser")||"";
+function euro(v){return new Intl.NumberFormat('nl-NL',{style:'currency',currency:'EUR'}).format(Number(v||0))}
+function today(){return new Date().toISOString().slice(0,10)}
+function formatDateNL(d){if(!d)return '';let p=d.split('-');return p.length===3?p[2]+'/'+p[1]+'/'+p[0].slice(2):d}
+function save(){localStorage.setItem('gioTestBetaald',JSON.stringify(data));localStorage.setItem('gioPlannerLastUpdate',String(Date.now()))}
+function load(check=true){
+ try{
+  let raw = localStorage.getItem('gioTestBetaald')
+        || localStorage.getItem('gioTestDesktop')
+        || localStorage.getItem('gioPlannerDesktop')
+        || localStorage.getItem('gioTestDesktop_v14')
+        || null;
+  data = raw ? JSON.parse(raw) : data;
+ }catch(e){}
+ ['planning','uren','materiaal','leveranciers','materialen','vrijedagen','projecten','uitgaven','klanten'].forEach(k=>{if(!data[k])data[k]=[]});
+ data.planning.forEach(x=>{ if(x.project && typeof ensureProject==='function') ensureProject(x.project,x.klant||''); });
+ data.uren.forEach(x=>{ if(x.project && typeof ensureProject==='function') ensureProject(x.project,x.klant||''); });
+ data.materiaal.forEach(x=>{ if(x.project && typeof ensureProject==='function') ensureProject(x.project,''); });
+ initDates();render();
+ if(currentUser){loginScreen.style.display='none';currentUserLabel.innerText=currentUser}else if(check){loginScreen.style.display='flex'};
+ lastSync.innerText=new Date().toLocaleString('nl-NL');
+}
+function login(){if(loginPin.value!=="1234"){alert("Pincode klopt niet");return}currentUser=loginUser.value;localStorage.setItem("gioCurrentUser",currentUser);loginScreen.style.display="none";currentUserLabel.innerText=currentUser;refreshData()}
+function logout(){localStorage.removeItem("gioCurrentUser");currentUser="";loginScreen.style.display="flex"}
+function refreshData(){load(false)}
+function initDates(){[pDatum,uDatum,vStart,vEind,projStart].forEach(e=>{if(e&&!e.value)e.value=today()}); if(document.getElementById('uitDatum')&&!uitDatum.value)uitDatum.value=today();}
+function show(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');titel.innerText=btn.innerText.replace(/[^\w\s/]/g,'').trim()}
+function del(arr,i){data[arr].splice(i,1);save();render()}
+function min(t){let p=t.split(':');return +p[0]*60+(+p[1])}
+function addPlanning(){data.planning.push({datum:pDatum.value,tijd:pTijd.value,klant:pKlant.value,project:pProject.value,notitie:pNotitie.value,door:currentUser||'SAMMAR88',status:'Wacht',statusSinds:''});ensureProject(pProject.value,pKlant.value);pTijd.value=pKlant.value=pProject.value=pNotitie.value='';save();render()}
+function statusIcon(s){if(s==='Onderweg')return'🟡 Onderweg';if(s==='Gestart')return'🟢 Gestart';if(s==='Pauze')return'☕ Pauze';if(s==='Gereed')return'✅ Gereed';if(s==='Vrij')return'🏖️ Vrij';return'⏳ Wacht'}
+function statusClass(s){s=(s||'Wacht').toLowerCase();if(s.includes('onderweg'))return'status-onderweg';if(s.includes('gestart'))return'status-gestart';if(s.includes('pauze'))return'status-pauze';if(s.includes('gereed'))return'status-gereed';if(s.includes('vrij'))return'status-vrij';return'status-wacht'}
+function setStatus(i,s){data.planning[i].status=s;data.planning[i].statusSinds=new Date().toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'});save();render()}
+function ensureProject(naam,klant){naam=(naam||'').trim();if(!naam)return;if(!data.projecten.some(p=>p.naam===naam))data.projecten.push({projectNr:nextProjectNumber(),naam,klant:klant||'',status:'In uitvoering',start:today(),notitie:'Automatisch aangemaakt'})}
+function addProject(){let naam=projNaam.value.trim();if(!naam){alert('Vul projectnaam in');return}data.projecten.push({projectNr:nextProjectNumber(),naam,klant:projKlant.value,status:projStatus.value,start:projStart.value,notitie:projNotitie.value,pdf:projectPdfData,pdfNaam:projectPdfName}); projectPdfData='';projectPdfName=''; if(document.getElementById('projPdf'))projPdf.value=''; if(document.getElementById('projPdfNaam'))projPdfNaam.innerText='';projNaam.value=projKlant.value=projNotitie.value='';save();render()}
+function projectTotals(naam){let uren=data.uren.filter(x=>(x.project||'')===naam),mat=data.materiaal.filter(x=>(x.project||'')===naam);let urenSom=uren.reduce((s,x)=>s+(+x.uren||0),0),arbeid=uren.reduce((s,x)=>s+(+x.bedrag||0),0),materiaal=mat.reduce((s,x)=>s+(+x.bedrag||0),0);return{urenSom,arbeid,materiaal,totaal:arbeid+materiaal,uren,mat}}
+function setProjectStatus(i,status){
+ if(!data.projecten || !data.projecten[i])return;
+ data.projecten[i].status=status;
+ data.projecten[i].statusDatum=new Date().toLocaleString('nl-NL');
+ if(['Factureren','Factuur verzonden','Betaald'].includes(status) && !data.projecten[i].factuurNr && typeof nextFactuurNumber==='function')data.projecten[i].factuurNr=nextFactuurNumber();
+ if(status==='Betaald')data.projecten[i].betaaldDatum=today();
+ save(); render();
+}
+function markProjectByName(naam,status){let i=data.projecten.findIndex(p=>p.naam===naam);if(i>=0)setProjectStatus(i,status)}
+function clockIn(){let d=new Date();uStart.value=d.toTimeString().slice(0,5);clockInBtn.classList.add('inActive');clockOutBtn.classList.remove('outActive');urenStatusTekst.innerText='Status: 🟢 Aan het werk sinds '+uStart.value;berekenUren()}
+function clockOut(){let d=new Date();uEinde.value=d.toTimeString().slice(0,5);clockOutBtn.classList.add('outActive');clockInBtn.classList.remove('inActive');urenStatusTekst.innerText='Status: 🔴 Uitgeklokt om '+uEinde.value;berekenUren()}
+function berekenUren(){berekenBtn.classList.add('calcActive');setTimeout(()=>berekenBtn.classList.remove('calcActive'),450);let m=min(uEinde.value)-min(uStart.value);if(m<0)m+=1440;let uren=m/60,bedrag=uren*(+uTarief.value||35);uUren.innerText=uren.toFixed(2).replace('.',',')+' u';uBedrag.innerText=euro(bedrag);return{uren,bedrag}}
+function saveUren(){let r=berekenUren();data.uren.push({datum:uDatum.value,klant:uKlant.value,project:uProject.value,start:uStart.value,einde:uEinde.value,tarief:+uTarief.value||35,uren:r.uren,bedrag:r.bedrag});ensureProject(uProject.value,uKlant.value);save();render();saveUrenBtn.classList.add('saved');saveUrenBtn.innerText='Opgeslagen ✓';setTimeout(()=>{saveUrenBtn.classList.remove('saved');saveUrenBtn.innerText='Opslaan'},1800)}
+function openUrenEdit(i){let x=data.uren[i];if(!x)return;editUrenIndex.value=i;editUrenDatum.value=x.datum||today();editUrenKlant.value=x.klant||'';editUrenProject.value=x.project||'';editUrenStart.value=x.start||'';editUrenEinde.value=x.einde||'';editUrenTarief.value=x.tarief||35;editUrenModal.style.display='flex'}
+function closeUrenEdit(){editUrenModal.style.display='none'}
+function saveUrenEdit(){let i=parseInt(editUrenIndex.value,10),s=editUrenStart.value.split(':'),e=editUrenEinde.value.split(':');let m=(+e[0]*60+ +e[1])-(+s[0]*60+ +s[1]);if(m<0)m+=1440;let uren=m/60,tarief=+editUrenTarief.value||35;data.uren[i]={datum:editUrenDatum.value,klant:editUrenKlant.value,project:editUrenProject.value,start:editUrenStart.value,einde:editUrenEinde.value,tarief,uren,bedrag:uren*tarief};ensureProject(editUrenProject.value,editUrenKlant.value);closeUrenEdit();save();render()}
+function previewBon(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=x=>{bonData=x.target.result;bonPrev.src=bonData;bonPrevBox.style.display='block'};r.readAsDataURL(f)}
+function addMateriaal(){let lev=mLev.value.trim(),oms=mOms.value.trim(),bedrag=+mBedrag.value||0;data.materiaal.push({datum:today(),project:mProject.value,lev,oms,bon:mBonNr.value,bedrag,foto:bonData,pdf:materiaalPdfData,pdfNaam:materiaalPdfName}); materiaalPdfData='';materiaalPdfName=''; if(document.getElementById('mPdf'))mPdf.value='';ensureProject(mProject.value,'');if(lev&&!data.leveranciers.includes(lev))data.leveranciers.push(lev);if(oms&&!data.materialen.includes(oms))data.materialen.push(oms);mBedrag.value='0.00';mBonNr.value='';mOms.value='';mFoto.value='';bonData='';bonPrevBox.style.display='none';save();render()}
+function addVrijeDag(){data.vrijedagen.push({medewerker:vMedewerker.value,start:vStart.value,eind:vEind.value,soort:vSoort.value,notitie:vNotitie.value,door:currentUser||'-'});data.planning.push({datum:vStart.value,tijd:'Hele dag',klant:vMedewerker.value,project:vSoort.value,notitie:vNotitie.value,door:currentUser||'-',status:'Vrij'});vNotitie.value='';save();render()}
+function weekStart(d){let x=new Date(d+'T12:00:00'),day=x.getDay(),diff=x.getDate()-day+(day==0?-6:1);x.setDate(diff);return x.toISOString().slice(0,10)}
+function datePlus(days){let d=new Date();d.setDate(d.getDate()+days);return d.toISOString().slice(0,10)}
+function planDateTime(x){return new Date((x.datum||today())+'T'+((x.tijd&&x.tijd!='Hele dag')?x.tijd:'00:00')+':00')}
+function sumUren(type){let td=today(),ws=weekStart(td);return data.uren.filter(x=>type=='dag'?x.datum==td:type=='week'?x.datum>=ws&&x.datum<=td:x.datum.slice(0,7)==td.slice(0,7)).reduce((s,x)=>s+(+x.bedrag||0),0)}
+function sumMat(type){let td=today(),ws=weekStart(td);return data.materiaal.filter(x=>type=='dag'?x.datum==td:type=='week'?x.datum>=ws&&x.datum<=td:x.datum.slice(0,7)==td.slice(0,7)).reduce((s,x)=>s+(+x.bedrag||0),0)}
+function matchBalansDatum(d){let jaar=balansJaar.value||String(new Date().getFullYear()),kw=balansKwartaal.value,maand=balansMaand.value;if(!d||d.slice(0,4)!==jaar)return false;if(maand!='all')return d.slice(5,7)===maand;if(kw!='all'){let m=parseInt(d.slice(5,7)),st=(parseInt(kw)-1)*3+1;return m>=st&&m<=st+2}return true}
+function vulJaren(){let years=new Set([String(new Date().getFullYear()),'2025','2026']);data.uren.forEach(x=>x.datum&&years.add(x.datum.slice(0,4)));data.materiaal.forEach(x=>x.datum&&years.add(x.datum.slice(0,4)));let selected=balansJaar.value||String(new Date().getFullYear());balansJaar.innerHTML=[...years].sort().map(y=>`<option>${y}</option>`).join('');balansJaar.value=selected}
+function renderDashboard(){let td=today(),morgen=datePlus(1),now=new Date();let startNext=new Date(now);startNext.setDate(startNext.getDate()+((8-startNext.getDay())%7||7));startNext.setHours(0,0,0,0);let endNext=new Date(startNext);endNext.setDate(endNext.getDate()+7);let row=x=>`<tr><td>${x.tijd||'--:--'}</td><td>${x.klant||'-'}</td><td>${x.project||'-'}</td><td><span class="status-pill ${statusClass(x.status)}">${statusIcon(x.status)}</span></td></tr>`;let vandaag=data.planning.filter(x=>x.datum===td),morg=data.planning.filter(x=>x.datum===morgen),week=data.planning.filter(x=>{let dt=planDateTime(x);return dt>=startNext&&dt<endNext});dashVandaag.innerHTML=vandaag.length?vandaag.map(row).join(''):'<tr><td colspan="4">Geen planning vandaag</td></tr>';dashMorgen.innerHTML=morg.length?morg.map(row).join(''):'<tr><td colspan="4">Geen planning morgen</td></tr>';dashWeek.innerHTML=week.length?week.map(x=>`<tr><td>${formatDateNL(x.datum)}</td><td>${x.tijd||''}</td><td>${x.klant||'-'}</td><td>${x.project||'-'}</td></tr>`).join(''):'<tr><td colspan="4">Geen planning volgende week</td></tr>';let actief=data.planning.find(x=>['Gestart','Onderweg','Pauze'].includes(x.status))||{};gioStatusDash.innerText=statusIcon(actief.status||'Wacht');gioKlantDash.innerText=actief.klant||'-';gioProjectDash.innerText=actief.project||'-';gioSindsDash.innerText=actief.statusSinds||'-'}
+function renderProjecten(){
+ if(!document.getElementById('projectList'))return;
+ if(!data.projecten)data.projecten=[];
+ if(document.getElementById('projectenList'))projectenList.innerHTML=data.projecten.map(p=>`<option value="${p.naam}">`).join('');
+ if(document.getElementById('projectDetailSelect'))projectDetailSelect.innerHTML=data.projecten.map(p=>`<option value="${p.naam}">${p.projectNr||'-'} - ${p.naam}</option>`).join('');
+ if(document.getElementById('nextProjectNr') && typeof nextProjectNumber==='function')nextProjectNr.innerText=nextProjectNumber();
+
+ projectList.innerHTML=data.projecten.map((p,i)=>{
+   let t=projectTotals(p.naam);
+   let totaalKlant=t.arbeid+t.materiaal;
+   let paid=p.status==='Betaald';
+   let open=paid?0:t.materiaal;
+   return `<tr class="${paid?'project-paid':''}">
+ <td>${p.projectNr||'-'}</td>
+ <td>${paid?'✅ ':''}${p.naam}${p.factuurNr?`<br><small>Factuur: ${p.factuurNr}</small>`:''}</td>
+ <td>${p.klant||'-'}</td>
+ <td>${paid?'<span class="paid-badge">✅ Betaald</span>':(p.status||'-')}${p.statusDatum?`<br><small>${p.statusDatum}</small>`:''}${p.betaaldDatum?`<br><small>Betaald: ${formatDateNL(p.betaaldDatum)}</small>`:''}</td>
+ <td>${t.urenSom.toFixed(2).replace('.',',')}</td>
+ <td>${euro(t.arbeid)}</td>
+ <td>${euro(t.materiaal)}</td>
+ <td><span class="openMoney">${euro(open)}</span></td>
+ <td><span class="totalKlant">${euro(totaalKlant)}</span></td>
+ <td>
+  <button class="btn2" onclick="projectDetailSelect.value='${p.naam.replace(/'/g,"\\'")}';renderProjectDetails()">Bekijk</button>
+  <button class="btn2 statusDone" onclick="setProjectStatus(${i},'Werk done')">Werk done</button>
+  <button class="btn2 statusInvoice" onclick="setProjectStatus(${i},'Factureren')">Factureren</button>
+  <button class="btn2 statusInvoice" onclick="setProjectStatus(${i},'Factuur verzonden')">Factuur verzonden</button>
+  <button class="btn2 statusPaid" onclick="setProjectStatus(${i},'Betaald')">✅ Betaald</button>
+  <button class="del" onclick="del('projecten',${i})">🗑️</button>
+ </td></tr>`;
+ }).join('');
+ renderProjectDetails();
+}
+function renderProjectDetails(){
+ if(!document.getElementById('projectDetailsBox'))return;
+ let naam=projectDetailSelect.value;
+ if(!naam){projectDetailsBox.innerHTML='<p>Geen project gekozen.</p>';return}
+ let t=projectTotals(naam);
+ let totaalKlant=t.arbeid+t.materiaal;
+ let p=data.projecten.find(x=>x.naam===naam)||{};
+ let open=p.status==='Betaald'?0:t.materiaal;
+
+ projectDetailsBox.innerHTML=`<h3>${p.status==='Betaald'?'✅ ':''}${p.projectNr||'-'} - ${naam}</h3>
+ <p><b>Klant:</b> ${p.klant||'-'} &nbsp; <b>Factuurnummer:</b> ${p.factuurNr||'Nog niet aangemaakt'} &nbsp; <b>Status:</b> ${p.status||'-'} ${p.betaaldDatum?`&nbsp; <b>Betaald:</b> ${formatDateNL(p.betaaldDatum)}`:''}</p>
+ <div class="grid">
+  <div class="kpi"><small>Uren</small><b>${t.urenSom.toFixed(2).replace('.',',')} u</b></div>
+  <div class="kpi"><small>Arbeid</small><b>${euro(t.arbeid)}</b></div>
+  <div class="kpi"><small>Materiaal</small><b>${euro(t.materiaal)}</b></div>
+  <div class="kpi"><small>Open materiaal</small><b class="openMoney">${euro(open)}</b></div>
+  <div class="kpi"><small>Totaal klant</small><b>${euro(totaalKlant)}</b></div>
+ </div>
+ <div style="margin:12px 0">
+  <button class="btn statusDone" onclick="markProjectByName('${naam.replace(/'/g,"\\'")}','Werk done')">✅ Werk done</button>
+  <button class="btn statusInvoice" onclick="markProjectByName('${naam.replace(/'/g,"\\'")}','Factureren')">📄 Factureren</button>
+  <button class="btn statusInvoice" onclick="markProjectByName('${naam.replace(/'/g,"\\'")}','Factuur verzonden')">📨 Factuur verzonden</button>
+  <button class="btn statusPaid" onclick="markProjectByName('${naam.replace(/'/g,"\\'")}','Betaald')">✅ Betaald</button>
+ </div>
+ <h4>Uren op dit project</h4>
+ <table><thead><tr><th>Datum</th><th>Klant</th><th>Start</th><th>Einde</th><th>Uren</th><th>Bedrag</th><th>Wijzig</th></tr></thead>
+ <tbody>${t.uren.length?t.uren.map(x=>{let idx=data.uren.indexOf(x);return`<tr><td>${formatDateNL(x.datum)}</td><td>${x.klant||''}</td><td>${x.start}</td><td>${x.einde}</td><td>${(+x.uren||0).toFixed(2).replace('.',',')}</td><td>${euro(x.bedrag)}</td><td><button class="editBtn" onclick="openUrenEdit(${idx})">✏️</button></td></tr>`}).join(''):'<tr><td colspan="7">Geen uren geboekt</td></tr>'}</tbody>
+ <tfoot><tr><th colspan="4">Totaal uren/arbeid</th><th>${t.urenSom.toFixed(2).replace('.',',')} u</th><th>${euro(t.arbeid)}</th><th></th></tr></tfoot></table>
+ <h4>Materialen op dit project</h4>
+ <table><thead><tr><th>Datum</th><th>Leverancier</th><th>Materiaal</th><th>Bon</th><th>Bedrag</th></tr></thead>
+ <tbody>${t.mat.length?t.mat.map(x=>`<tr><td>${formatDateNL(x.datum)}</td><td>${x.lev}</td><td>${x.oms}</td><td>${x.bon||'-'}</td><td>${euro(x.bedrag)}</td></tr>`).join(''):'<tr><td colspan="5">Geen materialen geboekt</td></tr>'}</tbody>
+ <tfoot><tr><th colspan="4">Totaal materiaal</th><th>${euro(t.materiaal)}</th></tr></tfoot></table>
+ <div class="card" style="background:#fff7d1;margin-top:14px;">
+  <h3>Facturatie samenvatting</h3>
+  <p>Arbeid: <b>${euro(t.arbeid)}</b><br>Materiaal: <b>${euro(t.materiaal)}</b><br>Open materiaal: <b>${euro(open)}</b></p>
+  <h2>Totaal klant: ${euro(totaalKlant)}</h2>
+ </div>
+ <button class="btn" onclick="exportProjectCSV('${naam.replace(/'/g,"\\'")}')">📥 Project export voor factuur</button>`;
+}
+
+let uitBonData="";
+function previewUitgaveBon(e){
+ let f=e.target.files[0]; if(!f)return;
+ let r=new FileReader();
+ r.onload=x=>{uitBonData=x.target.result;uitBonPrev.src=uitBonData;uitBonBox.style.display='block'};
+ r.readAsDataURL(f);
+}
+function addUitgave(){
+ if(!data.uitgaven)data.uitgaven=[];
+ let bedrag=+uitBedrag.value||0;
+ let btwPerc=+uitBtw.value||0;
+ let btwBedrag=btwPerc>0 ? bedrag-(bedrag/(1+btwPerc/100)) : 0;
+ data.uitgaven.push({
+  datum:uitDatum.value,
+  categorie:uitCategorie.value,
+  leverancier:uitLeverancier.value,
+  omschrijving:uitOmschrijving.value,
+  bedrag:bedrag,
+  btwPerc:btwPerc,
+  btwBedrag:btwBedrag,
+  bon:uitBonData,pdf:uitgavePdfData,pdfNaam:uitgavePdfName
+ });
+ uitBedrag.value='0.00';
+ uitOmschrijving.value='';
+ uitFoto.value='';
+ uitBonData='';uitgavePdfData='';uitgavePdfName=''; if(document.getElementById('uitPdf'))uitPdf.value='';
+ uitBonBox.style.display='none';
+ save(); render();
+}
+function sumUitgaven(type){
+ if(!data.uitgaven)data.uitgaven=[];
+ let td=today(), ws=weekStart(td);
+ return data.uitgaven.filter(x=>type=='dag'?x.datum==td:type=='week'?x.datum>=ws&&x.datum<=td:type=='maand'?x.datum.slice(0,7)==td.slice(0,7):x.datum.slice(0,4)==td.slice(0,4)).reduce((s,x)=>s+(+x.bedrag||0),0);
+}
+function sumUitgavenFilter(){
+ if(!data.uitgaven)return 0;
+ return data.uitgaven.filter(x=>matchBalansDatum(x.datum)).reduce((s,x)=>s+(+x.bedrag||0),0);
+}
+function renderUitgaven(){
+ if(!document.getElementById('uitgavenList'))return;
+ uitgavenList.innerHTML=(data.uitgaven||[]).map((x,i)=>`<tr><td>${formatDateNL(x.datum)}</td><td>${x.categorie}</td><td>${x.leverancier||'-'}</td><td>${x.omschrijving||'-'}</td><td>${euro(x.bedrag)}</td><td>${euro(x.btwBedrag||0)}</td><td>${x.bon?`<img class="receipt" src="${x.bon}">`:'-'}</td><td>${pdfLink(x.pdf,x.pdfNaam)}</td><td><button class="del" onclick="del('uitgaven',${i})">🗑️</button></td></tr>`).join('');
+ uitVandaag.innerText=euro(sumUitgaven('dag'));
+ uitMaand.innerText=euro(sumUitgaven('maand'));
+ uitJaar.innerText=euro(sumUitgaven('jaar'));
+}
+
+
+function nextNumber(prefix, arr, field){
+ let jaar=String(new Date().getFullYear());
+ let max=0;
+ (arr||[]).forEach(x=>{
+  let v=x[field]||'';
+  let m=String(v).match(new RegExp('^'+prefix+jaar+'-(\\d+)$'));
+  if(m) max=Math.max(max,parseInt(m[1],10));
+ });
+ return prefix+jaar+'-'+String(max+1).padStart(3,'0');
+}
+function nextProjectNumber(){return nextNumber('',data.projecten,'projectNr')}
+function nextFactuurNumber(){return nextNumber('F',data.projecten,'factuurNr')}
+function nextKlantNumber(){return nextNumber('K',data.klanten,'klantNr')}
+function addKlant(){
+ if(!data.klanten)data.klanten=[];
+ let naam=klantNaam.value.trim();
+ if(!naam){alert('Vul een klantnaam in');return;}
+ data.klanten.push({
+  klantNr:nextKlantNumber(),
+  naam,
+  adres:klantAdres.value,
+  postcode:klantPostcode.value,
+  plaats:klantPlaats.value,
+  telefoon:klantTelefoon.value,
+  email:klantEmail.value,
+  opmerking:klantOpmerking.value
+ });
+ klantNaam.value=klantAdres.value=klantPostcode.value=klantPlaats.value=klantTelefoon.value=klantEmail.value=klantOpmerking.value='';
+ save(); render();
+}
+function renderKlanten(){
+ if(!document.getElementById('klantenList'))return;
+ if(!data.klanten)data.klanten=[];
+ klantenDatalist.innerHTML=data.klanten.map(k=>`<option value="${k.naam}">`).join('');
+ klantenList.innerHTML=data.klanten.map((k,i)=>`<tr>
+ <td>${k.klantNr||'-'}</td>
+ <td>${k.naam||'-'}${k.gewijzigdOp?`<br><small>Gewijzigd: ${k.gewijzigdOp}</small>`:''}</td>
+ <td>${k.adres||'-'} ${k.postcode||''}</td>
+ <td>${k.plaats||'-'}</td>
+ <td>${k.telefoon||'-'}</td>
+ <td>${k.email||'-'}</td>
+ <td><button class="editBtn" onclick="openKlantEdit(${i})">✏️</button></td>
+ <td><button class="del" onclick="del('klanten',${i})">🗑️</button></td>
+ </tr>`).join('');
+}
+function projectTotalForStatus(statusList){
+ return (data.projecten||[]).filter(p=>statusList.includes(p.status)).reduce((s,p)=>s+projectTotals(p.naam).totaal,0);
+}
+
+
+let projectPdfData="", projectPdfName="", materiaalPdfData="", materiaalPdfName="", uitgavePdfData="", uitgavePdfName="";
+function readPDFFile(file, cb){
+ if(!file)return;
+ let r=new FileReader();
+ r.onload=e=>cb(e.target.result,file.name);
+ r.readAsDataURL(file);
+}
+function previewProjectPDF(e){
+ let f=e.target.files[0]; if(!f)return;
+ readPDFFile(f,(data,name)=>{projectPdfData=data;projectPdfName=name;if(document.getElementById('projPdfNaam'))projPdfNaam.innerText='PDF gekoppeld: '+name;});
+}
+function previewMateriaalPDF(e){
+ let f=e.target.files[0]; if(!f)return;
+ readPDFFile(f,(data,name)=>{materiaalPdfData=data;materiaalPdfName=name;alert('PDF gekoppeld: '+name);});
+}
+function previewUitgavePDF(e){
+ let f=e.target.files[0]; if(!f)return;
+ readPDFFile(f,(data,name)=>{uitgavePdfData=data;uitgavePdfName=name;alert('PDF gekoppeld: '+name);});
+}
+function pdfLink(data,name){
+ return data?`<a class="pdfLink" href="${data}" download="${name||'document.pdf'}">📄 ${name||'PDF'}</a>`:'-';
+}
+
+
+function renderUitgavenCategorieen(){
+ if(!document.getElementById('uitgavenCategorieList'))return;
+ let totals={};
+ (data.uitgaven||[]).forEach(x=>{
+  let cat=x.categorie||'Overig';
+  totals[cat]=(totals[cat]||0)+(+x.bedrag||0);
+ });
+ let rows=Object.keys(totals).sort().map(cat=>`<tr><td>${cat}</td><td>${euro(totals[cat])}</td></tr>`).join('');
+ uitgavenCategorieList.innerHTML=rows||'<tr><td colspan="2">Nog geen uitgaven</td></tr>';
+}
+
+function render(){planningList.innerHTML=data.planning.map((x,i)=>`<tr><td>${formatDateNL(x.datum)}</td><td>${x.tijd}</td><td>${x.klant}</td><td>${x.project}</td><td>${x.notitie}</td><td>${x.door||'-'}</td><td><span class="status-pill ${statusClass(x.status)}">${statusIcon(x.status)}</span><br><small>${x.statusSinds||''}</small></td><td><button onclick="setStatus(${i},'Onderweg')">Onderweg</button> <button onclick="setStatus(${i},'Gestart')">Gestart</button> <button onclick="setStatus(${i},'Pauze')">Pauze</button> <button onclick="setStatus(${i},'Gereed')">Gereed</button> <button class="del" onclick="del('planning',${i})">🗑️</button></td></tr>`).join('');urenList.innerHTML=data.uren.map((x,i)=>`<tr><td>${formatDateNL(x.datum)}</td><td>${x.klant}</td><td>${x.project||'-'}</td><td>${x.start}</td><td>${x.einde}</td><td>${(+x.uren||0).toFixed(2).replace('.',',')}</td><td>${euro(x.bedrag)}</td><td><button class="editBtn" onclick="openUrenEdit(${i})">✏️</button></td><td><button class="del" onclick="del('uren',${i})">🗑️</button></td></tr>`).join('');matList.innerHTML=data.materiaal.map((x,i)=>`<tr><td>${formatDateNL(x.datum)}</td><td>${x.project||'-'}</td><td>${x.lev}</td><td>${x.oms}</td><td>${x.bon||'-'}</td><td>${euro(x.bedrag)}</td><td>${x.foto?`<img class="receipt" src="${x.foto}">`:'-'}</td><td>${pdfLink(x.pdf,x.pdfNaam)}</td><td><button class="del" onclick="del('materiaal',${i})">🗑️</button></td></tr>`).join('');leveranciers.innerHTML=data.leveranciers.map(x=>`<option value="${x}">`).join('');materialen.innerHTML=data.materialen.map(x=>`<option value="${x}">`).join('');vrijList.innerHTML=data.vrijedagen.map((x,i)=>`<tr><td>${x.medewerker}</td><td>${formatDateNL(x.start)}</td><td>${formatDateNL(x.eind)}</td><td>${x.soort}</td><td>${x.notitie||''}</td><td>${x.door||'-'}</td><td><button class="del" onclick="del('vrijedagen',${i})">🗑️</button></td></tr>`).join('');renderKlanten();renderProjecten();renderUitgaven();renderUitgavenCategorieen();renderDashboard();let od=sumUren('dag'),ud=sumMat('dag');let businessUitDag=sumUitgaven('dag');kOmzetDag.innerText=euro(od);kUitDag.innerText=euro(ud+businessUitDag);kWinstDag.innerText=euro(od-ud-businessUitDag);let bm=data.projecten.filter(p=>p.status==='Betaald'&&p.betaaldDatum&&p.betaaldDatum.slice(0,7)===today().slice(0,7)).reduce((s,p)=>s+projectTotals(p.naam).totaal,0);kBetaaldMaand.innerText=euro(bm); if(document.getElementById('kNogFactureren'))kNogFactureren.innerText=euro(projectTotalForStatus(['Factureren'])); if(document.getElementById('kOpenFacturen'))kOpenFacturen.innerText=euro(projectTotalForStatus(['Factuur verzonden'])); if(document.getElementById('kNogOntvangen'))kNogOntvangen.innerText=euro((data.projecten||[]).filter(p=>p.status!=='Betaald').reduce((s,p)=>s+projectTotals(p.naam).materiaal,0));vulJaren();let omzet=data.uren.filter(x=>matchBalansDatum(x.datum)).reduce((s,x)=>s+(+x.bedrag||0),0),uit=data.materiaal.filter(x=>matchBalansDatum(x.datum)).reduce((s,x)=>s+(+x.bedrag||0),0);let invest=sumUitgavenFilter();balansOmzet.innerText=euro(omzet);balansUitgaven.innerText=euro(uit);if(document.getElementById('balansInvestering'))balansInvestering.innerText=euro(invest);balansResultaat.innerText=euro(omzet-uit-invest);resultTable.innerHTML=`<tr><td>Vandaag</td><td>${euro(od)}</td><td>${euro(ud)}</td><td>${euro(od-ud)}</td></tr>`}
+function exportProjectCSV(naam){
+ let t=projectTotals(naam);
+ let p=(data.projecten||[]).find(x=>x.naam===naam)||{};
+ let totaalKlant=t.arbeid+t.materiaal;
+ let open=p.status==='Betaald'?0:t.materiaal;
+ let rows=[
+  ['PROJECT FACTURATIE'],
+  ['Project',naam],
+  ['Projectnummer',p.projectNr||''],
+  ['Factuurnummer',p.factuurNr||''],
+  ['Status',p.status||''],
+  ['Datum export',new Date().toLocaleString('nl-NL')],
+  [],
+  ['Samenvatting'],
+  ['Uren',t.urenSom.toFixed(2).replace('.',',')],
+  ['Arbeid',euro(t.arbeid)],
+  ['Materiaal',euro(t.materiaal)],
+  ['Open materiaal',euro(open)],
+  ['Totaal klant',euro(totaalKlant)],
+  [],
+  ['Uren'],
+  ['Datum','Klant','Start','Einde','Uren','Bedrag'],
+  ...t.uren.map(x=>[formatDateNL(x.datum),x.klant||'',x.start,x.einde,String(x.uren).replace('.',','),euro(x.bedrag)]),
+  [],
+  ['Materiaal'],
+  ['Datum','Leverancier','Materiaal','Bonnummer','Bedrag'],
+  ...t.mat.map(x=>[formatDateNL(x.datum),x.lev,x.oms,x.bon,euro(x.bedrag)])
+ ];
+ downloadCSV(rows,'Project_'+naam.replace(/[^a-z0-9]/gi,'_')+'_'+today()+'.csv')
+}
+function exportCSV(){let rows=[['GIO BUSINESS PLANNER EXPORT'],['Datum',new Date().toLocaleString('nl-NL')],[],['Klanten'],['Klantnr','Naam','Adres','Postcode','Plaats','Telefoon','Email'],...(data.klanten||[]).map(k=>[k.klantNr,k.naam,k.adres,k.postcode,k.plaats,k.telefoon,k.email]),[],['Projecten'],['Projectnr','Project','Klant','Status','Factuurnr','Totaal'],...data.projecten.map(p=>[p.projectNr,p.naam,p.klant,p.status,p.factuurNr||'',euro(projectTotals(p.naam).totaal)]),[],['Uren'],['Datum','Klant','Project','Start','Einde','Uren','Bedrag'],...data.uren.map(x=>[formatDateNL(x.datum),x.klant,x.project,x.start,x.einde,x.uren,euro(x.bedrag)]),[],['Materiaal klant'],['Datum','Project','Leverancier','Materiaal','Bedrag','PDF'],...data.materiaal.map(x=>[formatDateNL(x.datum),x.project,x.lev,x.oms,euro(x.bedrag),x.pdfNaam||'']),[],['Uitgave / Investeren'],['Datum','Categorie','Leverancier','Omschrijving','Bedrag','BTW','PDF'],...(data.uitgaven||[]).map(x=>[formatDateNL(x.datum),x.categorie,x.leverancier,x.omschrijving,euro(x.bedrag),euro(x.btwBedrag||0),x.pdfNaam||''])];downloadCSV(rows,'GIO_export_'+today()+'.csv')}
+function downloadCSV(rows,name){let csv=rows.map(r=>r.map(c=>`"${String(c??'').replace(/"/g,'""')}"`).join(';')).join('\n');let b=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});let a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click()}
+
+function backupJSON(){
+ let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+ let a=document.createElement('a');
+ a.href=URL.createObjectURL(blob);
+ a.download='GIO_Business_Planner_Backup_'+today()+'.json';
+ a.click();
+}
+function importJSON(ev){
+ let f=ev.target.files[0]; if(!f)return;
+ let r=new FileReader();
+ r.onload=function(e){
+  try{
+   data=JSON.parse(e.target.result);
+   ['planning','uren','materiaal','leveranciers','materialen','vrijedagen','projecten','uitgaven','klanten'].forEach(k=>{if(!data[k])data[k]=[]});
+   save(); render(); alert('Back-up teruggezet.');
+  }catch(err){alert('Dit bestand kan niet worden ingelezen.');}
+ };
+ r.readAsText(f);
+}
+function migreerOudeData(){
+ let keys=['gioTestDesktop','gioPlannerDesktop','gioTestDesktop_v14','gioTestBetaald'];
+ for(let k of keys){
+  let raw=localStorage.getItem(k);
+  if(raw){
+   try{
+    data=JSON.parse(raw);
+    ['planning','uren','materiaal','leveranciers','materialen','vrijedagen','projecten','uitgaven','klanten'].forEach(x=>{if(!data[x])data[x]=[]});
+    save(); render();
+    alert('Gegevens gevonden en meegenomen uit: '+k);
+    return;
+   }catch(e){}
+  }
+ }
+ alert('Geen oude v14 gegevens gevonden in deze browser. Open v14 eerst in dezelfde browser en maak eventueel een JSON back-up.');
+}
+
+function resetAlles(){if(confirm('Alle testdata verwijderen?')){localStorage.removeItem('gioTestBetaald');data={planning:[],uren:[],materiaal:[],leveranciers:[],materialen:[],vrijedagen:[],projecten:[]};render()}}
+window.addEventListener("storage",e=>{if(e.key==="gioTestBetaald"||e.key==="gioPlannerLastUpdate")refreshData()});
+document.addEventListener('DOMContentLoaded',()=>{load();berekenUren();editUrenModal.addEventListener('click',e=>{if(e.target===editUrenModal)closeUrenEdit()})});
+
+function openKlantEdit(i){
+ let k=data.klanten[i]; if(!k)return;
+ editKlantIndex.value=i;
+ editKlantNr.value=k.klantNr||'';
+ editKlantNaam.value=k.naam||'';
+ editKlantAdres.value=k.adres||'';
+ editKlantPostcode.value=k.postcode||'';
+ editKlantPlaats.value=k.plaats||'';
+ editKlantTelefoon.value=k.telefoon||'';
+ editKlantEmail.value=k.email||'';
+ editKlantOpmerking.value=k.opmerking||'';
+ editKlantModal.style.display='flex';
+}
+function closeKlantEdit(){editKlantModal.style.display='none'}
+function saveKlantEdit(){
+ let i=parseInt(editKlantIndex.value,10); if(!data.klanten[i])return;
+ let oldName=data.klanten[i].naam;
+ data.klanten[i]={
+   ...data.klanten[i],
+   klantNr:editKlantNr.value,
+   naam:editKlantNaam.value,
+   adres:editKlantAdres.value,
+   postcode:editKlantPostcode.value,
+   plaats:editKlantPlaats.value,
+   telefoon:editKlantTelefoon.value,
+   email:editKlantEmail.value,
+   opmerking:editKlantOpmerking.value,
+   gewijzigdOp:new Date().toLocaleString('nl-NL'),
+   gewijzigdDoor:currentUser||'-'
+ };
+ if(oldName && oldName!==editKlantNaam.value){
+   data.projecten.forEach(p=>{if(p.klant===oldName)p.klant=editKlantNaam.value});
+   data.planning.forEach(p=>{if(p.klant===oldName)p.klant=editKlantNaam.value});
+   data.uren.forEach(u=>{if(u.klant===oldName)u.klant=editKlantNaam.value});
+ }
+ closeKlantEdit(); save(); render();
+}
+
+</script>
+
+<div id="editKlantModal" class="modalOverlay">
+  <div class="modalBox">
+    <h2>✏️ Klant aanpassen</h2>
+    <input type="hidden" id="editKlantIndex">
+    <div class="row">
+      <div><label>Klantnummer</label><input id="editKlantNr" readonly></div>
+      <div><label>Naam</label><input id="editKlantNaam"></div>
+      <div><label>Adres</label><input id="editKlantAdres"></div>
+      <div><label>Postcode</label><input id="editKlantPostcode"></div>
+      <div><label>Plaats</label><input id="editKlantPlaats"></div>
+      <div><label>Telefoon</label><input id="editKlantTelefoon"></div>
+      <div><label>E-mail</label><input id="editKlantEmail"></div>
+    </div>
+    <label>Opmerking</label><textarea id="editKlantOpmerking"></textarea>
+    <button class="btn" onclick="saveKlantEdit()">💾 Opslaan</button>
+    <button class="btn2" onclick="closeKlantEdit()">Annuleren</button>
+  </div>
+</div>
+
+</body>
+</html>
