@@ -51,9 +51,35 @@ th{background:var(--geel)}
 .project-paid{background:#d8f5dc!important}
 .project-paid td:nth-child(2){text-decoration:line-through;font-weight:900}
 .paid-badge{color:#2e7d32;font-weight:900}
+
+/* UPDATE 4 PROJECTKAART PRO MOBIEL */
+.mobileTopBar{display:none}.bottomDock,.mobileActionDock{display:none}
+.projectHero{background:linear-gradient(135deg,#07111f,#0d2238);color:#fff;border-radius:22px;padding:18px;margin-bottom:16px}
+.projectHero h2{margin:0;color:#fff}.syncBadge{display:inline-block;background:#d8f5dc;color:#0b6b1e;border-radius:999px;padding:6px 10px;font-weight:900;font-size:13px;margin-top:6px}
+.liveClock{background:#e6ffe8;border:1px solid #b7eabb;border-radius:18px;padding:14px;margin-bottom:15px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.liveClockDot{width:18px;height:18px;border-radius:50%;background:#18a42e;box-shadow:0 0 0 0 rgba(24,164,46,.7);animation:gioPulse 1.4s infinite}
+@keyframes gioPulse{0%{box-shadow:0 0 0 0 rgba(24,164,46,.7)}70%{box-shadow:0 0 0 12px rgba(24,164,46,0)}100%{box-shadow:0 0 0 0 rgba(24,164,46,0)}}
+.liveClock b{color:#0b6b1e}.liveClock button{background:#e52525;color:#fff;border:0;border-radius:12px;padding:12px 16px;font-weight:900}
+.proGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.proTile{background:#fff;border-radius:18px;padding:16px;box-shadow:0 8px 22px #00000012;border:1px solid #eee;min-height:132px}
+.proTile h3{margin:0 0 10px;font-size:20px}.proBig{font-size:24px;font-weight:900}.blue{color:#1565c0}.green{color:#10851f}.orange{color:#ef6c00}
+.quickActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.quickActions a,.quickActions button{background:#fff;border:1px solid #ddd;border-radius:14px;padding:11px 13px;font-weight:900;color:#111;text-decoration:none}
+.progressCircle{width:92px;height:92px;border-radius:50%;background:conic-gradient(#24a33b 0 65%,#e5e7eb 65% 100%);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900}.progressCircle span{background:#fff;border-radius:50%;width:62px;height:62px;display:flex;align-items:center;justify-content:center}
+@media(max-width:760px){
+ body{background:#f5f7fb!important}.shell{display:block!important}.sidebar{display:none!important}main,.main{padding:0 12px 120px!important;max-width:none!important;width:100%!important}
+ .mobileTopBar{display:flex;position:sticky;top:0;z-index:9999;background:#07111f;color:#fff;margin:0 -12px 12px;padding:14px 16px;align-items:center;justify-content:space-between}.mobileTopBar b{color:#f4c400}
+ .card{border-radius:18px!important;padding:14px!important;margin-bottom:12px!important}table{display:block;overflow-x:auto;white-space:nowrap}.row{grid-template-columns:1fr!important}
+ .projectHero{margin:0 0 12px 0;border-radius:0 0 24px 24px;padding:16px}.liveClock{position:sticky;top:58px;z-index:999;display:block}.liveClock button{width:100%;margin-top:10px}
+ .proGrid{grid-template-columns:1fr 1fr;gap:10px}.proTile{padding:13px;min-height:118px;border-radius:16px}.proTile h3{font-size:16px}.proBig{font-size:20px}
+ .quickActions{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.quickActions a,.quickActions button{font-size:12px;text-align:center;padding:10px 6px}
+ .mobileActionDock{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;position:fixed;left:0;right:0;bottom:58px;background:#07111f;padding:10px 8px;z-index:9999}.mobileActionDock button{border:1px solid #34465c;background:#132238;color:#fff;border-radius:12px;padding:9px 3px;font-weight:900;font-size:11px}.mobileActionDock button.main{background:#f4c400;color:#111}
+ .bottomDock{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #ddd;z-index:9999}.bottomDock button{background:#fff;border:0;padding:9px 2px;font-size:11px;font-weight:800;color:#555}.bottomDock button.active{color:#f4c400}
+}
+
 </style>
 </head>
 <body>
+<div class="mobileTopBar"><div>☰ <b>GIO</b> Planner PRO</div><div>☁️ Sync</div></div>
 <div id="loginScreen" class="loginScreen">
   <div class="loginBox">
     <h1>GIO Business Planner</h1>
@@ -161,10 +187,6 @@ th{background:var(--geel)}
 </section>
 
 <section id="uren" class="page">
- <div class="card" style="background:#eaf3ff;border-left:7px solid #2e7d32">
-  <h2>⏱ Inklok herstel actief</h2>
-  <p>Als je inklokt en later weer online komt, blijven klant, project en starttijd bewaard. Uitklokken berekent vanaf de originele starttijd.</p>
- </div>
  <div class="card dark">
   <h2>In- en uitklokken</h2>
   <div class="row"><div><label>Klant</label><input id="uKlant" list="klantenDatalist" value="Bert"></div><div><label>Project</label><input id="uProject" list="projectenList"></div><div><label>Datum</label><input type="date" id="uDatum"></div><div><label>Start</label><input type="time" id="uStart" value="13:00"></div><div><label>Einde</label><input type="time" id="uEinde" value="20:30"></div><div><label>Tarief</label><input type="number" id="uTarief" value="35" step="0.01"></div></div>
@@ -292,6 +314,28 @@ th{background:var(--geel)}
 
 <datalist id="projectenList"></datalist>
 <datalist id="klantenDatalist"></datalist>
+
+<section id="projectkaartpro" class="page">
+  <div class="projectHero">
+    <h2>📁 Projectkaart PRO</h2>
+    <span class="syncBadge">☁️ Gesynchroniseerd</span>
+    <p>Alles van één project op één scherm: klant, uren, materiaal, uitgaven, werkbon, factuur, notities en resultaat.</p>
+  </div>
+  <div id="projectClockBar" class="liveClock" style="display:none">
+    <div style="display:flex;gap:12px;align-items:center">
+      <div class="liveClockDot"></div>
+      <div><b>JE BENT INGEKLOKT</b><br><span id="projectClockText">Lopende klus</span></div>
+    </div>
+    <button onclick="showPage('uren');setTimeout(()=>{if(typeof clockOut==='function')clockOut()},300)">UITKLOKKEN</button>
+  </div>
+  <div class="card">
+    <label>Kies project</label>
+    <select id="projectProSelect" onchange="renderProjectPro()"></select>
+    <button class="btn" onclick="renderProjectPro()">Open projectkaart</button>
+  </div>
+  <div id="projectProContent"></div>
+</section>
+
 </main>
 </div>
 
@@ -638,68 +682,94 @@ function resetAlles(){if(confirm('Alle testdata verwijderen?')){localStorage.rem
 window.addEventListener("storage",e=>{if(e.key==="gioTestBetaald"||e.key==="gioPlannerLastUpdate")refreshData()});
 document.addEventListener('DOMContentLoaded',()=>{load();berekenUren();editUrenModal.addEventListener('click',e=>{if(e.target===editUrenModal)closeUrenEdit()})});
 
-/* === UPDATE 3: INKLOK HERSTEL === */
-function ensureActiveClock(){ if(!data.activeClock)data.activeClock=null; }
-function restoreActiveClock(){
- ensureActiveClock();
- if(data.activeClock && data.activeClock.running){
-  let ac=data.activeClock;
-  if(document.getElementById('uKlant'))uKlant.value=ac.klant||'';
-  if(document.getElementById('uProject'))uProject.value=ac.project||'';
-  if(document.getElementById('uDatum'))uDatum.value=ac.datum||today();
-  if(document.getElementById('uStart'))uStart.value=ac.start||'';
-  if(document.getElementById('uTarief'))uTarief.value=ac.tarief||35;
-  let st=new Date(ac.startedAt||((ac.datum||today())+'T'+(ac.start||'00:00')+':00'));
-  let minRun=Math.max(0,Math.round((Date.now()-st.getTime())/60000));
-  let h=Math.floor(minRun/60), m=minRun%60;
-  if(document.getElementById('urenStatusTekst'))urenStatusTekst.innerText='Status: 🟢 lopende inklok gevonden — '+(ac.klant||'-')+' / '+(ac.project||'-')+' sinds '+(ac.start||'-')+' ('+h+'u '+m+'m)';
-  if(document.getElementById('clockInBtn'))clockInBtn.classList.add('inActive');
- }
+/* UPDATE 4 PROJECTKAART PRO JS */
+function euroPro(v){return new Intl.NumberFormat('nl-NL',{style:'currency',currency:'EUR'}).format(Number(v||0))}
+function totalsPro(projectNaam){
+ const uren=(data.uren||[]).filter(x=>x.project===projectNaam);
+ const mat=(data.materiaal||[]).filter(x=>x.project===projectNaam);
+ const uit=(data.uitgaven||[]).filter(x=>x.project===projectNaam);
+ const urenSom=uren.reduce((s,x)=>s+Number(x.uren||0),0);
+ const arbeid=uren.reduce((s,x)=>s+Number(x.bedrag||0),0);
+ const materiaal=mat.reduce((s,x)=>s+Number(x.bedrag||0),0);
+ const uitgaven=uit.reduce((s,x)=>s+Number(x.bedrag||0),0);
+ return {uren,mat,uit,urenSom,arbeid,materiaal,uitgaven,omzet:arbeid+materiaal,winst:arbeid+materiaal-uitgaven};
 }
-function clockIn(){
- let d=new Date(), start=d.toTimeString().slice(0,5);
- if(!uDatum.value)uDatum.value=today();
- uStart.value=start;
- data.activeClock={running:true,klant:uKlant.value||'',project:uProject.value||'',datum:uDatum.value||today(),start:start,tarief:+uTarief.value||35,startedAt:d.toISOString(),aangemaaktOp:new Date().toLocaleString('nl-NL')};
- save();
- if(typeof cloudPush==='function')cloudPush().catch(()=>{});
- clockInBtn.classList.add('inActive'); clockOutBtn.classList.remove('outActive');
- urenStatusTekst.innerText='Status: 🟢 Aan het werk sinds '+start+' — lopende inklok opgeslagen';
- berekenUren();
+function getKlantPro(name){return (data.klanten||[]).find(k=>k.naam===name)||{}}
+function fillProjectProSelect(){
+ const s=document.getElementById('projectProSelect'); if(!s)return;
+ const current=s.value;
+ s.innerHTML=(data.projecten||[]).map(p=>`<option value="${p.naam||''}">${p.projectNr||''} ${p.naam||''}</option>`).join('');
+ if(current)s.value=current;
 }
-function clockOut(){
- ensureActiveClock();
- let d=new Date(), end=d.toTimeString().slice(0,5);
- uEinde.value=end;
- if(data.activeClock && data.activeClock.running){
-  uKlant.value=data.activeClock.klant||uKlant.value;
-  uProject.value=data.activeClock.project||uProject.value;
-  uDatum.value=data.activeClock.datum||uDatum.value||today();
-  uStart.value=data.activeClock.start||uStart.value;
-  uTarief.value=data.activeClock.tarief||uTarief.value||35;
- }
- clockOutBtn.classList.add('outActive'); clockInBtn.classList.remove('inActive');
- urenStatusTekst.innerText='Status: 🔴 Uitgeklokt om '+end+' — klik Opslaan';
- berekenUren();
+function renderProjectClock(){
+ const bar=document.getElementById('projectClockBar'), txt=document.getElementById('projectClockText');
+ if(!bar||!txt)return;
+ if(data.activeClock&&data.activeClock.running){
+  const ac=data.activeClock;
+  const st=new Date(ac.startedAt||((ac.datum||today())+'T'+(ac.start||'00:00')+':00'));
+  const mins=Math.max(0,Math.round((Date.now()-st.getTime())/60000));
+  txt.innerText=`Klant: ${ac.klant||'-'} • Project: ${ac.project||'-'} • sinds ${ac.start||'-'} • ${Math.floor(mins/60)}u ${mins%60}m`;
+  bar.style.display='flex';
+ }else bar.style.display='none';
 }
-function saveUren(){
- let r=berekenUren();
- data.uren.push({datum:uDatum.value,klant:uKlant.value,project:uProject.value,start:uStart.value,einde:uEinde.value,tarief:+uTarief.value||35,uren:r.uren,bedrag:r.bedrag,bron:(data.activeClock&&data.activeClock.running)?'herstelde inklok':'handmatig',opgeslagenOp:new Date().toLocaleString('nl-NL')});
- ensureProject(uProject.value,uKlant.value);
- data.activeClock=null;
- save();
- if(typeof cloudPush==='function')cloudPush().catch(()=>{});
- render();
- saveUrenBtn.classList.add('saved'); saveUrenBtn.innerText='Opgeslagen ✓';
- urenStatusTekst.innerText='Status: uren opgeslagen en lopende inklok afgesloten';
- setTimeout(()=>{saveUrenBtn.classList.remove('saved');saveUrenBtn.innerText='Opslaan'},1800);
+function renderProjectPro(){
+ fillProjectProSelect(); renderProjectClock();
+ const box=document.getElementById('projectProContent'), sel=document.getElementById('projectProSelect');
+ if(!box||!sel)return;
+ const naam=sel.value||((data.projecten||[])[0]?.naam);
+ if(!naam){box.innerHTML='<div class="card">Nog geen project gekozen.</div>';return}
+ const p=(data.projecten||[]).find(x=>x.naam===naam)||{}, k=getKlantPro(p.klant), t=totalsPro(p.naam);
+ const tel=(k.telefoon||'').replace(/\s/g,''), mail=k.factuurEmail||k.email||'', adres=encodeURIComponent([k.adres,k.postcode,k.plaats].filter(Boolean).join(' '));
+ box.innerHTML=`
+ <div class="card">
+  <div style="display:flex;justify-content:space-between;gap:12px;align-items:start;flex-wrap:wrap">
+   <div><h1 style="margin:0">${p.naam||'-'}</h1><p>Project ${p.projectNr||'-'} • <span class="status-pill">${p.status||'Gepland'}</span></p></div>
+   <button class="btn2" onclick="showPage('projecten')">Project wijzigen</button>
+  </div>
+  <div class="quickActions">
+   <a href="${tel?'tel:'+tel:'#'}">📞 Bellen</a>
+   <a href="${tel?'https://wa.me/'+tel:'#'}" target="_blank">💬 WhatsApp</a>
+   <a href="${mail?'mailto:'+mail:'#'}">📧 E-mail</a>
+   <a href="${adres?'https://www.google.com/maps/search/?api=1&query='+adres:'#'}" target="_blank">📍 Locatie</a>
+  </div>
+ </div>
+ <div class="proGrid">
+  <div class="proTile"><h3>👤 Klant</h3><b>${p.klant||'-'}</b><br>${k.type||'Privé'}<br><small>${k.contact||''}</small><br><small>KvK: ${k.kvk||'-'} • BTW: ${k.btw||'-'}</small></div>
+  <div class="proTile"><h3>⏱ Uren</h3><div class="proBig blue">${t.urenSom.toFixed(2)} u</div><small>Arbeid</small><br><b>${euroPro(t.arbeid)}</b></div>
+  <div class="proTile"><h3>🧰 Materiaal</h3><small>Openstaand</small><div class="proBig orange">${euroPro(t.materiaal)}</div><small>${t.mat.length} regels</small></div>
+  <div class="proTile"><h3>💸 Uitgaven</h3><small>Kosten project</small><div class="proBig green">${euroPro(t.uitgaven)}</div><small>${t.uit.length} regels</small></div>
+  <div class="proTile"><h3>📷 Foto's</h3><div class="proBig">0</div><small>Voor / tijdens / na</small><br><button class="btn2" onclick="alert('Foto upload komt in volgende stap')">Foto toevoegen</button></div>
+  <div class="proTile"><h3>📄 Werkbon</h3><small>Status</small><br><span class="status-pill">Concept</span><br><br><button class="btn2" onclick="alert('Werkbon PDF komt in volgende stap')">Bekijk werkbon</button></div>
+  <div class="proTile"><h3>🧾 Factuur</h3><small>Status</small><br><span class="status-pill">${p.factuurNr?'Concept':'Nog geen'}</span><br><div class="proBig">${euroPro(t.omzet)}</div></div>
+  <div class="proTile"><h3>💰 Resultaat</h3><small>Omzet ${euroPro(t.omzet)}</small><br><small>Kosten ${euroPro(t.uitgaven)}</small><div class="proBig green">${euroPro(t.winst)}</div></div>
+  <div class="proTile"><h3>📝 Notities</h3><p>${p.notitie||'Nog geen notitie.'}</p><button class="btn2" onclick="showPage('projecten')">Notitie aanpassen</button></div>
+  <div class="proTile"><h3>📈 Voortgang</h3><div class="progressCircle"><span>65%</span></div><small>Verwachte oplevering ${p.eind||'-'}</small></div>
+ </div>
+ <div class="card"><h2>Laatste activiteit</h2><p>🟢 Projectkaart geopend</p><p>🔵 ${t.uren.length} urenregels gekoppeld</p><p>🟠 ${t.mat.length} materiaalregels gekoppeld</p></div>`;
 }
-const gioLoadBase=load;
-load=function(check=true){ gioLoadBase(check); setTimeout(restoreActiveClock,300); }
-const gioRenderBase=render;
-render=function(){ gioRenderBase(); setTimeout(restoreActiveClock,100); }
-document.addEventListener('DOMContentLoaded',()=>setTimeout(restoreActiveClock,700));
+const oldShowPageUpdate4=showPage;
+showPage=function(id){oldShowPageUpdate4(id); if(id==='projectkaartpro')setTimeout(renderProjectPro,100)}
+const oldRenderUpdate4=render;
+render=function(){oldRenderUpdate4(); fillProjectProSelect(); renderProjectClock();}
+setInterval(renderProjectClock,30000);
+document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{fillProjectProSelect();renderProjectClock();},800));
 
 </script>
+
+<div class="mobileActionDock">
+  <button class="main" onclick="showPage('uren')">▶ Inklok</button>
+  <button onclick="showPage('materiaal')">🧰 Materiaal</button>
+  <button onclick="showPage('uitgaven')">💸 Uitgave</button>
+  <button onclick="showPage('projectkaartpro')">📁 Kaart</button>
+  <button onclick="showPage('export')">☁️ Sync</button>
+</div>
+<div class="bottomDock">
+  <button class="active" onclick="showPage('dashboard')">🏠<br>Dashboard</button>
+  <button onclick="showPage('projecten')">📁<br>Projecten</button>
+  <button onclick="showPage('klanten')">👥<br>Klanten</button>
+  <button onclick="showPage('uren')">⏱<br>Uren</button>
+  <button onclick="showPage('projectkaartpro')">☰<br>Meer</button>
+</div>
+
 </body>
 </html>
