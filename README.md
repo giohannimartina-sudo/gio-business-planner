@@ -1,3 +1,1 @@
-# GIO Business Planner PRO - Update 1 Klanten
-
-Toegevoegd: Privé/Zakelijk, contactpersoon, factuur e-mail, KvK, BTW-nummer, klant wijzigen en PWA.
+Update 2 Cloud Sync: Opslaan naar cloud en Sync ophalen via Supabase planner_data.
