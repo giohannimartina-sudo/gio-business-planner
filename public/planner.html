@@ -51,9 +51,6 @@ th{background:var(--geel)}
 .project-paid{background:#d8f5dc!important}
 .project-paid td:nth-child(2){text-decoration:line-through;font-weight:900}
 .paid-badge{color:#2e7d32;font-weight:900}
-
-.cloudSyncBox{background:#eaf3ff;border:1px solid #97bce8;border-radius:16px;padding:14px;margin-bottom:14px}
-.cloudSyncStatus{font-weight:900;margin-top:8px}.cloudOk{color:#176b2c}.cloudBad{color:#b00020}
 </style>
 </head>
 <body>
@@ -86,19 +83,6 @@ th{background:var(--geel)}
 </aside>
 
 <main>
-<div id="cloudSyncBox" class="cloudSyncBox">
-  <h2>☁️ Cloud Sync telefoon ↔ desktop</h2>
-  <p><b>Telefoon:</b> na invoeren klik je op <b>Opslaan naar cloud</b>. <b>Desktop:</b> klik op <b>Sync ophalen</b>.</p>
-  <div class="row">
-    <div><label>Supabase e-mail</label><input id="cloudEmail" placeholder="jouw@email.nl"></div>
-    <div><label>Wachtwoord</label><input id="cloudPassword" type="password" placeholder="wachtwoord"></div>
-  </div>
-  <button class="btn2" onclick="cloudLogin()">🔐 Inloggen</button>
-  <button class="btn2" onclick="cloudSignup()">Account maken</button>
-  <button class="btn" onclick="cloudPush()">☁️ Opslaan naar cloud</button>
-  <button class="btn" onclick="cloudPull()">🔄 Sync ophalen</button>
-  <div id="cloudSyncStatus" class="cloudSyncStatus">Cloud sync nog niet verbonden.</div>
-</div>
 <div class="userbar">
   <div><b>Ingelogd als: <span id="currentUserLabel">-</span></b><br><small>Laatste update: <span id="lastSync">-</span></small></div>
   <div><button class="btn2" onclick="refreshData()">🔄 Verversen</button><button class="btn2" onclick="logout()">Uitloggen</button></div>
@@ -177,6 +161,10 @@ th{background:var(--geel)}
 </section>
 
 <section id="uren" class="page">
+ <div class="card" style="background:#eaf3ff;border-left:7px solid #2e7d32">
+  <h2>⏱ Inklok herstel actief</h2>
+  <p>Als je inklokt en later weer online komt, blijven klant, project en starttijd bewaard. Uitklokken berekent vanaf de originele starttijd.</p>
+ </div>
  <div class="card dark">
   <h2>In- en uitklokken</h2>
   <div class="row"><div><label>Klant</label><input id="uKlant" list="klantenDatalist" value="Bert"></div><div><label>Project</label><input id="uProject" list="projectenList"></div><div><label>Datum</label><input type="date" id="uDatum"></div><div><label>Start</label><input type="time" id="uStart" value="13:00"></div><div><label>Einde</label><input type="time" id="uEinde" value="20:30"></div><div><label>Tarief</label><input type="number" id="uTarief" value="35" step="0.01"></div></div>
@@ -650,65 +638,67 @@ function resetAlles(){if(confirm('Alle testdata verwijderen?')){localStorage.rem
 window.addEventListener("storage",e=>{if(e.key==="gioTestBetaald"||e.key==="gioPlannerLastUpdate")refreshData()});
 document.addEventListener('DOMContentLoaded',()=>{load();berekenUren();editUrenModal.addEventListener('click',e=>{if(e.target===editUrenModal)closeUrenEdit()})});
 
-let cloudClient=null;
-let cloudUser=null;
-function cloudStatus(msg,ok=true){
- let el=document.getElementById('cloudSyncStatus');
- if(el){el.className='cloudSyncStatus '+(ok?'cloudOk':'cloudBad');el.innerText=msg;}
+/* === UPDATE 3: INKLOK HERSTEL === */
+function ensureActiveClock(){ if(!data.activeClock)data.activeClock=null; }
+function restoreActiveClock(){
+ ensureActiveClock();
+ if(data.activeClock && data.activeClock.running){
+  let ac=data.activeClock;
+  if(document.getElementById('uKlant'))uKlant.value=ac.klant||'';
+  if(document.getElementById('uProject'))uProject.value=ac.project||'';
+  if(document.getElementById('uDatum'))uDatum.value=ac.datum||today();
+  if(document.getElementById('uStart'))uStart.value=ac.start||'';
+  if(document.getElementById('uTarief'))uTarief.value=ac.tarief||35;
+  let st=new Date(ac.startedAt||((ac.datum||today())+'T'+(ac.start||'00:00')+':00'));
+  let minRun=Math.max(0,Math.round((Date.now()-st.getTime())/60000));
+  let h=Math.floor(minRun/60), m=minRun%60;
+  if(document.getElementById('urenStatusTekst'))urenStatusTekst.innerText='Status: 🟢 lopende inklok gevonden — '+(ac.klant||'-')+' / '+(ac.project||'-')+' sinds '+(ac.start||'-')+' ('+h+'u '+m+'m)';
+  if(document.getElementById('clockInBtn'))clockInBtn.classList.add('inActive');
+ }
 }
-async function cloudInit(){
- if(cloudClient)return cloudClient;
- try{
-  const cfg=await fetch('/api/config').then(r=>r.json());
-  if(!cfg.url||!cfg.anonKey){cloudStatus('Supabase instellingen ontbreken in Vercel.',false);return null;}
-  const mod=await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm');
-  cloudClient=mod.createClient(cfg.url,cfg.anonKey);
-  const ses=await cloudClient.auth.getSession();
-  if(ses.data.session){cloudUser=ses.data.session.user;cloudStatus('Ingelogd voor cloud sync: '+cloudUser.email);}
-  return cloudClient;
- }catch(e){cloudStatus('Cloud fout: '+e.message,false);return null;}
-}
-async function cloudLogin(){
- const c=await cloudInit(); if(!c)return;
- const email=document.getElementById('cloudEmail').value.trim();
- const password=document.getElementById('cloudPassword').value;
- if(!email||!password){cloudStatus('Vul e-mail en wachtwoord in.',false);return;}
- const res=await c.auth.signInWithPassword({email,password});
- if(res.error){cloudStatus('Login fout: '+res.error.message,false);return;}
- cloudUser=res.data.user; cloudStatus('Ingelogd: '+cloudUser.email);
-}
-async function cloudSignup(){
- const c=await cloudInit(); if(!c)return;
- const email=document.getElementById('cloudEmail').value.trim();
- const password=document.getElementById('cloudPassword').value;
- if(!email||!password){cloudStatus('Vul e-mail en wachtwoord in.',false);return;}
- const res=await c.auth.signUp({email,password});
- if(res.error){cloudStatus('Account fout: '+res.error.message,false);return;}
- cloudStatus('Account gemaakt. Log daarna in.');
-}
-async function cloudPush(){
- const c=await cloudInit(); if(!c)return;
- const ses=await c.auth.getSession(); cloudUser=ses.data.session?.user;
- if(!cloudUser){cloudStatus('Eerst inloggen.',false);return;}
+function clockIn(){
+ let d=new Date(), start=d.toTimeString().slice(0,5);
+ if(!uDatum.value)uDatum.value=today();
+ uStart.value=start;
+ data.activeClock={running:true,klant:uKlant.value||'',project:uProject.value||'',datum:uDatum.value||today(),start:start,tarief:+uTarief.value||35,startedAt:d.toISOString(),aangemaaktOp:new Date().toLocaleString('nl-NL')};
  save();
- const res=await c.from('planner_data').upsert({user_id:cloudUser.id,data:data,updated_at:new Date().toISOString()},{onConflict:'user_id'});
- if(res.error){cloudStatus('Opslaan fout: '+res.error.message,false);return;}
- cloudStatus('Opgeslagen naar cloud om '+new Date().toLocaleTimeString('nl-NL'));
+ if(typeof cloudPush==='function')cloudPush().catch(()=>{});
+ clockInBtn.classList.add('inActive'); clockOutBtn.classList.remove('outActive');
+ urenStatusTekst.innerText='Status: 🟢 Aan het werk sinds '+start+' — lopende inklok opgeslagen';
+ berekenUren();
 }
-async function cloudPull(){
- const c=await cloudInit(); if(!c)return;
- const ses=await c.auth.getSession(); cloudUser=ses.data.session?.user;
- if(!cloudUser){cloudStatus('Eerst inloggen.',false);return;}
- const res=await c.from('planner_data').select('data,updated_at').eq('user_id',cloudUser.id).maybeSingle();
- if(res.error){cloudStatus('Sync fout: '+res.error.message,false);return;}
- if(!res.data||!res.data.data){cloudStatus('Geen clouddata gevonden. Sla eerst op vanaf telefoon.',false);return;}
- if(!confirm('Clouddata ophalen en lokale data vervangen?'))return;
- data=res.data.data;
- ['planning','uren','materiaal','leveranciers','materialen','vrijedagen','projecten','uitgaven','klanten','notities'].forEach(k=>{if(!data[k])data[k]=[]});
- save(); render();
- cloudStatus('Clouddata opgehaald. Update: '+new Date(res.data.updated_at).toLocaleString('nl-NL'));
+function clockOut(){
+ ensureActiveClock();
+ let d=new Date(), end=d.toTimeString().slice(0,5);
+ uEinde.value=end;
+ if(data.activeClock && data.activeClock.running){
+  uKlant.value=data.activeClock.klant||uKlant.value;
+  uProject.value=data.activeClock.project||uProject.value;
+  uDatum.value=data.activeClock.datum||uDatum.value||today();
+  uStart.value=data.activeClock.start||uStart.value;
+  uTarief.value=data.activeClock.tarief||uTarief.value||35;
+ }
+ clockOutBtn.classList.add('outActive'); clockInBtn.classList.remove('inActive');
+ urenStatusTekst.innerText='Status: 🔴 Uitgeklokt om '+end+' — klik Opslaan';
+ berekenUren();
 }
-document.addEventListener('DOMContentLoaded',()=>{setTimeout(cloudInit,800);});
+function saveUren(){
+ let r=berekenUren();
+ data.uren.push({datum:uDatum.value,klant:uKlant.value,project:uProject.value,start:uStart.value,einde:uEinde.value,tarief:+uTarief.value||35,uren:r.uren,bedrag:r.bedrag,bron:(data.activeClock&&data.activeClock.running)?'herstelde inklok':'handmatig',opgeslagenOp:new Date().toLocaleString('nl-NL')});
+ ensureProject(uProject.value,uKlant.value);
+ data.activeClock=null;
+ save();
+ if(typeof cloudPush==='function')cloudPush().catch(()=>{});
+ render();
+ saveUrenBtn.classList.add('saved'); saveUrenBtn.innerText='Opgeslagen ✓';
+ urenStatusTekst.innerText='Status: uren opgeslagen en lopende inklok afgesloten';
+ setTimeout(()=>{saveUrenBtn.classList.remove('saved');saveUrenBtn.innerText='Opslaan'},1800);
+}
+const gioLoadBase=load;
+load=function(check=true){ gioLoadBase(check); setTimeout(restoreActiveClock,300); }
+const gioRenderBase=render;
+render=function(){ gioRenderBase(); setTimeout(restoreActiveClock,100); }
+document.addEventListener('DOMContentLoaded',()=>setTimeout(restoreActiveClock,700));
 
 </script>
 </body>

@@ -1,1 +1,1 @@
-Update 2 Cloud Sync: Opslaan naar cloud en Sync ophalen via Supabase planner_data.
+Update 3: Inklok herstel. Lopende inklok blijft bewaard en wordt hersteld bij opnieuw openen.
