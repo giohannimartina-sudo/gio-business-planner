@@ -20,5 +20,40 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
+  ],
+  "shortcuts": [
+    {
+      "name": "Inklokken",
+      "short_name": "Inklok",
+      "url": "/?actie=uren",
+      "icons": [
+        {
+          "src": "/gio-logo-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Projectkaart",
+      "short_name": "Project",
+      "url": "/?actie=projectkaartpro",
+      "icons": [
+        {
+          "src": "/gio-logo-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Cloud Sync",
+      "short_name": "Sync",
+      "url": "/?actie=cloud",
+      "icons": [
+        {
+          "src": "/gio-logo-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
   ]
 }
