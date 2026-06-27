@@ -1,0 +1,33 @@
+/* GIO PRO v2.0 SAFE THEME */
+:root{--gio-bg:#050607;--gio-panel:#0b0c0f;--gio-border:#2a2d34;--gio-gold:#f4c400;--gio-text:#f8fafc}
+html,body{background:var(--gio-bg)!important;color:var(--gio-text)!important}
+body{background:radial-gradient(circle at top right,#1b1b12 0,#050607 45%,#000 100%)!important}
+.sidebar,aside,nav.sidebar{background:linear-gradient(180deg,#070707,#0b0c0f)!important;border-right:1px solid var(--gio-border)!important}
+.sidebar:before,aside:before{content:'';display:block;width:116px;height:116px;margin:14px auto 10px;background:url('/gio-logo-192.png') center/contain no-repeat;border-radius:22px;box-shadow:0 0 26px rgba(244,196,0,.22)}
+.sidebar h1,.sidebar h2,aside h1,aside h2{color:var(--gio-gold)!important}
+.sidebar button,aside button{background:linear-gradient(180deg,#111318,#090a0d)!important;color:white!important;border:1px solid var(--gio-border)!important;border-radius:12px!important}
+.sidebar button:hover,.sidebar button.active,aside button:hover,aside button.active{background:linear-gradient(180deg,#ffd22b,#f4b800)!important;color:#111!important}
+main,.main,.content{background:transparent!important;color:var(--gio-text)!important}
+.card,.panel,.box,section>div{background:linear-gradient(180deg,rgba(17,19,24,.94),rgba(8,9,11,.96))!important;color:var(--gio-text)!important;border:1px solid var(--gio-border)!important;border-radius:16px!important;box-shadow:0 14px 35px rgba(0,0,0,.28)!important}
+h1,h2,h3{color:#fff!important}
+input,select,textarea{background:#0b0d11!important;color:#fff!important;border:1px solid #30343d!important;border-radius:10px!important}
+button,.btn,.btn2{border-radius:12px!important;font-weight:800!important}
+button[onclick*='cloud'],button[onclick*='Cloud'],button[onclick*='sync'],button[onclick*='Sync'],button[onclick*='Opslaan']{background:linear-gradient(180deg,#ffd22b,#f4b800)!important;color:#111!important}
+th{background:linear-gradient(180deg,#ffd22b,#f4b800)!important;color:#111!important}
+td{border-color:#2a2d34!important}
+.metric,.stat,.kpi,.summary-card{background:linear-gradient(180deg,#111318,#090a0d)!important;border:1px solid #30343d!important;border-bottom:4px solid var(--gio-gold)!important;border-radius:14px!important;color:#fff!important}
+.metric b,.stat b,.kpi b,.summary-card b,.value{color:var(--gio-gold)!important}
+#gioV2MobileTop,#gioV2Dock,#gioV2ActionDock{display:none}
+@media(max-width:760px){
+.sidebar,aside,nav.sidebar{display:none!important}
+main,.main,.content{padding:0 12px 126px!important;width:100%!important;max-width:none!important}
+#gioV2MobileTop{display:flex!important;position:sticky;top:0;z-index:9999;align-items:center;justify-content:space-between;background:#050607;color:#fff;margin:0 -12px 10px;padding:10px 14px;border-bottom:1px solid #20232a}
+#gioV2MobileTop img{width:42px;height:42px;border-radius:10px}#gioV2MobileTop b{color:var(--gio-gold)}
+table{display:block!important;overflow-x:auto!important;white-space:nowrap!important}
+#gioV2ActionDock{display:grid!important;grid-template-columns:repeat(5,1fr);gap:8px;position:fixed;left:0;right:0;bottom:58px;z-index:9999;background:#070707;padding:8px;border-top:1px solid #222}
+#gioV2ActionDock button{font-size:11px!important;padding:9px 2px!important;background:#111318!important;color:#fff!important;border:1px solid #30343d!important}
+#gioV2ActionDock button:first-child{background:linear-gradient(180deg,#ffd22b,#f4b800)!important;color:#111!important}
+#gioV2Dock{display:grid!important;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#08090c;border-top:1px solid #252832}
+#gioV2Dock button{background:transparent!important;color:#d1d5db!important;border:0!important;font-size:11px!important;padding:9px 2px!important}
+#gioV2Dock button:hover,#gioV2Dock button.active{color:var(--gio-gold)!important}
+}

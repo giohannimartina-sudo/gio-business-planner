@@ -1,82 +1,24 @@
 {
-  "name": "GIO Business Planner",
+  "name": "GIO Business Planner PRO",
   "short_name": "GIO Planner",
-  "description": "GIO Business Planner voor klanten, projecten, uren, materiaal en facturen.",
-  "id": "/",
   "start_url": "/?source=pwa",
   "scope": "/",
   "display": "standalone",
-  "display_override": [
-    "window-controls-overlay",
-    "standalone",
-    "minimal-ui"
-  ],
-  "background_color": "#07111f",
-  "theme_color": "#07111f",
+  "background_color": "#050607",
+  "theme_color": "#050607",
   "orientation": "portrait-primary",
-  "categories": [
-    "business",
-    "productivity"
-  ],
   "icons": [
     {
-      "src": "/icon-192.png",
+      "src": "/gio-logo-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
-      "src": "/icon-512.png",
+      "src": "/gio-logo-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "Inklokken",
-      "short_name": "Inklok",
-      "url": "/?actie=uren",
-      "icons": [
-        {
-          "src": "/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
-    },
-    {
-      "name": "Projectkaart",
-      "short_name": "Project",
-      "url": "/?actie=projectkaart",
-      "icons": [
-        {
-          "src": "/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
-    },
-    {
-      "name": "Backup",
-      "short_name": "Backup",
-      "url": "/?actie=export",
-      "icons": [
-        {
-          "src": "/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
+      "purpose": "any maskable"
     }
   ]
 }
