@@ -1,19 +1,12 @@
 import './globals.css';
 
 export const metadata = {
-  title: 'GIO Business Planner',
-  description: 'GIO Business Planner app',
+  title: 'GIO Business Planner PRO',
+  description: 'Projecten, uren, planning, betalingen en cloudsync voor GIO Klus Baas',
   manifest: '/manifest.webmanifest',
-  themeColor: '#07111f',
-  icons: {
-    icon: '/favicon.png',
-    apple: '/icon-180.png'
-  },
-  appleWebApp: {
-    capable: true,
-    title: 'GIO Planner',
-    statusBarStyle: 'black-translucent'
-  }
+  themeColor: '#0b0b0c',
+  icons: { icon: '/favicon.png', apple: '/gio-logo-180.png' },
+  appleWebApp: { capable: true, title: 'GIO Planner', statusBarStyle: 'black-translucent' }
 };
 
 export default function RootLayout({ children }) {

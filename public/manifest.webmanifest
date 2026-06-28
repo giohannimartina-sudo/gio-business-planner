@@ -1,11 +1,11 @@
 {
   "name": "GIO Business Planner PRO",
   "short_name": "GIO Planner",
-  "start_url": "/?source=pwa",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#050607",
-  "theme_color": "#050607",
+  "background_color": "#0a0b0d",
+  "theme_color": "#0a0b0d",
   "orientation": "portrait-primary",
   "icons": [
     {
@@ -19,41 +19,6 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "Inklokken",
-      "short_name": "Inklok",
-      "url": "/?actie=uren",
-      "icons": [
-        {
-          "src": "/gio-logo-192.png",
-          "sizes": "192x192"
-        }
-      ]
-    },
-    {
-      "name": "Projectkaart",
-      "short_name": "Project",
-      "url": "/?actie=projectkaartpro",
-      "icons": [
-        {
-          "src": "/gio-logo-192.png",
-          "sizes": "192x192"
-        }
-      ]
-    },
-    {
-      "name": "Cloud Sync",
-      "short_name": "Sync",
-      "url": "/?actie=cloud",
-      "icons": [
-        {
-          "src": "/gio-logo-192.png",
-          "sizes": "192x192"
-        }
-      ]
     }
   ]
 }
