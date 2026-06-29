@@ -62,40 +62,29 @@ body.gioV2{background:radial-gradient(circle at top right,#1d1a0a 0,#050607 48%,
 #gioMobileTop,#gioActionDock,#gioBottomDock{display:none}@media(max-width:800px){.gioV2 .wrap{display:block}.gioV2 aside{display:none}.gioV2 main{padding:0 12px 130px}.gioV2 #titel{display:none}.gioV2 .userbar{margin-top:10px}.gioV2 .card{border-radius:16px;padding:14px}.gioV2 .grid,.gioTileGrid{grid-template-columns:1fr 1fr;gap:10px}.gioV2 table{display:block;overflow-x:auto;white-space:nowrap}.gioV2 input,.gioV2 select,.gioV2 textarea{font-size:16px}#gioMobileTop{display:flex;position:sticky;top:0;z-index:9999;margin:0 -12px 10px;padding:10px 14px;background:#050607;border-bottom:1px solid #222;align-items:center;justify-content:space-between}#gioMobileTop img{width:42px;height:42px;border-radius:10px}#gioMobileTop b{color:var(--gio-gold)}#gioActionDock{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;position:fixed;bottom:58px;left:0;right:0;background:#070707;padding:8px;z-index:9999;border-top:1px solid #222}#gioActionDock button{font-size:11px;padding:9px 2px;background:#111318;color:#fff;border:1px solid #30343d;border-radius:12px;font-weight:900}#gioActionDock button:first-child{background:linear-gradient(180deg,#ffd22b,#f4b800);color:#111}#gioBottomDock{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;bottom:0;left:0;right:0;background:#08090c;border-top:1px solid #252832;z-index:9999}#gioBottomDock button{background:transparent;color:#d1d5db;border:0;font-size:11px;padding:9px 2px;font-weight:800}#gioBottomDock button.active,#gioBottomDock button:hover{color:var(--gio-gold)}}
 
 
-
-/* === GIO PRO v2.0 LIGHT / DARK SWITCH - LIVE SAFE === */
-body.gioV2{--app-bg:#050607;--app-panel:#0b0d11;--app-card:#111318;--app-border:#2a2d34;--app-text:#f8fafc;--app-muted:#a7adb8;--app-input:#0b0d11;--app-table:#0b0d11;--app-sidebar:#070707;--app-shadow:rgba(0,0,0,.28)}
-body.gioV2.gioLight{--app-bg:#f5f7fb;--app-panel:#ffffff;--app-card:#ffffff;--app-border:#d6dbe5;--app-text:#101828;--app-muted:#475467;--app-input:#ffffff;--app-table:#ffffff;--app-sidebar:#111318;--app-shadow:rgba(16,24,40,.10);background:#f5f7fb!important;color:#101828!important}
-body.gioV2.gioDark{background:radial-gradient(circle at top right,#1d1a0a 0,#050607 48%,#000 100%)!important;color:#f8fafc!important}
-body.gioV2.gioLight main{background:#f5f7fb!important;color:#101828!important}
-body.gioV2.gioLight h1,body.gioV2.gioLight h2,body.gioV2.gioLight h3{color:#101828!important}
-body.gioV2.gioLight .userbar,body.gioV2.gioLight .card{background:#fff!important;color:#101828!important;border:1px solid #d6dbe5!important;box-shadow:0 10px 25px rgba(16,24,40,.10)!important}
-body.gioV2.gioLight .dark{background:#fff!important;color:#101828!important;border:2px solid var(--gio-gold)!important}
-body.gioV2.gioLight .kpi,body.gioV2.gioLight .gioFinanceTile,body.gioV2.gioLight .gioProjectTile{background:#fff!important;color:#101828!important;border:1px solid #d6dbe5!important;border-bottom:4px solid var(--gio-gold)!important;box-shadow:0 8px 18px rgba(16,24,40,.10)!important}
-body.gioV2.gioLight .kpi small,body.gioV2.gioLight .gioFinanceTile small{color:#475467!important;opacity:1!important}
-body.gioV2.gioLight .kpi b,body.gioV2.gioLight .gioFinanceTile b{color:#b88a00!important}
-body.gioV2.gioLight input,body.gioV2.gioLight select,body.gioV2.gioLight textarea{background:#fff!important;color:#101828!important;border:1px solid #cfd6e2!important}
-body.gioV2.gioLight table{background:#fff!important;color:#101828!important}
-body.gioV2.gioLight td{border-color:#e5e7eb!important;color:#101828!important}
-body.gioV2.gioLight th{background:linear-gradient(180deg,#ffd22b,#f4b800)!important;color:#111!important}
-body.gioV2.gioLight .btn2{background:#fff!important;color:#101828!important;border:1px solid #cfd6e2!important}
-body.gioV2.gioLight .gioProjectHero{background:#fff!important;color:#101828!important;border:1px solid #d6dbe5!important}
-body.gioV2.gioLight .gioProjectHero h2{color:#b88a00!important}
-body.gioV2.gioLight .urenStatusBox{background:#fff7d1!important;color:#101828!important}
-body.gioV2.gioLight aside{background:linear-gradient(180deg,#101216,#0b0d11)!important;color:#fff!important}
-body.gioV2.gioLight aside h1,body.gioV2.gioLight aside h2,body.gioV2.gioLight aside h3{color:#fff!important}
-.gioThemeToggle{display:inline-flex;align-items:center;gap:6px;background:#16191f;border:1px solid #30343d;border-radius:999px;padding:4px;margin-right:8px}
-.gioThemeToggle button{border:0;border-radius:999px;padding:8px 10px;font-weight:900;cursor:pointer;background:transparent;color:#d1d5db}
-.gioThemeToggle button.active{background:linear-gradient(180deg,#ffd22b,#f4b800);color:#111}
-body.gioV2.gioLight .gioThemeToggle{background:#eef2f7;border-color:#cfd6e2}
-body.gioV2.gioLight .gioThemeToggle button{color:#101828}
-body.gioV2.gioLight .gioThemeToggle button.active{color:#111}
-body.gioV2.gioLight #gioMobileTop{background:#fff!important;color:#101828!important;border-bottom:1px solid #d6dbe5!important}
-body.gioV2.gioLight #gioActionDock,body.gioV2.gioLight #gioBottomDock{background:#fff!important;border-color:#d6dbe5!important}
-body.gioV2.gioLight #gioActionDock button{background:#f3f4f6!important;color:#101828!important;border-color:#d6dbe5!important}
-body.gioV2.gioLight #gioActionDock button:first-child{background:linear-gradient(180deg,#ffd22b,#f4b800)!important;color:#111!important}
-body.gioV2.gioLight #gioBottomDock button{color:#475467!important}
-body.gioV2.gioLight #gioBottomDock button.active,body.gioV2.gioLight #gioBottomDock button:hover{color:#b88a00!important}
+/* === GIO THEME SWITCH INTEGRATED LIVE === */
+:root{--gio-bg:#f4f6f9;--gio-card:#fff;--gio-card2:#f8fafc;--gio-text:#111827;--gio-muted:#4b5563;--gio-border:#d9dee7;--gio-sidebar:#101318;--gio-gold:#f4c400}
+html[data-gio-theme="dark"]{--gio-bg:#080a0f;--gio-card:#11141b;--gio-card2:#171b24;--gio-text:#f9fafb;--gio-muted:#d1d5db;--gio-border:#2b3140;--gio-sidebar:#050607;--gio-gold:#f4c400}
+html,body,main,.main,.content,.app{background:var(--gio-bg)!important;color:var(--gio-text)!important}
+.sidebar,aside,nav.sidebar{background:var(--gio-sidebar)!important;color:#f9fafb!important;border-right:1px solid var(--gio-border)!important}
+.card,.panel,.box,.tile,.summary-card,.kpi,.stat,.metric,section>div:not(#gioThemeSwitchBar):not(#gioThemePanel){background:var(--gio-card)!important;color:var(--gio-text)!important;border-color:var(--gio-border)!important}
+html[data-gio-theme="dark"] .card,html[data-gio-theme="dark"] .panel,html[data-gio-theme="dark"] .box,html[data-gio-theme="dark"] .tile,html[data-gio-theme="dark"] .summary-card{background:linear-gradient(180deg,var(--gio-card),var(--gio-card2))!important}
+h1,h2,h3,h4,h5,h6{color:var(--gio-text)!important}
+small,.muted,.sub,.subtitle,.hint{color:var(--gio-muted)!important}
+input,select,textarea{background:var(--gio-card2)!important;color:var(--gio-text)!important;border:1px solid var(--gio-border)!important}
+table{background:var(--gio-card)!important;color:var(--gio-text)!important}
+th{background:var(--gio-gold)!important;color:#111827!important}
+td{color:var(--gio-text)!important;border-color:var(--gio-border)!important}
+.btn,.primary,button.primary,button[onclick*="save"],button[onclick*="Save"],button[onclick*="Opslaan"],button[onclick*="sync"],button[onclick*="Sync"]{background:linear-gradient(180deg,#ffd83d,var(--gio-gold))!important;color:#111827!important;border:1px solid #c79d00!important}
+.sidebar button:hover,.sidebar button.active,aside button:hover,aside button.active{background:var(--gio-gold)!important;color:#111827!important}
+#gioThemeSwitchBar{position:fixed;right:18px;top:18px;z-index:999999;display:flex;gap:8px;align-items:center;background:var(--gio-card)!important;color:var(--gio-text)!important;border:1px solid var(--gio-border)!important;border-radius:999px;padding:7px;box-shadow:0 10px 30px rgba(0,0,0,.18)}
+#gioThemeSwitchBar button{border:0!important;background:transparent!important;color:var(--gio-text)!important;padding:8px 10px!important;border-radius:999px!important;font-weight:900!important;cursor:pointer}
+#gioThemeSwitchBar button.active{background:var(--gio-gold)!important;color:#111827!important}
+#gioThemeSwitchBar .label{font-size:12px;color:var(--gio-muted)!important;padding-left:8px;font-weight:800}
+#gioThemePanel{position:fixed;right:18px;top:70px;z-index:999998;max-width:320px;display:none;background:var(--gio-card)!important;color:var(--gio-text)!important;border:1px solid var(--gio-border)!important;border-radius:18px;padding:14px;box-shadow:0 16px 45px rgba(0,0,0,.22)}
+#gioThemePanel.open{display:block}
+#gioThemePanel p{margin:0 0 6px;color:var(--gio-muted)!important;font-size:13px}
+@media(max-width:760px){#gioThemeSwitchBar{top:auto;bottom:70px;right:10px;left:10px;justify-content:center}#gioThemeSwitchBar .label{display:none}#gioThemePanel{top:auto;bottom:124px;right:10px;left:10px;max-width:none}}
 
 </style>
 <meta name="theme-color" content="#07111f"><link rel="manifest" href="/manifest.webmanifest">
@@ -148,7 +137,7 @@ body.gioV2.gioLight #gioBottomDock button.active,body.gioV2.gioLight #gioBottomD
 <main>
 <div class="userbar">
   <div><b>Ingelogd als: <span id="currentUserLabel">-</span></b><br><small>Laatste update: <span id="lastSync">-</span></small></div>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span class="gioThemeToggle" aria-label="Thema kiezen"><button type="button" id="themeDarkBtn" onclick="setGioTheme('dark')">🌙 Donker</button><button type="button" id="themeLightBtn" onclick="setGioTheme('light')">☀️ Licht</button><button type="button" id="themeAutoBtn" onclick="setGioTheme('auto')">🌓 Auto</button></span><button class="btn2" onclick="refreshData()">🔄 Verversen</button><button class="btn2" onclick="logout()">Uitloggen</button></div>
+  <div><button class="btn2" onclick="refreshData()">🔄 Verversen</button><button class="btn2" onclick="logout()">Uitloggen</button></div>
 </div>
 <h1 id="titel">Dashboard</h1>
 
@@ -756,35 +745,35 @@ const gioOldShow=show;show=function(id,btn){gioOldShow(id,btn||document.querySel
 const gioOldRender=render;render=function(){gioOldRender();fillProSelects();renderProjectkaartPro();renderBetalingen();renderProjectClock(); if(document.getElementById('kNogOntvangen')) kNogOntvangen.innerText=euro((data.projecten||[]).reduce((s,p)=>s+Math.max(0,financeTotals(p.naam).openMateriaal),0));}
 setInterval(renderProjectClock,60000);
 if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));}
-
-
-/* === GIO PRO THEME SWITCH === */
-function applyGioTheme(mode){
-  let real=mode;
-  if(mode==='auto'){
-    const h=new Date().getHours();
-    real=(h>=7 && h<19)?'light':'dark';
-  }
-  document.body.classList.toggle('gioLight',real==='light');
-  document.body.classList.toggle('gioDark',real!=='light');
-  document.querySelectorAll('.gioThemeToggle button').forEach(b=>b.classList.remove('active'));
-  const btn=document.getElementById(mode==='light'?'themeLightBtn':mode==='auto'?'themeAutoBtn':'themeDarkBtn');
-  if(btn)btn.classList.add('active');
-  const meta=document.querySelector('meta[name="theme-color"]');
-  if(meta)meta.setAttribute('content',real==='light'?'#f5f7fb':'#050607');
-}
-function setGioTheme(mode){
-  localStorage.setItem('gioThemeMode',mode);
-  applyGioTheme(mode);
-}
-(function(){
-  const mode=localStorage.getItem('gioThemeMode')||'dark';
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>applyGioTheme(mode));
-  else applyGioTheme(mode);
-})();
-
 </script>
 
 
+<script>
+
+/* === GIO THEME SWITCH JS INTEGRATED LIVE === */
+(function(){
+ const KEY='gio_theme_mode';
+ function systemDark(){return window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches}
+ function mode(){return localStorage.getItem(KEY)||'auto'}
+ function resolved(m){return m==='auto'?(systemDark()?'dark':'light'):m}
+ function updateButtons(m){document.querySelectorAll('[data-gio-theme-btn]').forEach(b=>b.classList.toggle('active',b.getAttribute('data-gio-theme-btn')===m))}
+ function apply(m){document.documentElement.setAttribute('data-gio-theme',resolved(m));document.documentElement.setAttribute('data-gio-theme-mode',m);localStorage.setItem(KEY,m);updateButtons(m)}
+ function create(){
+  if(document.getElementById('gioThemeSwitchBar'))return;
+  const bar=document.createElement('div');bar.id='gioThemeSwitchBar';
+  bar.innerHTML='<span class="label">Thema</span><button type="button" data-gio-theme-btn="light">☀️ Licht</button><button type="button" data-gio-theme-btn="dark">🌙 Donker</button><button type="button" data-gio-theme-btn="auto">🌓 Auto</button><button type="button" id="gioThemeHelpBtn">?</button>';
+  document.body.appendChild(bar);
+  const panel=document.createElement('div');panel.id='gioThemePanel';
+  panel.innerHTML='<h3>🎨 Layout voorkeur</h3><p><b>Licht</b> is rustig voor kantoor.</p><p><b>Donker</b> is prettig in de avond.</p><p><b>Auto</b> volgt je telefoon/computer.</p><p><b>Leesbaarheid:</b> tekst blijft hoog contrast.</p>';
+  document.body.appendChild(panel);
+  bar.querySelectorAll('[data-gio-theme-btn]').forEach(b=>b.addEventListener('click',()=>apply(b.getAttribute('data-gio-theme-btn'))));
+  document.getElementById('gioThemeHelpBtn').addEventListener('click',()=>panel.classList.toggle('open'));
+ }
+ if(window.matchMedia){window.matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',()=>{if(mode()==='auto')apply('auto')})}
+ document.addEventListener('DOMContentLoaded',()=>{create();apply(mode())});
+ if(document.readyState!=='loading'){create();apply(mode())}
+})();
+
+</script>
 </body>
 </html>
