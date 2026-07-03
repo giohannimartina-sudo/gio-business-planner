@@ -62,29 +62,15 @@ body.gioV2{background:radial-gradient(circle at top right,#1d1a0a 0,#050607 48%,
 #gioMobileTop,#gioActionDock,#gioBottomDock{display:none}@media(max-width:800px){.gioV2 .wrap{display:block}.gioV2 aside{display:none}.gioV2 main{padding:0 12px 130px}.gioV2 #titel{display:none}.gioV2 .userbar{margin-top:10px}.gioV2 .card{border-radius:16px;padding:14px}.gioV2 .grid,.gioTileGrid{grid-template-columns:1fr 1fr;gap:10px}.gioV2 table{display:block;overflow-x:auto;white-space:nowrap}.gioV2 input,.gioV2 select,.gioV2 textarea{font-size:16px}#gioMobileTop{display:flex;position:sticky;top:0;z-index:9999;margin:0 -12px 10px;padding:10px 14px;background:#050607;border-bottom:1px solid #222;align-items:center;justify-content:space-between}#gioMobileTop img{width:42px;height:42px;border-radius:10px}#gioMobileTop b{color:var(--gio-gold)}#gioActionDock{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;position:fixed;bottom:58px;left:0;right:0;background:#070707;padding:8px;z-index:9999;border-top:1px solid #222}#gioActionDock button{font-size:11px;padding:9px 2px;background:#111318;color:#fff;border:1px solid #30343d;border-radius:12px;font-weight:900}#gioActionDock button:first-child{background:linear-gradient(180deg,#ffd22b,#f4b800);color:#111}#gioBottomDock{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;bottom:0;left:0;right:0;background:#08090c;border-top:1px solid #252832;z-index:9999}#gioBottomDock button{background:transparent;color:#d1d5db;border:0;font-size:11px;padding:9px 2px;font-weight:800}#gioBottomDock button.active,#gioBottomDock button:hover{color:var(--gio-gold)}}
 
 
-/* === GIO THEME SWITCH INTEGRATED LIVE === */
-:root{--gio-bg:#f4f6f9;--gio-card:#fff;--gio-card2:#f8fafc;--gio-text:#111827;--gio-muted:#4b5563;--gio-border:#d9dee7;--gio-sidebar:#101318;--gio-gold:#f4c400}
-html[data-gio-theme="dark"]{--gio-bg:#080a0f;--gio-card:#11141b;--gio-card2:#171b24;--gio-text:#f9fafb;--gio-muted:#d1d5db;--gio-border:#2b3140;--gio-sidebar:#050607;--gio-gold:#f4c400}
-html,body,main,.main,.content,.app{background:var(--gio-bg)!important;color:var(--gio-text)!important}
-.sidebar,aside,nav.sidebar{background:var(--gio-sidebar)!important;color:#f9fafb!important;border-right:1px solid var(--gio-border)!important}
-.card,.panel,.box,.tile,.summary-card,.kpi,.stat,.metric,section>div:not(#gioThemeSwitchBar):not(#gioThemePanel){background:var(--gio-card)!important;color:var(--gio-text)!important;border-color:var(--gio-border)!important}
-html[data-gio-theme="dark"] .card,html[data-gio-theme="dark"] .panel,html[data-gio-theme="dark"] .box,html[data-gio-theme="dark"] .tile,html[data-gio-theme="dark"] .summary-card{background:linear-gradient(180deg,var(--gio-card),var(--gio-card2))!important}
-h1,h2,h3,h4,h5,h6{color:var(--gio-text)!important}
-small,.muted,.sub,.subtitle,.hint{color:var(--gio-muted)!important}
-input,select,textarea{background:var(--gio-card2)!important;color:var(--gio-text)!important;border:1px solid var(--gio-border)!important}
-table{background:var(--gio-card)!important;color:var(--gio-text)!important}
-th{background:var(--gio-gold)!important;color:#111827!important}
-td{color:var(--gio-text)!important;border-color:var(--gio-border)!important}
-.btn,.primary,button.primary,button[onclick*="save"],button[onclick*="Save"],button[onclick*="Opslaan"],button[onclick*="sync"],button[onclick*="Sync"]{background:linear-gradient(180deg,#ffd83d,var(--gio-gold))!important;color:#111827!important;border:1px solid #c79d00!important}
-.sidebar button:hover,.sidebar button.active,aside button:hover,aside button.active{background:var(--gio-gold)!important;color:#111827!important}
-#gioThemeSwitchBar{position:fixed;right:18px;top:18px;z-index:999999;display:flex;gap:8px;align-items:center;background:var(--gio-card)!important;color:var(--gio-text)!important;border:1px solid var(--gio-border)!important;border-radius:999px;padding:7px;box-shadow:0 10px 30px rgba(0,0,0,.18)}
-#gioThemeSwitchBar button{border:0!important;background:transparent!important;color:var(--gio-text)!important;padding:8px 10px!important;border-radius:999px!important;font-weight:900!important;cursor:pointer}
-#gioThemeSwitchBar button.active{background:var(--gio-gold)!important;color:#111827!important}
-#gioThemeSwitchBar .label{font-size:12px;color:var(--gio-muted)!important;padding-left:8px;font-weight:800}
-#gioThemePanel{position:fixed;right:18px;top:70px;z-index:999998;max-width:320px;display:none;background:var(--gio-card)!important;color:var(--gio-text)!important;border:1px solid var(--gio-border)!important;border-radius:18px;padding:14px;box-shadow:0 16px 45px rgba(0,0,0,.22)}
-#gioThemePanel.open{display:block}
-#gioThemePanel p{margin:0 0 6px;color:var(--gio-muted)!important;font-size:13px}
-@media(max-width:760px){#gioThemeSwitchBar{top:auto;bottom:70px;right:10px;left:10px;justify-content:center}#gioThemeSwitchBar .label{display:none}#gioThemePanel{top:auto;bottom:124px;right:10px;left:10px;max-width:none}}
+/* === GIO v2 geïntegreerde modules === */
+.gioAgendaGrid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:12px}
+.gioAgendaDay{background:#fff;border:1px solid #ddd;border-radius:14px;min-height:120px;padding:10px;box-shadow:0 3px 12px #0001}
+.gioAgendaDay b{display:block;margin-bottom:6px}.gioEvent{background:#111;color:#fff;border-left:5px solid var(--geel);border-radius:9px;padding:6px;margin:4px 0;font-size:12px}.gioEvent.late{background:#b91c1c!important;color:#fff}.gioEvent.done{background:#15803d!important;color:#fff}.gioEvent small{color:#eee}
+.gioInvoicePaper{background:#fff;color:#111;border:1px solid #ddd;border-radius:18px;padding:28px;margin-top:16px;box-shadow:0 12px 35px #0002}.gioInvoicePaper *{color:#111}.gioInvoiceTop{display:flex;justify-content:space-between;gap:18px;border-bottom:4px solid var(--geel);padding-bottom:18px;margin-bottom:18px}.gioInvoiceLogo{background:#111;color:var(--geel);border-radius:16px;padding:14px;font-weight:900;display:inline-block;margin-bottom:8px}.gioInvoiceTable{width:100%;border-collapse:collapse;margin-top:12px}.gioInvoiceTable th{background:#111!important;color:#fff!important}.gioInvoiceTable td{border-bottom:1px solid #e5e7eb;padding:8px}.gioInvoiceTotal{max-width:440px;margin-left:auto;margin-top:18px}.gioInvoiceTotal .line{display:flex;justify-content:space-between;border-bottom:1px solid #e5e7eb;padding:8px 0}.gioInvoiceTotal .grand{display:flex;justify-content:space-between;background:var(--geel);border-radius:12px;padding:12px;margin-top:8px;font-size:20px;font-weight:900}
+.gioV2Summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:14px 0}.gioV2Summary>div{background:#fff;border:1px solid #ddd;border-radius:14px;padding:14px}.gioV2Summary b{font-size:22px}.gioStatusWarn{color:#b91c1c!important;font-weight:900}.gioStatusOk{color:#15803d!important;font-weight:900}
+html[data-gio-theme="dark"] body{background:#080a0f!important;color:#f9fafb!important}html[data-gio-theme="dark"] main{background:#080a0f!important;color:#f9fafb!important}html[data-gio-theme="dark"] .card,html[data-gio-theme="dark"] .gioAgendaDay{background:#11141b!important;color:#f9fafb!important;border-color:#2b3140!important}html[data-gio-theme="dark"] .card h2,html[data-gio-theme="dark"] .card h3{color:#f9fafb!important}html[data-gio-theme="light"] body{background:#f4f4f4!important;color:#111!important}
+@media(max-width:800px){.gioAgendaGrid{grid-template-columns:1fr}.gioInvoiceTop{display:block}.gioInvoicePaper{padding:14px}}
+@media print{body *{visibility:hidden!important}#gioInvoicePrintable,#gioInvoicePrintable *{visibility:visible!important}#gioInvoicePrintable{position:absolute;left:0;top:0;width:100%;box-shadow:none;border:0;margin:0}}
 
 </style>
 <meta name="theme-color" content="#07111f"><link rel="manifest" href="/manifest.webmanifest">
@@ -124,6 +110,10 @@ td{color:var(--gio-text)!important;border-color:var(--gio-border)!important}
   <button onclick="show('projecten',this)">📁 Projecten</button>
   <button onclick="show('projectkaartpro',this)">📁 Projectkaart PRO</button>
   <button onclick="show('betalingen',this)">💳 Betalingen</button>
+  <button onclick="show('offertes',this)">📄 Offertes</button>
+  <button onclick="show('facturatiepro',this)">🧾 Facturatie</button>
+  <button onclick="show('archief',this)">📦 Project Archief</button>
+  <button onclick="show('instellingen',this)">⚙️ Instellingen</button>
   <button onclick="show('cloud',this)">☁️ Cloud Sync</button>
   <button onclick="show('uren',this)">⏱ Uren</button>
   <button onclick="show('materiaal',this)">🧰 Materiaal</button>
@@ -159,6 +149,12 @@ td{color:var(--gio-text)!important;border-color:var(--gio-border)!important}
   <div class="card"><h2>📅 Planning vandaag</h2><table><thead><tr><th>Tijd</th><th>Klant</th><th>Project</th><th>Status</th></tr></thead><tbody id="dashVandaag"></tbody></table></div>
   <div class="card"><h2>📅 Planning morgen</h2><table><thead><tr><th>Tijd</th><th>Klant</th><th>Project</th><th>Status</th></tr></thead><tbody id="dashMorgen"></tbody></table></div>
   <div class="card"><h2>📅 Planning volgende week</h2><table><thead><tr><th>Datum</th><th>Tijd</th><th>Klant</th><th>Project</th></tr></thead><tbody id="dashWeek"></tbody></table></div>
+ </div>
+
+ <div class="card">
+  <h2>📆 Agenda overzicht</h2>
+  <div class="row"><div><label>Agenda weergave</label><select id="gioAgendaMode" onchange="renderGioDashboardAgenda()"><option value="week">Week</option><option value="maand">Maand</option></select></div></div>
+  <div id="gioDashboardAgenda"></div>
  </div>
 </section>
 
@@ -367,6 +363,69 @@ td{color:var(--gio-text)!important;border-color:var(--gio-border)!important}
 </section>
 
 <datalist id="klantenDatalist"></datalist>
+
+
+<section id="offertes" class="page">
+ <div class="card dark"><h2>📄 Offerte PRO</h2><p>Maak offertes op basis van jouw bestaande projecthistorie. Geaccepteerde offertes kunnen later worden omgezet naar project.</p></div>
+ <div class="card">
+  <h2>Nieuwe offerte</h2>
+  <div class="row">
+   <div><label>Klant</label><input id="offKlant" list="klantenDatalist"></div>
+   <div><label>Projectnaam</label><input id="offProject" placeholder="Bijv. Washok renovatie"></div>
+   <div><label>Soort klus</label><input id="offType" placeholder="Badkamer, washok, schilderwerk"></div>
+   <div><label>Uurtarief</label><input id="offTarief" type="number" step="0.01" value="35"></div>
+  </div>
+  <label>Omschrijving</label><textarea id="offOmschrijving" placeholder="Werkzaamheden omschrijven..."></textarea>
+  <button class="btn" onclick="gioCreateOffer()">🤖 Maak offertevoorstel</button>
+ </div>
+ <div id="gioOfferAssistant"></div>
+ <div class="card"><h2>Offerte overzicht</h2><table><thead><tr><th>Nr.</th><th>Klant</th><th>Project</th><th>Type</th><th>Status</th><th>Bedrag</th><th>Actie</th></tr></thead><tbody id="gioOfferteList"></tbody></table></div>
+</section>
+
+<section id="facturatiepro" class="page">
+ <div class="card dark"><h2>🧾 Facturatie PRO</h2><p>Leest bestaande projectdata en maakt een professionele factuur-layout. Je data blijft staan.</p></div>
+ <div class="card">
+  <h2>Factuur maken</h2>
+  <div class="row">
+   <div><label>Project</label><select id="gioInvProject" onchange="gioRenderInvoice()"></select></div>
+   <div><label>Factuurnummer</label><input id="gioInvNumber"></div>
+   <div><label>Uurtarief fallback</label><input id="gioInvTarief" type="number" step="0.01" value="35" onchange="gioRenderInvoice()"></div>
+   <div><label>BTW %</label><input id="gioInvBtwPct" type="number" step="0.1" value="0" onchange="gioRenderInvoice()"></div>
+  </div>
+  <label>Omschrijving op factuur</label><textarea id="gioInvIntro">Werkzaamheden volgens afspraak.</textarea>
+  <h3>Klant ziet op factuur</h3>
+  <div class="row">
+   <label><input type="checkbox" id="gioInvShowUren" checked onchange="gioRenderInvoice()"> Uren tonen</label>
+   <label><input type="checkbox" id="gioInvShowTijden" checked onchange="gioRenderInvoice()"> Start/eindtijden tonen</label>
+   <label><input type="checkbox" id="gioInvShowMateriaal" checked onchange="gioRenderInvoice()"> Materiaal tonen</label>
+   <label><input type="checkbox" id="gioInvShowBon" checked onchange="gioRenderInvoice()"> Bonnummers tonen</label>
+   <label><input type="checkbox" id="gioInvShowBetalingen" checked onchange="gioRenderInvoice()"> Betalingen tonen</label>
+   <label><input type="checkbox" id="gioInvShowUitgaven" onchange="gioRenderInvoice()"> Uitgaven tonen</label>
+  </div>
+  <button class="btn" onclick="gioRenderInvoice()">🔄 Factuur vernieuwen</button>
+  <button class="btn2" onclick="gioPrintInvoice()">🖨 Print / PDF</button>
+  <button class="btn2" onclick="gioExportInvoiceCSV()">📊 Excel / CSV</button>
+  <button class="btn2" onclick="gioEmailInvoice()">📧 E-mail concept</button>
+  <button class="btn2" onclick="gioSaveInvoiceRecord()">💾 Opslaan in factuurhistorie</button>
+ </div>
+ <div id="gioInvoiceSummary"></div>
+ <div id="gioInvoicePreview"></div>
+ <div class="card"><h2>Factuurhistorie</h2><table><thead><tr><th>Factuur</th><th>Project</th><th>Datum</th><th>Status</th><th>Totaal</th><th>Open</th></tr></thead><tbody id="gioFactuurHistorie"></tbody></table></div>
+</section>
+
+<section id="archief" class="page">
+ <div class="card dark"><h2>📦 Project Archief</h2><p>Afgeronde en betaalde projecten blijven bewaard voor kwartaalrapportages en slimme offertes.</p></div>
+ <div class="card"><h2>Archief acties</h2><p>Projecten gaan naar archief wanneer ze betaald zijn. Data wordt niet verwijderd.</p><button class="btn" onclick="gioAutoArchivePaid()">📦 Betaalde projecten archiveren</button></div>
+ <div id="gioArchiveStats"></div>
+ <div class="card"><h2>Gearchiveerde projecten</h2><table><thead><tr><th>Project</th><th>Klant</th><th>Betaald</th><th>Uren</th><th>Omzet</th><th>Actie</th></tr></thead><tbody id="gioArchiveList"></tbody></table></div>
+</section>
+
+<section id="instellingen" class="page">
+ <div class="card dark"><h2>⚙️ Instellingen</h2><p>GIO Business Planner PRO v2.0</p></div>
+ <div class="card"><h2>Layout</h2><button class="btn" onclick="gioSetTheme('light')">☀️ Licht</button><button class="btn2" onclick="gioSetTheme('dark')">🌙 Donker</button><button class="btn2" onclick="gioSetTheme('auto')">🌓 Auto</button><p>Teksten blijven leesbaar in beide layouts.</p></div>
+ <div class="card"><h2>Over deze versie</h2><p><b>GIO Business Planner PRO</b><br>Versie 2.0<br>Gebouwd voor GIO Klus Baas</p></div>
+</section>
+
 </main>
 </div>
 
@@ -747,35 +806,39 @@ setInterval(renderProjectClock,60000);
 if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));}
 </script>
 
-
 <script>
-
-/* === GIO THEME SWITCH JS INTEGRATED LIVE === */
-(function(){
- const KEY='gio_theme_mode';
- function systemDark(){return window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches}
- function mode(){return localStorage.getItem(KEY)||'auto'}
- function resolved(m){return m==='auto'?(systemDark()?'dark':'light'):m}
- function updateButtons(m){document.querySelectorAll('[data-gio-theme-btn]').forEach(b=>b.classList.toggle('active',b.getAttribute('data-gio-theme-btn')===m))}
- function apply(m){document.documentElement.setAttribute('data-gio-theme',resolved(m));document.documentElement.setAttribute('data-gio-theme-mode',m);localStorage.setItem(KEY,m);updateButtons(m)}
- function create(){
-  if(document.getElementById('gioThemeSwitchBar'))return;
-  const bar=document.createElement('div');bar.id='gioThemeSwitchBar';
-  bar.innerHTML='<span class="label">Thema</span><button type="button" data-gio-theme-btn="light">☀️ Licht</button><button type="button" data-gio-theme-btn="dark">🌙 Donker</button><button type="button" data-gio-theme-btn="auto">🌓 Auto</button><button type="button" id="gioThemeHelpBtn">?</button>';
-  document.body.appendChild(bar);
-  const panel=document.createElement('div');panel.id='gioThemePanel';
-  panel.innerHTML='<h3>🎨 Layout voorkeur</h3><p><b>Licht</b> is rustig voor kantoor.</p><p><b>Donker</b> is prettig in de avond.</p><p><b>Auto</b> volgt je telefoon/computer.</p><p><b>Leesbaarheid:</b> tekst blijft hoog contrast.</p>';
-  document.body.appendChild(panel);
-  bar.querySelectorAll('[data-gio-theme-btn]').forEach(b=>b.addEventListener('click',()=>apply(b.getAttribute('data-gio-theme-btn'))));
-  document.getElementById('gioThemeHelpBtn').addEventListener('click',()=>panel.classList.toggle('open'));
- }
- if(window.matchMedia){window.matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',()=>{if(mode()==='auto')apply('auto')})}
- document.addEventListener('DOMContentLoaded',()=>{create();apply(mode())});
- if(document.readyState!=='loading'){create();apply(mode())}
-})();
-
+/* === GIO Business Planner PRO v2.0 geïntegreerde uitbreidingen === */
+function gioNum(v){if(typeof v==='number'&&isFinite(v))return Math.abs(v)>1000000?0:v;let s=String(v??'').trim().replace(/[€\s]/g,'').replace(/[^\d,.\-]/g,'');if(!s)return 0;if(s.includes(','))s=s.replace(/\./g,'').replace(',','.');else if((s.match(/\./g)||[]).length>1)s=s.replace(/\./g,'');let n=Number(s);return(!isFinite(n)||Math.abs(n)>1000000)?0:n}
+function gioEsc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function gioHours(x){let h=gioNum(x.uren??x.hours??x.totaalUren);if(h>0&&h<1000)return h;let st=x.start||'',en=x.einde||x.eind||'';if(/^\d{1,2}:\d{2}$/.test(st)&&/^\d{1,2}:\d{2}$/.test(en)){let [sh,sm]=st.split(':').map(Number),[eh,em]=en.split(':').map(Number);let m=(eh*60+em)-(sh*60+sm);if(m<0)m+=1440;return m/60}return 0}
+function gioAmountHour(x,tarief){let a=gioNum(x.bedrag??x.amount??x.totaal);return a>0?a:gioHours(x)*(gioNum(tarief)||35)}
+function gioAmountMat(x){return gioNum(x.bedrag??x.amount??x.totaal??x.prijs)}
+function gioAmountPay(x){return gioNum(x.bedrag??x.amount??x.totaal)}
+function gioEnsureV2(){if(!data.offertes)data.offertes=[];if(!data.facturen)data.facturen=[];(data.projecten||[]).forEach(p=>{if(p.archived===undefined)p.archived=false})}
+function gioProjectNames(){let a=[];(data.projecten||[]).forEach(p=>{if(p.naam&&!a.includes(p.naam))a.push(p.naam)});(data.uren||[]).forEach(x=>{if(x.project&&!a.includes(x.project))a.push(x.project)});(data.materiaal||[]).forEach(x=>{if(x.project&&!a.includes(x.project))a.push(x.project)});return a}
+function gioClient(project){let p=(data.projecten||[]).find(x=>x.naam===project)||{},n=p.klant||((data.uren||[]).find(u=>u.project===project)||{}).klant||'',k=(data.klanten||[]).find(x=>x.naam===n)||{};return{naam:n||k.naam||'',data:k}}
+function gioRows(project){return{u:(data.uren||[]).filter(x=>x.project===project),m:(data.materiaal||[]).filter(x=>x.project===project),pay:(data.klantBetalingen||[]).filter(x=>x.project===project),uit:(data.uitgaven||[]).filter(x=>x.project===project)}}
+function gioInvoiceTotals(project){let tar=gioNum(document.getElementById('gioInvTarief')?.value)||35,btwp=gioNum(document.getElementById('gioInvBtwPct')?.value)||0,r=gioRows(project),uren=r.u.reduce((s,x)=>s+gioHours(x),0),arbeid=r.u.reduce((s,x)=>s+gioAmountHour(x,tar),0),mat=r.m.reduce((s,x)=>s+gioAmountMat(x),0),uit=r.uit.reduce((s,x)=>s+gioNum(x.bedrag),0),paid=r.pay.reduce((s,x)=>s+gioAmountPay(x),0),sub=arbeid+mat+(document.getElementById('gioInvShowUitgaven')?.checked?uit:0),btw=btwp>0?sub*(btwp/100):0,total=sub+btw;return{uren,arbeid,mat,uit,paid,sub,btw,total,open:total-paid}}
+function gioFillProjectSelects(){let opts=gioProjectNames().map(p=>`<option value="${gioEsc(p)}">${gioEsc(p)}</option>`).join('');['gioInvProject'].forEach(id=>{let el=document.getElementById(id);if(el){let v=el.value;el.innerHTML=opts;if(v)el.value=v}})}
+function renderGioDashboardAgenda(){let box=document.getElementById('gioDashboardAgenda');if(!box)return;let todayDate=new Date();let start=new Date(todayDate);start.setDate(todayDate.getDate()-((todayDate.getDay()+6)%7));let html='<div class="gioAgendaGrid">';for(let i=0;i<7;i++){let d=new Date(start);d.setDate(start.getDate()+i);let iso=d.toISOString().slice(0,10);let items=(data.planning||[]).filter(x=>x.datum===iso);html+=`<div class="gioAgendaDay"><b>${d.toLocaleDateString('nl-NL',{weekday:'short',day:'2-digit',month:'2-digit'})}</b>`+(items.length?items.map(x=>`<div class="gioEvent ${x.status==='Gereed'?'done':''}"><b>${gioEsc(x.tijd||'--:--')} ${gioEsc(x.project||'-')}</b><br><small>${gioEsc(x.klant||'')}</small></div>`).join(''):'<small>Geen planning</small>')+'</div>'}box.innerHTML=html+'</div>'}
+function gioRenderInvoice(){gioFillProjectSelects();let p=gioInvProject?.value||gioProjectNames()[0]||'',r=gioRows(p),t=gioInvoiceTotals(p),cl=gioClient(p),pr=(data.projecten||[]).find(x=>x.naam===p)||{};let su=gioInvShowUren?.checked,st=gioInvShowTijden?.checked,sm=gioInvShowMateriaal?.checked,sb=gioInvShowBon?.checked,sp=gioInvShowBetalingen?.checked;if(gioInvoiceSummary)gioInvoiceSummary.innerHTML=`<div class="gioV2Summary"><div><small>Uren</small><br><b>${t.uren.toFixed(2)}</b></div><div><small>Arbeid</small><br><b>${euro(t.arbeid)}</b></div><div><small>Materiaal</small><br><b>${euro(t.mat)}</b></div><div><small>Betaald</small><br><b>${euro(t.paid)}</b></div><div><small>Open</small><br><b>${euro(t.open)}</b></div></div>`;let uRows=r.u.map(x=>`<tr><td>${formatDateNL(x.datum)}</td><td>${gioEsc(x.klant||cl.naam)}</td>${st?`<td>${gioEsc(x.start||'')}</td><td>${gioEsc(x.einde||x.eind||'')}</td>`:''}<td>${gioHours(x).toFixed(2)}</td><td>${euro(gioAmountHour(x,gioInvTarief.value))}</td></tr>`).join('');let mRows=r.m.map(x=>`<tr><td>${formatDateNL(x.datum)}</td><td>${gioEsc(x.lev||x.leverancier||'')}</td><td>${gioEsc(x.oms||x.materiaal||x.omschrijving||'')}</td>${sb?`<td>${gioEsc(x.bon||x.bonnummer||'')}</td>`:''}<td>${euro(gioAmountMat(x))}</td></tr>`).join('');let pRows=r.pay.map(x=>`<tr><td>${formatDateNL(x.datum)}</td><td>${gioEsc(x.type||x.omschrijving||'Betaling')}</td><td>${gioEsc(x.betaalwijze||'')}</td><td>${euro(gioAmountPay(x))}</td></tr>`).join('');gioInvoicePreview.innerHTML=`<div class="gioInvoicePaper" id="gioInvoicePrintable"><div class="gioInvoiceTop"><div><div class="gioInvoiceLogo">GIO KLUS BAAS</div><h1>FACTUUR</h1><b>GIO Klus Baas</b><br>info@gioklusbaas.nl</div><div><b>Factuurnummer:</b> ${gioEsc(gioInvNumber.value||'F2026-001')}<br><b>Project:</b> ${gioEsc(p)}<br><b>Projectnummer:</b> ${gioEsc(pr.projectNr||'')}<br><b>Datum:</b> ${new Date().toLocaleDateString('nl-NL')}</div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div style="background:#f8fafc;padding:12px;border-radius:12px"><h3>Factuur aan</h3><b>${gioEsc(cl.naam)}</b><br>${gioEsc(cl.data.adres||'')}<br>${gioEsc(cl.data.postcode||'')} ${gioEsc(cl.data.plaats||'')}<br>${gioEsc(cl.data.email||'')}</div><div style="background:#f8fafc;padding:12px;border-radius:12px"><h3>Omschrijving</h3>${gioEsc(gioInvIntro.value).replace(/\n/g,'<br>')}</div></div>${su?`<h2>Uren</h2><table class="gioInvoiceTable"><thead><tr><th>Datum</th><th>Klant</th>${st?'<th>Start</th><th>Einde</th>':''}<th>Uren</th><th>Bedrag</th></tr></thead><tbody>${uRows||'<tr><td colspan="6">Geen uren.</td></tr>'}</tbody></table>`:''}${sm?`<h2>Materiaal</h2><table class="gioInvoiceTable"><thead><tr><th>Datum</th><th>Leverancier</th><th>Materiaal</th>${sb?'<th>Bon</th>':''}<th>Bedrag</th></tr></thead><tbody>${mRows||'<tr><td colspan="5">Geen materiaal.</td></tr>'}</tbody></table>`:''}${sp?`<h2>Ontvangen betalingen</h2><table class="gioInvoiceTable"><thead><tr><th>Datum</th><th>Omschrijving</th><th>Wijze</th><th>Bedrag</th></tr></thead><tbody>${pRows||'<tr><td colspan="4">Nog geen betalingen.</td></tr>'}</tbody></table>`:''}<div class="gioInvoiceTotal"><div class="line"><span>Arbeid</span><b>${euro(t.arbeid)}</b></div><div class="line"><span>Materiaal</span><b>${euro(t.mat)}</b></div>${gioInvShowUitgaven.checked?`<div class="line"><span>Uitgaven</span><b>${euro(t.uit)}</b></div>`:''}<div class="line"><span>Subtotaal</span><b>${euro(t.sub)}</b></div>${t.btw?`<div class="line"><span>BTW</span><b>${euro(t.btw)}</b></div>`:''}<div class="line"><span>Reeds betaald</span><b>-${euro(t.paid)}</b></div><div class="grand"><span>Nog te betalen</span><b>${euro(t.open)}</b></div></div></div>`;renderGioFactuurHistorie()}
+function gioPrintInvoice(){gioRenderInvoice();window.print()}
+function gioExportInvoiceCSV(){let p=gioInvProject.value,r=gioRows(p),t=gioInvoiceTotals(p),rows=[['PROJECT FACTURATIE'],['Project',p],['Factuur',gioInvNumber.value],[],['Samenvatting'],['Uren',t.uren.toFixed(2)],['Arbeid',t.arbeid.toFixed(2)],['Materiaal',t.mat.toFixed(2)],['Betaald',t.paid.toFixed(2)],['Open',t.open.toFixed(2)],[],['Uren'],['Datum','Klant','Start','Einde','Uren','Bedrag']];r.u.forEach(x=>rows.push([formatDateNL(x.datum),x.klant||'',x.start||'',x.einde||x.eind||'',gioHours(x).toFixed(2),gioAmountHour(x,gioInvTarief.value).toFixed(2)]));rows.push([],['Materiaal'],['Datum','Leverancier','Materiaal','Bon','Bedrag']);r.m.forEach(x=>rows.push([formatDateNL(x.datum),x.lev||x.leverancier||'',x.oms||x.materiaal||x.omschrijving||'',x.bon||x.bonnummer||'',gioAmountMat(x).toFixed(2)]));downloadCSV(rows,'Factuur_'+(gioInvNumber.value||'nieuw')+'_'+p+'.csv')}
+function gioEmailInvoice(){let p=gioInvProject.value,cl=gioClient(p),t=gioInvoiceTotals(p);location.href=`mailto:${cl.data.email||''}?subject=${encodeURIComponent('Factuur '+gioInvNumber.value+' - '+p)}&body=${encodeURIComponent('Beste '+cl.naam+',\n\nHierbij ontvang je de factuur voor project '+p+'.\nNog te betalen: '+euro(t.open)+'\n\nMet vriendelijke groet,\nGIO Klus Baas\ninfo@gioklusbaas.nl')}`}
+function gioSaveInvoiceRecord(){gioEnsureV2();let p=gioInvProject.value,t=gioInvoiceTotals(p);data.facturen.push({factuurnummer:gioInvNumber.value||'F'+new Date().getFullYear()+'-'+String((data.facturen||[]).length+1).padStart(3,'0'),project:p,datum:today(),status:'Concept',totaal:t.total,open:t.open});save();render();alert('Factuur opgeslagen in historie.')}
+function renderGioFactuurHistorie(){let box=document.getElementById('gioFactuurHistorie');if(!box)return;box.innerHTML=(data.facturen||[]).map(f=>`<tr><td>${gioEsc(f.factuurnummer)}</td><td>${gioEsc(f.project)}</td><td>${formatDateNL(f.datum)}</td><td>${gioEsc(f.status||'Concept')}</td><td>${euro(f.totaal)}</td><td>${euro(f.open)}</td></tr>`).join('')}
+function gioCreateOffer(){gioEnsureV2();let type=(offType.value||'').toLowerCase(),matches=(data.projecten||[]).filter(p=>(p.naam||'').toLowerCase().includes(type)||String(p.notitie||'').toLowerCase().includes(type));let avgH=0,avgM=0;if(matches.length){avgH=matches.reduce((s,p)=>s+projectTotals(p.naam).urenSom,0)/matches.length;avgM=matches.reduce((s,p)=>s+projectTotals(p.naam).materiaal,0)/matches.length}else{avgH=8;avgM=250}let bedrag=avgH*(+offTarief.value||35)+avgM;let nr='O'+new Date().getFullYear()+'-'+String(data.offertes.length+1).padStart(3,'0');data.offertes.push({nr,klant:offKlant.value,project:offProject.value,type:offType.value,status:'Concept',uren:avgH,materiaal:avgM,bedrag,omschrijving:offOmschrijving.value,datum:today()});save();render();gioRenderOffertes();alert('Offertevoorstel gemaakt op basis van historie.')}
+function gioRenderOffertes(){let box=document.getElementById('gioOfferteList');if(!box)return;box.innerHTML=(data.offertes||[]).map((o,i)=>`<tr><td>${gioEsc(o.nr)}</td><td>${gioEsc(o.klant)}</td><td>${gioEsc(o.project)}</td><td>${gioEsc(o.type)}</td><td>${gioEsc(o.status)}</td><td>${euro(o.bedrag)}</td><td><button class="btn2" onclick="gioAcceptOffer(${i})">✔ Naar project</button></td></tr>`).join('');let last=(data.offertes||[]).slice(-1)[0];if(last&&document.getElementById('gioOfferAssistant'))gioOfferAssistant.innerHTML=`<div class="card"><h2>🤖 Slim offertevoorstel</h2><p>Geschatte uren: <b>${last.uren.toFixed(1)}</b><br>Geschat materiaal: <b>${euro(last.materiaal)}</b><br>Voorstel totaal: <b>${euro(last.bedrag)}</b></p></div>`}
+function gioAcceptOffer(i){let o=data.offertes[i];if(!o)return;data.projecten.push({projectNr:nextProjectNumber(),naam:o.project,klant:o.klant,status:'Gepland',start:'',notitie:'Aangemaakt vanuit offerte '+o.nr});o.status='Geaccepteerd';save();render();alert('Offerte omgezet naar project.')}
+function gioAutoArchivePaid(){gioEnsureV2();(data.projecten||[]).forEach(p=>{if(p.status==='Betaald')p.archived=true});save();render();alert('Betaalde projecten staan in archief.')}
+function gioRestoreProject(i){data.projecten[i].archived=false;save();render()}
+function gioRenderArchive(){let list=document.getElementById('gioArchiveList'),stats=document.getElementById('gioArchiveStats');if(!list)return;let arr=(data.projecten||[]).map((p,i)=>({p,i})).filter(x=>x.p.archived||x.p.status==='Betaald');let omzet=arr.reduce((s,x)=>s+projectTotals(x.p.naam).totaal,0),uren=arr.reduce((s,x)=>s+projectTotals(x.p.naam).urenSom,0);stats.innerHTML=`<div class="gioV2Summary"><div><small>Projecten archief</small><br><b>${arr.length}</b></div><div><small>Omzet archief</small><br><b>${euro(omzet)}</b></div><div><small>Uren archief</small><br><b>${uren.toFixed(1)}</b></div></div>`;list.innerHTML=arr.map(x=>{let t=projectTotals(x.p.naam);return`<tr><td>${gioEsc(x.p.naam)}</td><td>${gioEsc(x.p.klant||'')}</td><td>${x.p.betaaldDatum?formatDateNL(x.p.betaaldDatum):'-'}</td><td>${t.urenSom.toFixed(2)}</td><td>${euro(t.totaal)}</td><td><button class="btn2" onclick="gioRestoreProject(${x.i})">Terugzetten</button></td></tr>`}).join('')}
+function gioSetTheme(mode){localStorage.setItem('gioThemeMode',mode);let resolved=mode==='auto'?(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):mode;document.documentElement.setAttribute('data-gio-theme',resolved)}
+(function(){gioSetTheme(localStorage.getItem('gioThemeMode')||'light');})();
+const gioV2OldShow=show;show=function(id,btn){gioV2OldShow(id,btn);if(id==='facturatiepro'){gioFillProjectSelects();if(!gioInvNumber.value)gioInvNumber.value='F'+new Date().getFullYear()+'-'+String(((data.facturen||[]).length+1)).padStart(3,'0');gioRenderInvoice()}if(id==='offertes')gioRenderOffertes();if(id==='archief')gioRenderArchive();if(id==='instellingen')gioSetTheme(localStorage.getItem('gioThemeMode')||'light')}
+const gioV2OldRender=render;render=function(){gioEnsureV2();gioV2OldRender();renderGioDashboardAgenda();gioFillProjectSelects();gioRenderOffertes();renderGioFactuurHistorie();gioRenderArchive()}
+document.addEventListener('DOMContentLoaded',()=>{gioEnsureV2();renderGioDashboardAgenda();gioFillProjectSelects()});
 </script>
-public/gio-factuur-maken-corrected.js
-<script src="/gio-factuur-maken-corrected.js"></script>
+
 </body>
 </html>
