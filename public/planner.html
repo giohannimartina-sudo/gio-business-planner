@@ -147,6 +147,28 @@ html[data-gio-theme="dark"] body{background:#080a0f!important;color:#f9fafb!impo
  #gioOfferPrintable{position:absolute!important;left:0!important;top:0!important;width:210mm!important;min-height:297mm!important;margin:0!important;box-shadow:none!important}
 }
 
+
+@page{size:A4 portrait;margin:0}
+@media print{
+ html,body{width:210mm!important;min-height:297mm!important;margin:0!important;padding:0!important;background:#fff!important}
+ body *{visibility:hidden!important}
+ #gioOfferPrintable,#gioOfferPrintable *{visibility:visible!important}
+ #gioOfferPrintable{position:absolute!important;left:0!important;top:0!important;width:210mm!important;min-height:297mm!important;height:auto!important;margin:0!important;padding:12mm 13mm 16mm!important;box-shadow:none!important;border:0!important;transform:none!important;overflow:visible!important;font-size:10.2pt!important}
+ #gioOfferPrintable .gioOfferLogo{width:48mm!important;max-height:25mm!important}
+ #gioOfferPrintable .gioOfferTitle{font-size:24pt!important;margin:0 0 5mm!important}
+ #gioOfferPrintable .gioOfferTop{grid-template-columns:1fr 68mm!important;gap:7mm!important}
+ #gioOfferPrintable .gioOfferClientGrid{grid-template-columns:1fr 1fr!important;gap:4mm!important;margin:6mm 0!important}
+ #gioOfferPrintable .gioOfferBox{min-height:25mm!important;padding:3mm!important}
+ #gioOfferPrintable .gioOfferTextBlock{margin:4mm 0!important;padding:3mm 0!important}
+ #gioOfferPrintable .gioOfferTable{font-size:8.3pt!important;margin-top:4mm!important}
+ #gioOfferPrintable .gioOfferTable th,#gioOfferPrintable .gioOfferTable td{padding:1.6mm!important}
+ #gioOfferPrintable .gioOfferTotals{width:92mm!important;margin-top:3mm!important}
+ #gioOfferPrintable .gioOfferTotals td{padding:2mm!important}
+ #gioOfferPrintable .gioOfferSign{margin-top:7mm!important;gap:8mm!important}
+ #gioOfferPrintable .gioOfferSignBox{min-height:15mm!important}
+ #gioOfferPrintable .gioOfferFooter{position:absolute!important;left:0!important;right:0!important;bottom:0!important;height:12mm!important;padding:3mm 10mm!important}
+}
+
 </style>
 <meta name="theme-color" content="#07111f"><link rel="manifest" href="/manifest.webmanifest">
 <meta name="theme-color" content="#07111f">
@@ -475,7 +497,7 @@ html[data-gio-theme="dark"] body{background:#080a0f!important;color:#f9fafb!impo
     <div class="row">
      <div><label>Beschrijving</label><input id="offRegelOmschrijving" placeholder="Arbeid, materiaal, km-vergoeding..."></div>
      <div><label>Aantal</label><input id="offRegelAantal" type="number" step="0.01" value="1"></div>
-     <div><label>Eenheid</label><select id="offRegelEenheid"><option>Stuk</option><option>Uur</option><option>Post</option><option>Meter</option><option>m²</option><option>km</option></select></div>
+     <div><label>Eenheid</label><select id="offRegelEenheid"><option>n.v.t.</option><option>Stuk</option><option>Uur</option><option>Post</option><option>Meter</option><option>m²</option><option>km</option></select></div>
      <div><label>Tarief</label><input id="offRegelTarief" type="number" step="0.01" value="0"></div>
      <div><label>BTW %</label><select id="offRegelBtw"><option value="0">0%</option><option value="9">9%</option><option value="21" selected>21%</option></select></div>
     </div>
@@ -1209,7 +1231,16 @@ function gioAcceptOffer(i){
  data.projecten.push({projectNr:nextProjectNumber(),naam:o.project,klant:o.klant,status:'Gepland',start:'',notitie:'Aangemaakt vanuit offerte '+o.nr,offerteNr:o.nr});
  o.status='Geaccepteerd';save();render();gioRenderOffertes();alert('Offerte omgezet naar project.');
 }
-function gioOfferPrint(){gioRenderOfferPreview();window.print()}
+function gioOfferPrint(){
+ gioRenderOfferPreview();
+ const el=document.getElementById('gioOfferPrintable');if(!el)return;
+ const css=[...document.querySelectorAll('style')].map(x=>x.textContent).join('\n');
+ const win=window.open('','_blank','width=900,height=1100');
+ if(!win){alert('Sta pop-ups toe om de offerte als PDF/print te openen.');return}
+ win.document.open();
+ win.document.write('<!doctype html><html><head><meta charset="utf-8"><title>'+(offNr.value||'Offerte')+'</title><style>'+css+'</style></head><body>'+el.outerHTML+'<script>window.onload=()=>setTimeout(()=>window.print(),250)<\/script></body></html>');
+ win.document.close();
+}
 function gioOfferExportCSV(){
  let o=gioOfferCollect(),rows=[['OFFERTE'],['Offertenummer',o.nr],['Klant',o.klant],['Project',o.project],['Datum',o.datum],['Geldig tot',o.geldigTot],[],['Beschrijving','Aantal','Eenheid','Tarief','BTW %','Totaal']];
  o.regels.forEach(x=>rows.push([x.omschrijving,x.aantal,x.eenheid,x.tarief,x.btw,gioOfferLineTotal(x)]));
@@ -1217,10 +1248,11 @@ function gioOfferExportCSV(){
  downloadCSV(rows,'Offerte_'+o.nr+'_'+o.project+'.csv');
 }
 function gioOfferDownloadHTML(){
- gioRenderOfferPreview();let el=document.getElementById('gioOfferPrintable');if(!el)return;
- let css=[...document.querySelectorAll('style')].map(x=>x.textContent).join('\n');
- let blob=new Blob(['<!doctype html><html><head><meta charset="utf-8"><title>Offerte</title><style>'+css+'</style></head><body>'+el.outerHTML+'</body></html>'],{type:'text/html'});
- let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(offNr.value||'offerte')+'.html';a.click();URL.revokeObjectURL(a.href);
+ gioRenderOfferPreview();const el=document.getElementById('gioOfferPrintable');if(!el)return;
+ const css=[...document.querySelectorAll('style')].map(x=>x.textContent).join('\n');
+ const doc='<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+(offNr.value||'Offerte')+'</title><style>'+css+'</style></head><body>'+el.outerHTML+'</body></html>';
+ const blob=new Blob([doc],{type:'text/html;charset=utf-8'});
+ const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(offNr.value||'offerte')+'.html';a.click();URL.revokeObjectURL(a.href);
 }
 function gioOfferEmail(){
  let cl=gioOfferClient(),o=gioOfferCollect();
