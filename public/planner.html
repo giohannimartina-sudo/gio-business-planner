@@ -373,6 +373,9 @@ html[data-gio-theme="dark"] body{background:#080a0f!important;color:#f9fafb!impo
    </div>
    <div><label>Leverancier</label><input id="uitLeverancier" placeholder="Bijv. Shell, Toolstation, garage"></div>
    <div><label>Omschrijving</label><input id="uitOmschrijving" placeholder="Bijv. tankbeurt, boormachine, onderhoud"></div>
+   <div><label>Klant</label><select id="uitKlant"><option value="">n.v.t. - eigen bedrijf</option></select></div>
+   <div><label>Project</label><select id="uitProject" onchange="gioUitgaveProjectChanged()"><option value="">n.v.t. - eigen bedrijf</option></select></div>
+   <div><label>Doorberekenen</label><select id="uitDoorberekenen"><option value="nee">Nee - eigen kosten</option><option value="ja">Ja - aan klant</option></select></div>
    <div><label>Bedrag incl. btw</label><input type="number" id="uitBedrag" value="0.00" step="0.01"></div>
    <div><label>BTW %</label><input type="number" id="uitBtw" value="21" step="1"></div>
    <div><label>Bon foto</label><input type="file" accept="image/*" capture="environment" id="uitFoto" onchange="previewUitgaveBon(event)"></div><div><label>PDF bon/document</label><input type="file" accept="application/pdf" id="uitPdf" onchange="previewUitgavePDF(event)"></div>
@@ -389,7 +392,7 @@ html[data-gio-theme="dark"] body{background:#080a0f!important;color:#f9fafb!impo
     <div class="kpi"><small>Uitgaven dit jaar</small><b id="uitJaar">€0,00</b></div>
   </div>
   <table>
-    <thead><tr><th>Datum</th><th>Categorie</th><th>Leverancier</th><th>Omschrijving</th><th>Bedrag</th><th>BTW</th><th>Bon</th><th>PDF</th><th></th></tr></thead>
+    <thead><tr><th>Datum</th><th>Categorie</th><th>Leverancier</th><th>Omschrijving</th><th>Klant</th><th>Project</th><th>Doorberekenen</th><th>Bedrag</th><th>BTW</th><th>Bon</th><th>PDF</th><th>Acties</th></tr></thead>
     <tbody id="uitgavenList"></tbody>
   </table>
  </div>
@@ -805,13 +808,16 @@ function addUitgave(){
   categorie:uitCategorie.value,
   leverancier:uitLeverancier.value,
   omschrijving:uitOmschrijving.value,
+  klant:uitKlant.value||'',
+  project:uitProject.value||'',
+  doorberekenen:uitDoorberekenen.value==='ja',
   bedrag:bedrag,
   btwPerc:btwPerc,
   btwBedrag:btwBedrag,
   bon:uitBonData,pdf:uitgavePdfData,pdfNaam:uitgavePdfName
  });
  uitBedrag.value='0.00';
- uitOmschrijving.value='';
+ uitOmschrijving.value='';uitKlant.value='';uitProject.value='';uitDoorberekenen.value='nee';
  uitFoto.value='';
  uitBonData='';uitgavePdfData='';uitgavePdfName=''; if(document.getElementById('uitPdf'))uitPdf.value='';
  uitBonBox.style.display='none';
@@ -828,7 +834,7 @@ function sumUitgavenFilter(){
 }
 function renderUitgaven(){
  if(!document.getElementById('uitgavenList'))return;
- uitgavenList.innerHTML=(data.uitgaven||[]).map((x,i)=>`<tr><td>${formatDateNL(x.datum)}</td><td>${x.categorie}</td><td>${x.leverancier||'-'}</td><td>${x.omschrijving||'-'}</td><td>${euro(x.bedrag)}</td><td>${euro(x.btwBedrag||0)}</td><td>${x.bon?`<img class="receipt" src="${x.bon}">`:'-'}</td><td>${pdfLink(x.pdf,x.pdfNaam)}</td><td><button class="del" onclick="del('uitgaven',${i})">🗑️</button></td></tr>`).join('');
+ uitgavenList.innerHTML=(data.uitgaven||[]).map((x,i)=>`<tr><td>${formatDateNL(x.datum)}</td><td>${x.categorie}</td><td>${x.leverancier||'-'}</td><td>${x.omschrijving||'-'}</td><td>${x.klant||'n.v.t.'}</td><td>${x.project||'n.v.t.'}</td><td>${x.doorberekenen?'✅ Ja':'➖ Nee'}</td><td>${euro(x.bedrag)}</td><td>${euro(x.btwBedrag||0)}</td><td>${x.bon?`<img class="receipt" src="${x.bon}">`:'-'}</td><td>${pdfLink(x.pdf,x.pdfNaam)}</td><td><button class="editBtn" onclick="editUitgave(${i})">✏️ Wijzigen</button> <button class="del" onclick="del('uitgaven',${i})">🗑️</button></td></tr>`).join('');
  uitVandaag.innerText=euro(sumUitgaven('dag'));
  uitMaand.innerText=euro(sumUitgaven('maand'));
  uitJaar.innerText=euro(sumUitgaven('jaar'));
@@ -946,7 +952,7 @@ function renderUitgavenCategorieen(){
  uitgavenCategorieList.innerHTML=rows||'<tr><td colspan="2">Nog geen uitgaven</td></tr>';
 }
 
-function render(){planningList.innerHTML=data.planning.map((x,i)=>`<tr><td>${formatDateNL(x.datum)}</td><td>${x.tijd}</td><td>${x.klant}</td><td>${x.project}</td><td>${x.notitie}</td><td>${x.door||'-'}</td><td><span class="status-pill ${statusClass(x.status)}">${statusIcon(x.status)}</span><br><small>${x.statusSinds||''}</small></td><td><button class="editBtn" onclick="editPlanning(${i})">✏️ Wijzigen</button> <button onclick="setStatus(${i},'Onderweg')">Onderweg</button> <button onclick="setStatus(${i},'Gestart')">Gestart</button> <button onclick="setStatus(${i},'Pauze')">Pauze</button> <button onclick="setStatus(${i},'Gereed')">Gereed</button> <button class="del" onclick="del('planning',${i})">🗑️</button></td></tr>`).join('');urenList.innerHTML=data.uren.map((x,i)=>`<tr><td>${formatDateNL(x.datum)}</td><td>${x.klant}</td><td>${x.project||'-'}</td><td>${x.start}</td><td>${x.einde}</td><td>${(+x.uren||0).toFixed(2).replace('.',',')}</td><td>${euro(x.bedrag)}</td><td><button class="editBtn" onclick="openUrenEdit(${i})">✏️</button></td><td><button class="del" onclick="del('uren',${i})">🗑️</button></td></tr>`).join('');matList.innerHTML=data.materiaal.map((x,i)=>`<tr><td>${formatDateNL(x.datum)}</td><td>${x.project||'-'}</td><td>${x.lev}</td><td>${x.oms}</td><td>${x.bon||'-'}</td><td>${euro(x.bedrag)}</td><td>${x.foto?`<img class="receipt" src="${x.foto}">`:'-'}</td><td>${pdfLink(x.pdf,x.pdfNaam)}</td><td><button class="editBtn" onclick="editMateriaal(${i})">✏️</button> <button class="del" onclick="del('materiaal',${i})">🗑️</button></td></tr>`).join('');leveranciers.innerHTML=data.leveranciers.map(x=>`<option value="${x}">`).join('');materialen.innerHTML=data.materialen.map(x=>`<option value="${x}">`).join('');vrijList.innerHTML=data.vrijedagen.map((x,i)=>`<tr><td>${x.medewerker}</td><td>${formatDateNL(x.start)}</td><td>${formatDateNL(x.eind)}</td><td>${x.soort}</td><td>${x.notitie||''}</td><td>${x.door||'-'}</td><td><button class="del" onclick="del('vrijedagen',${i})">🗑️</button></td></tr>`).join('');renderKlanten();renderProjecten();renderUitgaven();renderUitgavenCategorieen();renderDashboard();let od=sumUren('dag'),ud=sumMat('dag');let businessUitDag=sumUitgaven('dag');kOmzetDag.innerText=euro(od);kUitDag.innerText=euro(ud+businessUitDag);kWinstDag.innerText=euro(od-ud-businessUitDag);let bm=data.projecten.filter(p=>p.status==='Betaald'&&p.betaaldDatum&&p.betaaldDatum.slice(0,7)===today().slice(0,7)).reduce((s,p)=>s+projectTotals(p.naam).totaal,0);kBetaaldMaand.innerText=euro(bm); if(document.getElementById('kNogFactureren'))kNogFactureren.innerText=euro(projectTotalForStatus(['Factureren'])); if(document.getElementById('kOpenFacturen'))kOpenFacturen.innerText=euro(projectTotalForStatus(['Factuur verzonden'])); if(document.getElementById('kNogOntvangen'))kNogOntvangen.innerText=euro((data.projecten||[]).filter(p=>p.status!=='Betaald').reduce((s,p)=>s+projectTotals(p.naam).materiaal,0));vulJaren();let omzet=data.uren.filter(x=>matchBalansDatum(x.datum)).reduce((s,x)=>s+(+x.bedrag||0),0),uit=data.materiaal.filter(x=>matchBalansDatum(x.datum)).reduce((s,x)=>s+(+x.bedrag||0),0);let invest=sumUitgavenFilter();balansOmzet.innerText=euro(omzet);balansUitgaven.innerText=euro(uit);if(document.getElementById('balansInvestering'))balansInvestering.innerText=euro(invest);balansResultaat.innerText=euro(omzet-uit-invest);resultTable.innerHTML=`<tr><td>Vandaag</td><td>${euro(od)}</td><td>${euro(ud)}</td><td>${euro(od-ud)}</td></tr>`}
+function render(){planningList.innerHTML=data.planning.map((x,i)=>`<tr><td>${formatDateNL(x.datum)}</td><td>${x.tijd}</td><td>${x.klant}</td><td>${x.project}</td><td>${x.notitie}</td><td>${x.door||'-'}</td><td><span class="status-pill ${statusClass(x.status)}">${statusIcon(x.status)}</span><br><small>${x.statusSinds||''}</small></td><td><button class="editBtn" onclick="editPlanning(${i})">✏️ Wijzigen</button> <button onclick="setStatus(${i},'Onderweg')">Onderweg</button> <button onclick="setStatus(${i},'Gestart')">Gestart</button> <button onclick="setStatus(${i},'Pauze')">Pauze</button> <button onclick="setStatus(${i},'Gereed')">Gereed</button> <button class="del" onclick="del('planning',${i})">🗑️</button></td></tr>`).join('');urenList.innerHTML=data.uren.map((x,i)=>`<tr><td>${formatDateNL(x.datum)}</td><td>${x.klant}</td><td>${x.project||'-'}</td><td>${x.start}</td><td>${x.einde}</td><td>${(+x.uren||0).toFixed(2).replace('.',',')}</td><td>${euro(x.bedrag)}</td><td><button class="editBtn" onclick="openUrenEdit(${i})">✏️</button></td><td><button class="del" onclick="del('uren',${i})">🗑️</button></td></tr>`).join('');matList.innerHTML=data.materiaal.map((x,i)=>`<tr><td>${formatDateNL(x.datum)}</td><td>${x.project||'-'}</td><td>${x.lev}</td><td>${x.oms}</td><td>${x.bon||'-'}</td><td>${euro(x.bedrag)}</td><td>${x.foto?`<img class="receipt" src="${x.foto}">`:'-'}</td><td>${pdfLink(x.pdf,x.pdfNaam)}</td><td><button class="editBtn" onclick="editMateriaal(${i})">✏️</button> <button class="del" onclick="del('materiaal',${i})">🗑️</button></td></tr>`).join('');leveranciers.innerHTML=data.leveranciers.map(x=>`<option value="${x}">`).join('');materialen.innerHTML=data.materialen.map(x=>`<option value="${x}">`).join('');vrijList.innerHTML=data.vrijedagen.map((x,i)=>`<tr><td>${x.medewerker}</td><td>${formatDateNL(x.start)}</td><td>${formatDateNL(x.eind)}</td><td>${x.soort}</td><td>${x.notitie||''}</td><td>${x.door||'-'}</td><td><button class="del" onclick="del('vrijedagen',${i})">🗑️</button></td></tr>`).join('');renderKlanten();renderProjecten();renderUitgaven();gioFillUitgaveSelects();renderUitgavenCategorieen();renderDashboard();let od=sumUren('dag'),ud=sumMat('dag');let businessUitDag=sumUitgaven('dag');kOmzetDag.innerText=euro(od);kUitDag.innerText=euro(ud+businessUitDag);kWinstDag.innerText=euro(od-ud-businessUitDag);let bm=data.projecten.filter(p=>p.status==='Betaald'&&p.betaaldDatum&&p.betaaldDatum.slice(0,7)===today().slice(0,7)).reduce((s,p)=>s+projectTotals(p.naam).totaal,0);kBetaaldMaand.innerText=euro(bm); if(document.getElementById('kNogFactureren'))kNogFactureren.innerText=euro(projectTotalForStatus(['Factureren'])); if(document.getElementById('kOpenFacturen'))kOpenFacturen.innerText=euro(projectTotalForStatus(['Factuur verzonden'])); if(document.getElementById('kNogOntvangen'))kNogOntvangen.innerText=euro((data.projecten||[]).filter(p=>p.status!=='Betaald').reduce((s,p)=>s+projectTotals(p.naam).materiaal,0));vulJaren();let omzet=data.uren.filter(x=>matchBalansDatum(x.datum)).reduce((s,x)=>s+(+x.bedrag||0),0),uit=data.materiaal.filter(x=>matchBalansDatum(x.datum)).reduce((s,x)=>s+(+x.bedrag||0),0);let invest=sumUitgavenFilter();balansOmzet.innerText=euro(omzet);balansUitgaven.innerText=euro(uit);if(document.getElementById('balansInvestering'))balansInvestering.innerText=euro(invest);balansResultaat.innerText=euro(omzet-uit-invest);resultTable.innerHTML=`<tr><td>Vandaag</td><td>${euro(od)}</td><td>${euro(ud)}</td><td>${euro(od-ud)}</td></tr>`}
 function exportProjectCSV(naam){
  let t=projectTotals(naam);
  let p=(data.projecten||[]).find(x=>x.naam===naam)||{};
@@ -977,7 +983,7 @@ function exportProjectCSV(naam){
  ];
  downloadCSV(rows,'Project_'+naam.replace(/[^a-z0-9]/gi,'_')+'_'+today()+'.csv')
 }
-function exportCSV(){let rows=[['GIO BUSINESS PLANNER EXPORT'],['Datum',new Date().toLocaleString('nl-NL')],[],['Klanten'],['Klantnr','Naam','Adres','Postcode','Plaats','Telefoon','Email'],...(data.klanten||[]).map(k=>[k.klantNr,k.naam,k.adres,k.postcode,k.plaats,k.telefoon,k.email]),[],['Projecten'],['Projectnr','Project','Klant','Status','Factuurnr','Totaal'],...data.projecten.map(p=>[p.projectNr,p.naam,p.klant,p.status,p.factuurNr||'',euro(projectTotals(p.naam).totaal)]),[],['Uren'],['Datum','Klant','Project','Start','Einde','Uren','Bedrag'],...data.uren.map(x=>[formatDateNL(x.datum),x.klant,x.project,x.start,x.einde,x.uren,euro(x.bedrag)]),[],['Materiaal klant'],['Datum','Project','Leverancier','Materiaal','Bedrag','PDF'],...data.materiaal.map(x=>[formatDateNL(x.datum),x.project,x.lev,x.oms,euro(x.bedrag),x.pdfNaam||'']),[],['Uitgave / Investeren'],['Datum','Categorie','Leverancier','Omschrijving','Bedrag','BTW','PDF'],...(data.uitgaven||[]).map(x=>[formatDateNL(x.datum),x.categorie,x.leverancier,x.omschrijving,euro(x.bedrag),euro(x.btwBedrag||0),x.pdfNaam||''])];downloadCSV(rows,'GIO_export_'+today()+'.csv')}
+function exportCSV(){let rows=[['GIO BUSINESS PLANNER EXPORT'],['Datum',new Date().toLocaleString('nl-NL')],[],['Klanten'],['Klantnr','Naam','Adres','Postcode','Plaats','Telefoon','Email'],...(data.klanten||[]).map(k=>[k.klantNr,k.naam,k.adres,k.postcode,k.plaats,k.telefoon,k.email]),[],['Projecten'],['Projectnr','Project','Klant','Status','Factuurnr','Totaal'],...data.projecten.map(p=>[p.projectNr,p.naam,p.klant,p.status,p.factuurNr||'',euro(projectTotals(p.naam).totaal)]),[],['Uren'],['Datum','Klant','Project','Start','Einde','Uren','Bedrag'],...data.uren.map(x=>[formatDateNL(x.datum),x.klant,x.project,x.start,x.einde,x.uren,euro(x.bedrag)]),[],['Materiaal klant'],['Datum','Project','Leverancier','Materiaal','Bedrag','PDF'],...data.materiaal.map(x=>[formatDateNL(x.datum),x.project,x.lev,x.oms,euro(x.bedrag),x.pdfNaam||'']),[],['Uitgave / Investeren'],['Datum','Categorie','Leverancier','Omschrijving','Klant','Project','Doorberekenen','Bedrag','BTW','PDF'],...(data.uitgaven||[]).map(x=>[formatDateNL(x.datum),x.categorie,x.leverancier,x.omschrijving,x.klant||'n.v.t.',x.project||'n.v.t.',x.doorberekenen?'Ja':'Nee',euro(x.bedrag),euro(x.btwBedrag||0),x.pdfNaam||''])];downloadCSV(rows,'GIO_export_'+today()+'.csv')}
 function downloadCSV(rows,name){let csv=rows.map(r=>r.map(c=>`"${String(c??'').replace(/"/g,'""')}"`).join(';')).join('\n');let b=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});let a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click()}
 
 function backupJSON(){
@@ -1023,7 +1029,7 @@ document.addEventListener('DOMContentLoaded',()=>{load();berekenUren();editUrenM
 
 /* === GIO PRO v2.0 geïntegreerde functies === */
 function projectPayments(project){return (data.klantBetalingen||[]).filter(x=>x.project===project)}
-function financeTotals(project){let base=projectTotals(project);let uit=(data.uitgaven||[]).filter(x=>x.project===project).reduce((s,x)=>s+(+x.bedrag||0),0);let betalingen=projectPayments(project);let betaald=betalingen.reduce((s,x)=>s+(+x.bedrag||0),0);let betaaldMateriaal=betalingen.filter(x=>x.type==='Materiaal').reduce((s,x)=>s+(+x.bedrag||0),0);let totaal=base.arbeid+base.materiaal+uit;return{...base,uitgaven:uit,totaalProject:totaal,betaald,betaaldMateriaal,openMateriaal:base.materiaal-betaaldMateriaal,open:totaal-betaald,winst:base.arbeid+base.materiaal-uit}}
+function financeTotals(project){let base=projectTotals(project);let uitAlle=(data.uitgaven||[]).filter(x=>x.project===project).reduce((s,x)=>s+(+x.bedrag||0),0);let uitDoor=(data.uitgaven||[]).filter(x=>x.project===project&&x.doorberekenen===true).reduce((s,x)=>s+(+x.bedrag||0),0);let betalingen=projectPayments(project);let betaald=betalingen.reduce((s,x)=>s+(+x.bedrag||0),0);let betaaldMateriaal=betalingen.filter(x=>x.type==='Materiaal').reduce((s,x)=>s+(+x.bedrag||0),0);let totaal=base.arbeid+base.materiaal+uitDoor;return{...base,uitgaven:uitAlle,doorberekendeUitgaven:uitDoor,totaalProject:totaal,betaald,betaaldMateriaal,openMateriaal:base.materiaal-betaaldMateriaal,open:totaal-betaald,winst:base.arbeid+base.materiaal-uitAlle}}
 function fillProSelects(){let opts=(data.projecten||[]).map(p=>`<option value="${p.naam}">${p.projectNr||''} ${p.naam}</option>`).join('');['proProjectSelect','kbProject'].forEach(id=>{let s=document.getElementById(id);if(s){let v=s.value;s.innerHTML=opts;if(v)s.value=v}});if(document.getElementById('kbDatum')&&!kbDatum.value)kbDatum.value=today()}
 function renderProjectClock(){let bar=document.getElementById('gioLiveClock'),txt=document.getElementById('gioClockText');if(!bar||!txt)return;if(data.activeClock&&data.activeClock.running){let ac=data.activeClock,st=new Date(ac.startedAt||((ac.datum||today())+'T'+(ac.start||'00:00')+':00')),mins=Math.max(0,Math.round((Date.now()-st.getTime())/60000));txt.innerText=`${ac.klant||'-'} • ${ac.project||'-'} • sinds ${ac.start||'-'} • ${Math.floor(mins/60)}u ${mins%60}m`;bar.classList.add('active')}else bar.classList.remove('active')}
 function renderProjectkaartPro(){fillProSelects();renderProjectClock();let box=document.getElementById('proProjectContent'),sel=document.getElementById('proProjectSelect');if(!box||!sel)return;let naam=sel.value||((data.projecten||[])[0]||{}).naam;if(!naam){box.innerHTML='<div class="card">Nog geen project.</div>';return}let p=(data.projecten||[]).find(x=>x.naam===naam)||{},k=(data.klanten||[]).find(x=>x.naam===p.klant)||{},t=financeTotals(naam);let tel=(k.telefoon||'').replace(/\s/g,''),mail=k.email||'',adres=encodeURIComponent([k.adres,k.postcode,k.plaats].filter(Boolean).join(' '));let pays=projectPayments(naam);box.innerHTML=`<div class="card"><h2>${p.naam}</h2><p>Klant: <b>${p.klant||'-'}</b> • Status: <b>${p.status||'-'}</b></p><div class="gioQuickActions"><a href="${tel?'tel:'+tel:'#'}">📞 Bellen</a><a href="${tel?'https://wa.me/'+tel:'#'}">💬 WhatsApp</a><a href="${mail?'mailto:'+mail:'#'}">📧 Mail</a><a target="_blank" href="${adres?'https://www.google.com/maps/search/?api=1&query='+adres:'#'}">📍 Route</a></div></div><div class="gioTileGrid"><div class="gioFinanceTile"><small>Materiaal totaal</small><br><b>${euro(t.materiaal)}</b></div><div class="gioFinanceTile"><small>Betaald materiaal</small><br><b style="color:#22c55e!important">${euro(t.betaaldMateriaal)}</b></div><div class="gioFinanceTile"><small>Open materiaal</small><br><b>${euro(t.openMateriaal)}</b></div><div class="gioFinanceTile"><small>Arbeid</small><br><b>${euro(t.arbeid)}</b><br><small>${t.urenSom.toFixed(2)} uur</small></div><div class="gioFinanceTile"><small>Uitgaven</small><br><b>${euro(t.uitgaven)}</b></div><div class="gioFinanceTile"><small>Totaal project</small><br><b>${euro(t.totaalProject)}</b></div><div class="gioFinanceTile"><small>Totaal betaald klant</small><br><b style="color:#22c55e!important">${euro(t.betaald)}</b></div><div class="gioFinanceTile"><small>Nog open klant</small><br><b>${euro(t.open)}</b></div></div><div class="card"><h2>💳 Betalingen</h2>${pays.length?`<table><thead><tr><th>Datum</th><th>Type</th><th>Omschrijving</th><th>Bedrag</th></tr></thead><tbody>${pays.map(x=>`<tr><td>${formatDateNL(x.datum)}</td><td>${x.type}</td><td>${x.omschrijving||''}</td><td>${euro(x.bedrag)}</td></tr>`).join('')}</tbody></table>`:'Nog geen betalingen.'}</div><div class="card"><h2>📝 Notities</h2><p>${p.notitie||'Geen notitie'}</p></div>`}
@@ -1066,7 +1072,7 @@ function gioAmountPay(x){return gioNum(x.bedrag??x.amount??x.totaal)}
 function gioEnsureV2(){if(!data.offertes)data.offertes=[];if(!data.facturen)data.facturen=[];if(!data.kmRegistraties)data.kmRegistraties=[];(data.projecten||[]).forEach(p=>{if(p.archived===undefined)p.archived=false})}
 function gioProjectNames(){let a=[];(data.projecten||[]).forEach(p=>{if(p.naam&&!a.includes(p.naam))a.push(p.naam)});(data.uren||[]).forEach(x=>{if(x.project&&!a.includes(x.project))a.push(x.project)});(data.materiaal||[]).forEach(x=>{if(x.project&&!a.includes(x.project))a.push(x.project)});return a}
 function gioClient(project){let p=(data.projecten||[]).find(x=>x.naam===project)||{},n=p.klant||((data.uren||[]).find(u=>u.project===project)||{}).klant||'',k=(data.klanten||[]).find(x=>x.naam===n)||{};return{naam:n||k.naam||'',data:k}}
-function gioRows(project){return{u:(data.uren||[]).filter(x=>x.project===project),m:(data.materiaal||[]).filter(x=>x.project===project),pay:(data.klantBetalingen||[]).filter(x=>x.project===project),uit:(data.uitgaven||[]).filter(x=>x.project===project)}}
+function gioRows(project){return{u:(data.uren||[]).filter(x=>x.project===project),m:(data.materiaal||[]).filter(x=>x.project===project),pay:(data.klantBetalingen||[]).filter(x=>x.project===project),uit:(data.uitgaven||[]).filter(x=>x.project===project&&x.doorberekenen===true)}}
 function gioInvoiceTotals(project){let tar=gioNum(document.getElementById('gioInvTarief')?.value)||35,btwp=gioNum(document.getElementById('gioInvBtwPct')?.value)||0,r=gioRows(project),uren=r.u.reduce((s,x)=>s+gioHours(x),0),arbeid=r.u.reduce((s,x)=>s+gioAmountHour(x,tar),0),mat=r.m.reduce((s,x)=>s+gioAmountMat(x),0),uit=r.uit.reduce((s,x)=>s+gioNum(x.bedrag),0),paid=r.pay.reduce((s,x)=>s+gioAmountPay(x),0),sub=arbeid+mat+(document.getElementById('gioInvShowUitgaven')?.checked?uit:0),btw=btwp>0?sub*(btwp/100):0,total=sub+btw;return{uren,arbeid,mat,uit,paid,sub,btw,total,open:total-paid}}
 function gioFillProjectSelects(){let opts=gioProjectNames().map(p=>`<option value="${gioEsc(p)}">${gioEsc(p)}</option>`).join('');['gioInvProject'].forEach(id=>{let el=document.getElementById(id);if(el){let v=el.value;el.innerHTML=opts;if(v)el.value=v}})}
 function renderGioDashboardAgenda(){let box=document.getElementById('gioDashboardAgenda');if(!box)return;let todayDate=new Date();let start=new Date(todayDate);start.setDate(todayDate.getDate()-((todayDate.getDay()+6)%7));let html='<div class="gioAgendaGrid">';for(let i=0;i<7;i++){let d=new Date(start);d.setDate(start.getDate()+i);let iso=d.toISOString().slice(0,10);let items=(data.planning||[]).filter(x=>x.datum===iso);html+=`<div class="gioAgendaDay"><b>${d.toLocaleDateString('nl-NL',{weekday:'short',day:'2-digit',month:'2-digit'})}</b>`+(items.length?items.map(x=>`<div class="gioEvent ${x.status==='Gereed'?'done':''}"><b>${gioEsc(x.tijd||'--:--')} ${gioEsc(x.project||'-')}</b><br><small>${gioEsc(x.klant||'')}</small></div>`).join(''):'<small>Geen planning</small>')+'</div>'}box.innerHTML=html+'</div>'}
@@ -1337,6 +1343,52 @@ function gioKmForCustomerOrProject(projectName,customerName){
 function gioKmChargeTotal(projectName,customerName){
   return gioKmForCustomerOrProject(projectName,customerName)
     .reduce((s,x)=>s+(+x.bedrag||((+x.km||0)*(+x.tarief||0))),0);
+}
+
+
+
+function gioFillUitgaveSelects(){
+  const klantSel=document.getElementById('uitKlant');
+  const projectSel=document.getElementById('uitProject');
+  if(!klantSel||!projectSel)return;
+  const oldK=klantSel.value, oldP=projectSel.value;
+  klantSel.innerHTML='<option value="">n.v.t. - eigen bedrijf</option>'+(data.klanten||[]).map(k=>`<option>${gioEsc(k.naam||k.name||'')}</option>`).join('');
+  projectSel.innerHTML='<option value="">n.v.t. - eigen bedrijf</option>'+(data.projecten||[]).filter(p=>!p.archived).map(p=>`<option>${gioEsc(p.naam||p.project||'')}</option>`).join('');
+  if(oldK)klantSel.value=oldK;
+  if(oldP)projectSel.value=oldP;
+}
+function gioUitgaveProjectChanged(){
+  const project=document.getElementById('uitProject')?.value||'';
+  if(!project)return;
+  const p=(data.projecten||[]).find(x=>(x.naam||x.project||'')===project);
+  if(p&&document.getElementById('uitKlant'))uitKlant.value=p.klant||'';
+  if(document.getElementById('uitDoorberekenen'))uitDoorberekenen.value='ja';
+}
+function editUitgave(i){
+  const x=(data.uitgaven||[])[i];if(!x)return;
+  const categorie=prompt('Categorie',x.categorie||'');if(categorie===null)return;
+  const leverancier=prompt('Leverancier',x.leverancier||'');if(leverancier===null)return;
+  const omschrijving=prompt('Omschrijving',x.omschrijving||'');if(omschrijving===null)return;
+  const bedrag=prompt('Bedrag incl. btw',x.bedrag||0);if(bedrag===null)return;
+  const klant=prompt('Klant (leeg of n.v.t. = eigen bedrijf)',x.klant||'n.v.t.');if(klant===null)return;
+  const project=prompt('Project (leeg of n.v.t. = eigen bedrijf)',x.project||'n.v.t.');if(project===null)return;
+  const door=confirm('Moet deze uitgave aan de klant worden doorberekend?');
+  const btwPerc=+x.btwPerc||0;
+  const nieuwBedrag=+String(bedrag).replace(',','.')||0;
+  Object.assign(x,{
+    categorie,leverancier,omschrijving,bedrag:nieuwBedrag,
+    btwBedrag:btwPerc>0?nieuwBedrag-(nieuwBedrag/(1+btwPerc/100)):0,
+    klant:(klant&&klant.toLowerCase()!=='n.v.t.')?klant:'',
+    project:(project&&project.toLowerCase()!=='n.v.t.')?project:'',
+    doorberekenen:door
+  });
+  save();render();
+}
+function gioBillableExpensesForProject(project){
+  return (data.uitgaven||[]).filter(x=>x.doorberekenen===true&&x.project===project);
+}
+function gioBillableExpenseTotalForProject(project){
+  return gioBillableExpensesForProject(project).reduce((s,x)=>s+(+x.bedrag||0),0);
 }
 
 </script>
