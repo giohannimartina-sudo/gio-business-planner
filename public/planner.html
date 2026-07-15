@@ -100,6 +100,53 @@ html[data-gio-theme="dark"] body{background:#080a0f!important;color:#f9fafb!impo
   .gioInvoiceTotal{width:100%!important}
 }
 
+
+/* === OFFERTE PRO === */
+.gioOfferLayout{display:grid;grid-template-columns:minmax(360px,520px) minmax(620px,1fr);gap:18px;align-items:start}
+.gioOfferEditor{min-width:0}
+.gioOfferPreviewWrap{position:sticky;top:12px;min-width:0;overflow:auto}
+.gioOfferPaper{width:794px;min-height:1123px;background:#fff!important;color:#111!important;margin:0 auto;padding:52px 54px 76px;box-sizing:border-box;box-shadow:0 15px 45px rgba(0,0,0,.25);font-family:Arial,Helvetica,sans-serif;font-size:13px;position:relative}
+.gioOfferPaper *{color:#111!important;box-sizing:border-box}
+.gioOfferTitle{font-size:34px;font-weight:900;margin:0 0 20px}
+.gioOfferTop{display:grid;grid-template-columns:1fr 280px;gap:30px}
+.gioOfferLogo{width:220px;max-height:115px;object-fit:contain;background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important}
+.gioOfferMeta{line-height:1.65}
+.gioOfferClientGrid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:26px 0}
+.gioOfferBox{border:1px solid #aaa;padding:14px;min-height:110px;background:#fff!important}
+.gioOfferTextBlock{margin:16px 0;padding:12px 0;border-top:3px solid #f4c400;border-bottom:1px solid #bbb}
+.gioOfferTable{width:100%;border-collapse:collapse;margin-top:20px;font-size:12px}
+.gioOfferTable th,.gioOfferTable td{border:1px solid #666;padding:8px;background:#fff!important;color:#111!important;vertical-align:top}
+.gioOfferTable th{background:#f4f4f4!important;font-weight:900}
+.gioOfferTable .num{text-align:right}
+.gioOfferTotals{width:360px;margin-left:auto;margin-top:14px;border-collapse:collapse}
+.gioOfferTotals td{border:1px solid #666;padding:9px;background:#fff!important}
+.gioOfferTotals .grand td{font-size:17px;font-weight:900;background:#f4c400!important}
+.gioOfferSign{margin-top:34px;display:grid;grid-template-columns:1fr 1fr;gap:35px}
+.gioOfferSignBox{border-top:1px solid #222;padding-top:8px;min-height:70px}
+.gioOfferFooter{position:absolute;left:0;right:0;bottom:0;background:#0b0b0b;color:#fff!important;padding:14px 30px;display:flex;justify-content:space-between;font-size:11px}
+.gioOfferFooter span{color:#fff!important}
+.gioOfferLineTable{width:100%;border-collapse:collapse}
+.gioOfferLineTable th,.gioOfferLineTable td{border-bottom:1px solid #ddd;padding:8px;text-align:left}
+.gioOfferLineTable .num{text-align:right}
+.gioOfferLineActions{white-space:nowrap}
+@media(max-width:1000px){
+ .gioOfferLayout{grid-template-columns:1fr}
+ .gioOfferPreviewWrap{position:static}
+}
+@media(max-width:800px){
+ .gioOfferPaper{width:100%;min-height:auto;padding:18px 14px 70px;font-size:11px}
+ .gioOfferTop,.gioOfferClientGrid,.gioOfferSign{grid-template-columns:1fr}
+ .gioOfferLogo{width:170px}
+ .gioOfferTable{font-size:10px}
+ .gioOfferTable th,.gioOfferTable td{padding:4px}
+ .gioOfferTotals{width:100%}
+}
+@media print{
+ body *{visibility:hidden!important}
+ #gioOfferPrintable,#gioOfferPrintable *{visibility:visible!important}
+ #gioOfferPrintable{position:absolute!important;left:0!important;top:0!important;width:210mm!important;min-height:297mm!important;margin:0!important;box-shadow:none!important}
+}
+
 </style>
 <meta name="theme-color" content="#07111f"><link rel="manifest" href="/manifest.webmanifest">
 <meta name="theme-color" content="#07111f">
@@ -395,22 +442,87 @@ html[data-gio-theme="dark"] body{background:#080a0f!important;color:#f9fafb!impo
 <datalist id="klantenDatalist"></datalist>
 
 
+
 <section id="offertes" class="page">
- <div class="card dark"><h2>📄 Offerte PRO</h2><p>Maak offertes op basis van jouw bestaande projecthistorie. Geaccepteerde offertes kunnen later worden omgezet naar project.</p></div>
- <div class="card">
-  <h2>Nieuwe offerte</h2>
-  <div class="row">
-   <div><label>Klant</label><input id="offKlant" list="klantenDatalist"></div>
-   <div><label>Projectnaam</label><input id="offProject" placeholder="Bijv. Washok renovatie"></div>
-   <div><label>Soort klus</label><input id="offType" placeholder="Badkamer, washok, schilderwerk"></div>
-   <div><label>Uurtarief</label><input id="offTarief" type="number" step="0.01" value="35"></div>
-  </div>
-  <label>Omschrijving</label><textarea id="offOmschrijving" placeholder="Werkzaamheden omschrijven..."></textarea>
-  <button class="btn" onclick="gioCreateOffer()">🤖 Maak offertevoorstel</button>
+ <div class="card dark">
+  <h2>📄 Offerte PRO</h2>
+  <p>Maak, controleer en verstuur een professionele offerte in dezelfde stijl als jouw Excel-template.</p>
  </div>
- <div id="gioOfferAssistant"></div>
- <div class="card"><h2>Offerte overzicht</h2><table><thead><tr><th>Nr.</th><th>Klant</th><th>Project</th><th>Type</th><th>Status</th><th>Bedrag</th><th>Actie</th></tr></thead><tbody id="gioOfferteList"></tbody></table></div>
+
+ <div class="gioOfferLayout">
+  <div class="gioOfferEditor">
+   <div class="card">
+    <h2>Offertegegevens</h2>
+    <div class="row">
+     <div><label>Klant</label><select id="offKlant" onchange="gioRenderOfferPreview()"></select></div>
+     <div><label>Projectnaam</label><input id="offProject" placeholder="Bijv. Washok renovatie" oninput="gioRenderOfferPreview()"></div>
+     <div><label>Soort klus</label><input id="offType" placeholder="Bijv. renovatie" oninput="gioRenderOfferPreview()"></div>
+    </div>
+    <div class="row">
+     <div><label>Offertenummer</label><input id="offNr" oninput="gioRenderOfferPreview()"></div>
+     <div><label>Offertedatum</label><input id="offDatum" type="date" onchange="gioRenderOfferPreview()"></div>
+     <div><label>Geldig tot</label><input id="offGeldigTot" type="date" onchange="gioRenderOfferPreview()"></div>
+     <div><label>Status</label><select id="offStatus" onchange="gioRenderOfferPreview()"><option>Concept</option><option>Verzonden</option><option>Geaccepteerd</option><option>Afgewezen</option></select></div>
+    </div>
+    <label>Informatie over de opdracht</label>
+    <textarea id="offOmschrijving" rows="4" placeholder="Omschrijf de werkzaamheden..." oninput="gioRenderOfferPreview()"></textarea>
+    <label>Extra informatie / voorwaarden</label>
+    <textarea id="offVoorwaarden" rows="3" placeholder="Bijv. offerte 30 dagen geldig, planning in overleg..." oninput="gioRenderOfferPreview()"></textarea>
+   </div>
+
+   <div class="card">
+    <h2>Offerte-regels</h2>
+    <div class="row">
+     <div><label>Beschrijving</label><input id="offRegelOmschrijving" placeholder="Arbeid, materiaal, km-vergoeding..."></div>
+     <div><label>Aantal</label><input id="offRegelAantal" type="number" step="0.01" value="1"></div>
+     <div><label>Eenheid</label><select id="offRegelEenheid"><option>Stuk</option><option>Uur</option><option>Post</option><option>Meter</option><option>m²</option><option>km</option></select></div>
+     <div><label>Tarief</label><input id="offRegelTarief" type="number" step="0.01" value="0"></div>
+     <div><label>BTW %</label><select id="offRegelBtw"><option value="0">0%</option><option value="9">9%</option><option value="21" selected>21%</option></select></div>
+    </div>
+    <button class="btn" onclick="gioOfferAddLine()">➕ Regel toevoegen</button>
+    <button class="btn2" onclick="gioOfferAddSuggestedLines()">🤖 Arbeid, materiaal en KM voorstellen</button>
+    <div id="gioOfferDraftLines" style="margin-top:12px"></div>
+   </div>
+
+   <div class="card">
+    <h2>Klant ziet op offerte</h2>
+    <div class="row">
+     <label><input type="checkbox" id="offShowDetails" checked onchange="gioRenderOfferPreview()"> Regels uitsplitsen</label>
+     <label><input type="checkbox" id="offShowHours" checked onchange="gioRenderOfferPreview()"> Arbeidsuren tonen</label>
+     <label><input type="checkbox" id="offShowMaterial" checked onchange="gioRenderOfferPreview()"> Materiaal tonen</label>
+     <label><input type="checkbox" id="offShowKm" checked onchange="gioRenderOfferPreview()"> KM-vergoeding tonen</label>
+     <label><input type="checkbox" id="offShowNotes" checked onchange="gioRenderOfferPreview()"> Opdrachtinformatie tonen</label>
+    </div>
+   </div>
+
+   <div class="card">
+    <h2>Acties</h2>
+    <button class="btn" onclick="gioOfferSave()">💾 Opslaan in offertehistorie</button>
+    <button class="btn2" onclick="gioOfferNew()">🆕 Nieuwe offerte</button>
+    <button class="btn2" onclick="gioOfferPrint()">📄 PDF / Print</button>
+    <button class="btn2" onclick="gioOfferExportCSV()">📊 Excel / CSV</button>
+    <button class="btn2" onclick="gioOfferDownloadHTML()">💻 Opslaan op computer</button>
+    <button class="btn2" onclick="gioOfferEmail()">📧 E-mail naar klant</button>
+    <a class="btn2" href="/templates/GIO-Offerte-template.xlsx" download>⬇️ Excel-template</a>
+   </div>
+  </div>
+
+  <div class="gioOfferPreviewWrap">
+   <div id="gioOfferPreview"></div>
+  </div>
+ </div>
+
+ <div class="card">
+  <h2>Offertehistorie</h2>
+  <div style="overflow:auto">
+   <table>
+    <thead><tr><th>Nr.</th><th>Klant</th><th>Project</th><th>Datum</th><th>Status</th><th>Totaal</th><th>Acties</th></tr></thead>
+    <tbody id="gioOfferteList"></tbody>
+   </table>
+  </div>
+ </div>
 </section>
+
 
 <section id="facturatiepro" class="page">
  <div class="card dark"><h2>🧾 Facturatie PRO</h2><p>Leest bestaande projectdata en maakt een professionele A4 factuur-layout. Je data blijft staan.</p></div>
@@ -944,16 +1056,189 @@ function gioExportInvoiceCSV(){let p=gioInvProject.value,r=gioRows(p),t=gioInvoi
 function gioEmailInvoice(){let p=gioInvProject.value,cl=gioClient(p),t=gioInvoiceTotals(p);location.href=`mailto:${cl.data.email||''}?subject=${encodeURIComponent('Factuur '+gioInvNumber.value+' - '+p)}&body=${encodeURIComponent('Beste '+cl.naam+',\n\nHierbij ontvang je de factuur voor project '+p+'.\nNog te betalen: '+euro(t.open)+'\n\nMet vriendelijke groet,\nGIO Klus Baas\ninfo@gioklusbaas.nl')}`}
 function gioSaveInvoiceRecord(){gioEnsureV2();let p=gioInvProject.value,t=gioInvoiceTotals(p);data.facturen.push({factuurnummer:gioInvNumber.value||'F'+new Date().getFullYear()+'-'+String((data.facturen||[]).length+1).padStart(3,'0'),project:p,datum:today(),status:'Concept',totaal:t.total,open:t.open});save();render();alert('Factuur opgeslagen in factuurhistorie. Gebruik daarnaast PDF / Opslaan op computer als je een bestand op je computer wilt bewaren.')}
 function renderGioFactuurHistorie(){let box=document.getElementById('gioFactuurHistorie');if(!box)return;box.innerHTML=(data.facturen||[]).map(f=>`<tr><td>${gioEsc(f.factuurnummer)}</td><td>${gioEsc(f.project)}</td><td>${formatDateNL(f.datum)}</td><td>${gioEsc(f.status||'Concept')}</td><td>${euro(f.totaal)}</td><td>${euro(f.open)}</td></tr>`).join('')}
-function gioCreateOffer(){gioEnsureV2();let type=(offType.value||'').toLowerCase(),matches=(data.projecten||[]).filter(p=>(p.naam||'').toLowerCase().includes(type)||String(p.notitie||'').toLowerCase().includes(type));let avgH=0,avgM=0;if(matches.length){avgH=matches.reduce((s,p)=>s+projectTotals(p.naam).urenSom,0)/matches.length;avgM=matches.reduce((s,p)=>s+projectTotals(p.naam).materiaal,0)/matches.length}else{avgH=8;avgM=250}let bedrag=avgH*(+offTarief.value||35)+avgM;let nr='O'+new Date().getFullYear()+'-'+String(data.offertes.length+1).padStart(3,'0');data.offertes.push({nr,klant:offKlant.value,project:offProject.value,type:offType.value,status:'Concept',uren:avgH,materiaal:avgM,bedrag,omschrijving:offOmschrijving.value,datum:today()});save();render();gioRenderOffertes();alert('Offertevoorstel gemaakt op basis van historie.')}
-function gioRenderOffertes(){let box=document.getElementById('gioOfferteList');if(!box)return;box.innerHTML=(data.offertes||[]).map((o,i)=>`<tr><td>${gioEsc(o.nr)}</td><td>${gioEsc(o.klant)}</td><td>${gioEsc(o.project)}</td><td>${gioEsc(o.type)}</td><td>${gioEsc(o.status)}</td><td>${euro(o.bedrag)}</td><td><button class="btn2" onclick="gioAcceptOffer(${i})">✔ Naar project</button></td></tr>`).join('');let last=(data.offertes||[]).slice(-1)[0];if(last&&document.getElementById('gioOfferAssistant'))gioOfferAssistant.innerHTML=`<div class="card"><h2>🤖 Slim offertevoorstel</h2><p>Geschatte uren: <b>${last.uren.toFixed(1)}</b><br>Geschat materiaal: <b>${euro(last.materiaal)}</b><br>Voorstel totaal: <b>${euro(last.bedrag)}</b></p></div>`}
-function gioAcceptOffer(i){let o=data.offertes[i];if(!o)return;data.projecten.push({projectNr:nextProjectNumber(),naam:o.project,klant:o.klant,status:'Gepland',start:'',notitie:'Aangemaakt vanuit offerte '+o.nr});o.status='Geaccepteerd';save();render();alert('Offerte omgezet naar project.')}
+
+let gioOfferDraftLines=[];
+let gioOfferEditIndex=-1;
+
+function gioOfferNextNumber(){
+ gioEnsureV2();
+ return 'O'+new Date().getFullYear()+'-'+String((data.offertes||[]).length+1).padStart(3,'0');
+}
+function gioOfferDatePlus(days){
+ let d=new Date();d.setDate(d.getDate()+days);return d.toISOString().slice(0,10);
+}
+function gioOfferFillClients(){
+ if(!document.getElementById('offKlant'))return;
+ let current=offKlant.value;
+ offKlant.innerHTML='<option value="">Kies klant</option>'+(data.klanten||[]).map(k=>`<option>${gioEsc(k.naam||k.name||'')}</option>`).join('');
+ if(current)offKlant.value=current;
+}
+function gioOfferClient(){
+ let name=offKlant?.value||'';
+ let k=(data.klanten||[]).find(x=>(x.naam||x.name||'')===name)||{};
+ return {name,data:k};
+}
+function gioOfferLineTotal(x){return (+x.aantal||0)*(+x.tarief||0)}
+function gioOfferLineVat(x){return gioOfferLineTotal(x)*((+x.btw||0)/100)}
+function gioOfferTotals(){
+ let sub=gioOfferDraftLines.reduce((s,x)=>s+gioOfferLineTotal(x),0);
+ let vat=gioOfferDraftLines.reduce((s,x)=>s+gioOfferLineVat(x),0);
+ return {sub,vat,total:sub+vat};
+}
+function gioOfferAddLine(){
+ let oms=offRegelOmschrijving.value.trim();
+ let aantal=+String(offRegelAantal.value||1).replace(',','.');
+ let tarief=+String(offRegelTarief.value||0).replace(',','.');
+ let eenheid=offRegelEenheid.value||'Stuk';
+ let btw=+offRegelBtw.value||0;
+ if(!oms){alert('Vul een beschrijving in.');return}
+ if(!(aantal>0)){alert('Aantal moet groter zijn dan 0.');return}
+ gioOfferDraftLines.push({omschrijving:oms,aantal,eenheid,tarief,btw});
+ offRegelOmschrijving.value='';offRegelAantal.value=1;offRegelTarief.value=0;
+ gioRenderOfferDraftLines();gioRenderOfferPreview();
+}
+function gioOfferAddSuggestedLines(){
+ let project=offProject.value.trim(),tarief=35,uren=0,mat=0,km=0;
+ if(project){
+  let t=projectTotals(project);uren=+t.urenSom||0;mat=+t.materiaal||0;
+  km=(data.kmRegistraties||[]).filter(x=>x.project===project).reduce((s,x)=>s+(+x.bedrag||0),0);
+ }
+ if(!uren)uren=8;
+ if(!mat)mat=250;
+ if(!gioOfferDraftLines.length){
+  gioOfferDraftLines.push({omschrijving:'Arbeid',aantal:uren,eenheid:'Uur',tarief,btw:21});
+  gioOfferDraftLines.push({omschrijving:'Materiaal',aantal:1,eenheid:'Post',tarief:mat,btw:21});
+  if(km>0)gioOfferDraftLines.push({omschrijving:'KM-vergoeding',aantal:1,eenheid:'Post',tarief:km,btw:21});
+ }
+ gioRenderOfferDraftLines();gioRenderOfferPreview();
+}
+function gioOfferEditLine(i){
+ let x=gioOfferDraftLines[i];if(!x)return;
+ let oms=prompt('Beschrijving',x.omschrijving);if(oms===null)return;
+ let aantal=prompt('Aantal',x.aantal);if(aantal===null)return;
+ let tarief=prompt('Tarief',x.tarief);if(tarief===null)return;
+ let btw=prompt('BTW %',x.btw);if(btw===null)return;
+ Object.assign(x,{omschrijving:oms,aantal:+String(aantal).replace(',','.')||0,tarief:+String(tarief).replace(',','.')||0,btw:+String(btw).replace(',','.')||0});
+ gioRenderOfferDraftLines();gioRenderOfferPreview();
+}
+function gioOfferDeleteLine(i){
+ if(!confirm('Deze offerteregel verwijderen?'))return;
+ gioOfferDraftLines.splice(i,1);gioRenderOfferDraftLines();gioRenderOfferPreview();
+}
+function gioRenderOfferDraftLines(){
+ let box=document.getElementById('gioOfferDraftLines');if(!box)return;
+ let rows=gioOfferDraftLines.map((x,i)=>`<tr><td>${gioEsc(x.omschrijving)}</td><td class="num">${Number(x.aantal).toFixed(2)}</td><td>${gioEsc(x.eenheid)}</td><td class="num">${euro(x.tarief)}</td><td class="num">${x.btw}%</td><td class="num">${euro(gioOfferLineTotal(x))}</td><td class="gioOfferLineActions"><button class="editBtn" onclick="gioOfferEditLine(${i})">✏️</button> <button class="del" onclick="gioOfferDeleteLine(${i})">🗑️</button></td></tr>`).join('');
+ box.innerHTML=`<div style="overflow:auto"><table class="gioOfferLineTable"><thead><tr><th>Beschrijving</th><th>Aantal</th><th>Eenheid</th><th>Tarief</th><th>BTW</th><th>Totaal</th><th>Actie</th></tr></thead><tbody>${rows||'<tr><td colspan="7">Nog geen offerteregels.</td></tr>'}</tbody></table></div>`;
+}
+function gioOfferVisibleLines(){
+ return gioOfferDraftLines.filter(x=>{
+  let t=String(x.omschrijving||'').toLowerCase();
+  if(!offShowHours.checked&&(t.includes('arbeid')||x.eenheid==='Uur'))return false;
+  if(!offShowMaterial.checked&&t.includes('materiaal'))return false;
+  if(!offShowKm.checked&&(t.includes('km')||x.eenheid==='km'))return false;
+  return true;
+ });
+}
+function gioRenderOfferPreview(){
+ if(!document.getElementById('gioOfferPreview'))return;
+ let cl=gioOfferClient(),lines=gioOfferVisibleLines(),tot=gioOfferTotals();
+ let date=offDatum.value||today(),valid=offGeldigTot.value||gioOfferDatePlus(30),nr=offNr.value||gioOfferNextNumber();
+ let lineHtml=offShowDetails.checked?lines.map(x=>`<tr><td>${gioEsc(x.omschrijving)}</td><td class="num">${Number(x.aantal).toFixed(2)}</td><td>${gioEsc(x.eenheid)}</td><td class="num">${euro(x.tarief)}</td><td class="num">${x.btw}%</td><td class="num">${euro(gioOfferLineTotal(x))}</td></tr>`).join(''):`<tr><td>Werkzaamheden volgens omschrijving</td><td class="num">1,00</td><td>Post</td><td class="num">${euro(tot.sub)}</td><td class="num">div.</td><td class="num">${euro(tot.sub)}</td></tr>`;
+ gioOfferPreview.innerHTML=`<div class="gioOfferPaper" id="gioOfferPrintable">
+  <div class="gioOfferTop">
+   <div><img src="/gio-factuur-logo.png" class="gioOfferLogo" onerror="this.style.display='none'"><h1 class="gioOfferTitle">OFFERTE</h1><b>GIO Klus Baas</b><br>info@gioklusbaas.nl<br>KvK: nog in te vullen<br>BTW: nog in te vullen</div>
+   <div class="gioOfferMeta"><b>Offertenummer:</b> ${gioEsc(nr)}<br><b>Offertedatum:</b> ${formatDateNL(date)}<br><b>Geldig tot:</b> ${formatDateNL(valid)}<br><b>Project:</b> ${gioEsc(offProject.value||'')}<br><b>Status:</b> ${gioEsc(offStatus.value||'Concept')}</div>
+  </div>
+  <div class="gioOfferClientGrid">
+   <div class="gioOfferBox"><b>Offerte voor</b><br><br><b>${gioEsc(cl.name)}</b><br>${gioEsc(cl.data.adres||'')}<br>${gioEsc(cl.data.postcode||'')} ${gioEsc(cl.data.plaats||'')}<br>${gioEsc(cl.data.email||'')}${cl.data.kvk?'<br>KvK: '+gioEsc(cl.data.kvk):''}${cl.data.btw?'<br>BTW: '+gioEsc(cl.data.btw):''}</div>
+   <div class="gioOfferBox"><b>Project</b><br><br>${gioEsc(offProject.value||'')}<br>${gioEsc(offType.value||'')}</div>
+  </div>
+  ${offShowNotes.checked?`<div class="gioOfferTextBlock"><b>Informatie over de opdracht</b><br><br>${gioEsc(offOmschrijving.value||'').replace(/\n/g,'<br>')}<br><br>${gioEsc(offVoorwaarden.value||'').replace(/\n/g,'<br>')}</div>`:''}
+  <table class="gioOfferTable"><thead><tr><th>Beschrijving</th><th class="num">Aantal</th><th>Eenheid</th><th class="num">Tarief</th><th class="num">BTW</th><th class="num">Totaal</th></tr></thead><tbody>${lineHtml||'<tr><td colspan="6">Nog geen regels toegevoegd.</td></tr>'}</tbody></table>
+  <table class="gioOfferTotals"><tr><td>Bedrag excl. BTW</td><td class="num">${euro(tot.sub)}</td></tr><tr><td>BTW</td><td class="num">${euro(tot.vat)}</td></tr><tr class="grand"><td>Totaalbedrag</td><td class="num">${euro(tot.total)}</td></tr></table>
+  <div class="gioOfferSign"><div class="gioOfferSignBox">Plaats en datum:</div><div class="gioOfferSignBox">Handtekening voor akkoord:</div></div>
+  <div style="margin-top:28px"><b>GIO Klus Baas</b><br>Contact: info@gioklusbaas.nl<br>Bankgegevens, KvK, BTW en telefoon worden later aangevuld.</div>
+  <div class="gioOfferFooter"><span>GIO Klus Baas</span><span>info@gioklusbaas.nl</span><span>Offerte ${gioEsc(nr)}</span></div>
+ </div>`;
+}
+function gioOfferCollect(){
+ let t=gioOfferTotals();
+ return {nr:offNr.value||gioOfferNextNumber(),klant:offKlant.value,project:offProject.value,type:offType.value,status:offStatus.value||'Concept',datum:offDatum.value||today(),geldigTot:offGeldigTot.value||gioOfferDatePlus(30),omschrijving:offOmschrijving.value,voorwaarden:offVoorwaarden.value,regels:JSON.parse(JSON.stringify(gioOfferDraftLines)),bedrag:t.total,subtotaal:t.sub,btw:t.vat,zichtbaar:{details:offShowDetails.checked,uren:offShowHours.checked,materiaal:offShowMaterial.checked,km:offShowKm.checked,notities:offShowNotes.checked}};
+}
+function gioOfferSave(){
+ gioEnsureV2();
+ if(!offKlant.value){alert('Kies een klant.');return}
+ if(!offProject.value.trim()){alert('Vul een projectnaam in.');return}
+ if(!gioOfferDraftLines.length){alert('Voeg minimaal één offerteregel toe.');return}
+ let o=gioOfferCollect();
+ if(gioOfferEditIndex>=0)data.offertes[gioOfferEditIndex]=o;else data.offertes.push(o);
+ save();gioOfferEditIndex=-1;gioRenderOffertes();alert('Offerte opgeslagen in offertehistorie.');
+}
+function gioOfferLoad(i){
+ let o=data.offertes[i];if(!o)return;
+ gioOfferEditIndex=i;offKlant.value=o.klant||'';offProject.value=o.project||'';offType.value=o.type||'';offNr.value=o.nr||'';offDatum.value=o.datum||today();offGeldigTot.value=o.geldigTot||gioOfferDatePlus(30);offStatus.value=o.status||'Concept';offOmschrijving.value=o.omschrijving||'';offVoorwaarden.value=o.voorwaarden||'';gioOfferDraftLines=JSON.parse(JSON.stringify(o.regels||[]));
+ let z=o.zichtbaar||{};offShowDetails.checked=z.details!==false;offShowHours.checked=z.uren!==false;offShowMaterial.checked=z.materiaal!==false;offShowKm.checked=z.km!==false;offShowNotes.checked=z.notities!==false;
+ gioRenderOfferDraftLines();gioRenderOfferPreview();window.scrollTo({top:0,behavior:'smooth'});
+}
+function gioOfferNew(){
+ gioOfferEditIndex=-1;gioOfferDraftLines=[];offKlant.value='';offProject.value='';offType.value='';offNr.value=gioOfferNextNumber();offDatum.value=today();offGeldigTot.value=gioOfferDatePlus(30);offStatus.value='Concept';offOmschrijving.value='';offVoorwaarden.value='Deze offerte is 30 dagen geldig. Planning en uitvoering in overleg.';
+ gioRenderOfferDraftLines();gioRenderOfferPreview();
+}
+function gioOfferDuplicate(i){
+ let o=data.offertes[i];if(!o)return;
+ let copy=JSON.parse(JSON.stringify(o));copy.nr=gioOfferNextNumber();copy.status='Concept';copy.datum=today();copy.geldigTot=gioOfferDatePlus(30);data.offertes.push(copy);save();gioRenderOffertes();alert('Offerte gedupliceerd.');
+}
+function gioDeleteOffer(i){
+ let o=data.offertes[i];if(!o)return;
+ if(!confirm('Offerte '+(o.nr||'')+' verwijderen?'))return;
+ data.offertes.splice(i,1);save();gioRenderOffertes();
+}
+function gioRenderOffertes(){
+ let box=document.getElementById('gioOfferteList');if(!box)return;
+ box.innerHTML=(data.offertes||[]).map((o,i)=>`<tr><td>${gioEsc(o.nr||'')}</td><td>${gioEsc(o.klant||'')}</td><td>${gioEsc(o.project||'')}</td><td>${formatDateNL(o.datum||'')}</td><td>${gioEsc(o.status||'Concept')}</td><td>${euro(o.bedrag||0)}</td><td><button class="editBtn" onclick="gioOfferLoad(${i})">✏️ Wijzigen</button> <button class="btn2" onclick="gioOfferDuplicate(${i})">📋 Dupliceren</button> <button class="btn2" onclick="gioAcceptOffer(${i})">✔ Naar project</button> <button class="del" onclick="gioDeleteOffer(${i})">🗑️</button></td></tr>`).join('');
+}
+function gioAcceptOffer(i){
+ let o=data.offertes[i];if(!o)return;
+ let exists=(data.projecten||[]).some(p=>(p.naam||p.project||'')===o.project&&(p.klant||'')===o.klant);
+ if(exists&&!confirm('Dit project bestaat al. Toch nogmaals aanmaken?'))return;
+ data.projecten.push({projectNr:nextProjectNumber(),naam:o.project,klant:o.klant,status:'Gepland',start:'',notitie:'Aangemaakt vanuit offerte '+o.nr,offerteNr:o.nr});
+ o.status='Geaccepteerd';save();render();gioRenderOffertes();alert('Offerte omgezet naar project.');
+}
+function gioOfferPrint(){gioRenderOfferPreview();window.print()}
+function gioOfferExportCSV(){
+ let o=gioOfferCollect(),rows=[['OFFERTE'],['Offertenummer',o.nr],['Klant',o.klant],['Project',o.project],['Datum',o.datum],['Geldig tot',o.geldigTot],[],['Beschrijving','Aantal','Eenheid','Tarief','BTW %','Totaal']];
+ o.regels.forEach(x=>rows.push([x.omschrijving,x.aantal,x.eenheid,x.tarief,x.btw,gioOfferLineTotal(x)]));
+ rows.push([],['Bedrag excl. BTW',o.subtotaal],['BTW',o.btw],['Totaalbedrag',o.bedrag]);
+ downloadCSV(rows,'Offerte_'+o.nr+'_'+o.project+'.csv');
+}
+function gioOfferDownloadHTML(){
+ gioRenderOfferPreview();let el=document.getElementById('gioOfferPrintable');if(!el)return;
+ let css=[...document.querySelectorAll('style')].map(x=>x.textContent).join('\n');
+ let blob=new Blob(['<!doctype html><html><head><meta charset="utf-8"><title>Offerte</title><style>'+css+'</style></head><body>'+el.outerHTML+'</body></html>'],{type:'text/html'});
+ let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(offNr.value||'offerte')+'.html';a.click();URL.revokeObjectURL(a.href);
+}
+function gioOfferEmail(){
+ let cl=gioOfferClient(),o=gioOfferCollect();
+ let subject=encodeURIComponent('Offerte '+o.nr+' - '+o.project);
+ let body=encodeURIComponent(`Beste ${cl.name},\n\nHierbij ontvangt u onze offerte ${o.nr} voor ${o.project}.\nTotaalbedrag: ${euro(o.bedrag)}\nGeldig tot: ${formatDateNL(o.geldigTot)}\n\nMet vriendelijke groet,\nGIO Klus Baas\ninfo@gioklusbaas.nl`);
+ location.href=`mailto:${cl.data.email||''}?subject=${subject}&body=${body}`;
+}
+function gioOfferInit(){
+ gioEnsureV2();gioOfferFillClients();
+ if(!offNr.value)offNr.value=gioOfferNextNumber();
+ if(!offDatum.value)offDatum.value=today();
+ if(!offGeldigTot.value)offGeldigTot.value=gioOfferDatePlus(30);
+ if(!offVoorwaarden.value)offVoorwaarden.value='Deze offerte is 30 dagen geldig. Planning en uitvoering in overleg.';
+ gioRenderOfferDraftLines();gioRenderOfferPreview();gioRenderOffertes();
+}
+
 function gioAutoArchivePaid(){gioEnsureV2();(data.projecten||[]).forEach(p=>{if(p.status==='Betaald')p.archived=true});save();render();alert('Betaalde projecten staan in archief.')}
 function gioRestoreProject(i){data.projecten[i].archived=false;save();render()}
 function gioRenderArchive(){let list=document.getElementById('gioArchiveList'),stats=document.getElementById('gioArchiveStats');if(!list)return;let arr=(data.projecten||[]).map((p,i)=>({p,i})).filter(x=>x.p.archived||x.p.status==='Betaald');let omzet=arr.reduce((s,x)=>s+projectTotals(x.p.naam).totaal,0),uren=arr.reduce((s,x)=>s+projectTotals(x.p.naam).urenSom,0);stats.innerHTML=`<div class="gioV2Summary"><div><small>Projecten archief</small><br><b>${arr.length}</b></div><div><small>Omzet archief</small><br><b>${euro(omzet)}</b></div><div><small>Uren archief</small><br><b>${uren.toFixed(1)}</b></div></div>`;list.innerHTML=arr.map(x=>{let t=projectTotals(x.p.naam);return`<tr><td>${gioEsc(x.p.naam)}</td><td>${gioEsc(x.p.klant||'')}</td><td>${x.p.betaaldDatum?formatDateNL(x.p.betaaldDatum):'-'}</td><td>${t.urenSom.toFixed(2)}</td><td>${euro(t.totaal)}</td><td><button class="btn2" onclick="gioRestoreProject(${x.i})">Terugzetten</button></td></tr>`}).join('')}
 function gioSetTheme(mode){localStorage.setItem('gioThemeMode',mode);let resolved=mode==='auto'?(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):mode;document.documentElement.setAttribute('data-gio-theme',resolved)}
 (function(){gioSetTheme(localStorage.getItem('gioThemeMode')||'light');})();
-const gioV2OldShow=show;show=function(id,btn){gioV2OldShow(id,btn);if(id==='facturatiepro'){gioFillProjectSelects();gioFillKmSelects();gioRenderKm();if(!gioInvNumber.value)gioInvNumber.value='F'+new Date().getFullYear()+'-'+String(((data.facturen||[]).length+1)).padStart(3,'0');if(document.getElementById('gioInvDate')&&!gioInvDate.value)gioInvDate.value=today();if(document.getElementById('gioInvDue')&&!gioInvDue.value)gioInvoiceSetDue();gioRenderInvoice()}if(id==='offertes')gioRenderOffertes();if(id==='archief')gioRenderArchive();if(id==='instellingen')gioSetTheme(localStorage.getItem('gioThemeMode')||'light')}
-const gioV2OldRender=render;render=function(){gioEnsureV2();gioV2OldRender();renderGioDashboardAgenda();gioFillProjectSelects();gioFillKmSelects();gioRenderKm();gioRenderOffertes();renderGioFactuurHistorie();gioRenderArchive()}
+const gioV2OldShow=show;show=function(id,btn){gioV2OldShow(id,btn);if(id==='facturatiepro'){gioFillProjectSelects();gioFillKmSelects();gioRenderKm();if(!gioInvNumber.value)gioInvNumber.value='F'+new Date().getFullYear()+'-'+String(((data.facturen||[]).length+1)).padStart(3,'0');if(document.getElementById('gioInvDate')&&!gioInvDate.value)gioInvDate.value=today();if(document.getElementById('gioInvDue')&&!gioInvDue.value)gioInvoiceSetDue();gioRenderInvoice()}if(id==='offertes')gioOfferInit();if(id==='archief')gioRenderArchive();if(id==='instellingen')gioSetTheme(localStorage.getItem('gioThemeMode')||'light')}
+const gioV2OldRender=render;render=function(){gioEnsureV2();gioV2OldRender();renderGioDashboardAgenda();gioFillProjectSelects();gioFillKmSelects();gioRenderKm();gioOfferFillClients();gioRenderOffertes();renderGioFactuurHistorie();gioRenderArchive()}
 document.addEventListener('DOMContentLoaded',()=>{gioEnsureV2();renderGioDashboardAgenda();gioFillProjectSelects()});
 
 
