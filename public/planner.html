@@ -171,6 +171,17 @@ html[data-gio-theme="dark"] body{background:#080a0f!important;color:#f9fafb!impo
 
 
 .gioIconEdit{width:38px!important;height:38px!important;min-width:38px!important;padding:0!important;border-radius:10px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;background:#fff4b8!important;color:#111!important;border:1px solid #e0b400!important;cursor:pointer!important;transition:transform .15s ease,box-shadow .15s ease,background .15s ease!important}.gioIconEdit:hover,.gioIconEdit:focus{background:#ffd400!important;box-shadow:0 0 0 3px rgba(255,212,0,.25),0 6px 16px rgba(0,0,0,.22)!important;transform:translateY(-1px) scale(1.06)!important;outline:none!important}
+
+/* === SLIMME KM BINNEN UITGAVEN === */
+.gioKmTabs,.gioKmRouteActions{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 14px}
+.gioKmAmount{font-size:24px;font-weight:900;color:#f4c400;padding:9px 0}
+.gioKmRouteStatus{margin:10px 0 14px;padding:11px 13px;border:1px solid #3b4456;border-radius:10px;background:#0b0e14;color:#e5e7eb}
+.gioKmRouteStatus.ok{border-color:#16a34a;background:#07170d;color:#bbf7d0}
+.gioKmRouteStatus.warn{border-color:#d97706;background:#1b1104;color:#fde68a}
+.gioKmSavedRow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px;border-bottom:1px solid #303643}
+.gioKmSavedRow button{flex:0 0 auto}
+@media(max-width:800px){.gioKmTabs,.gioKmRouteActions{display:grid;grid-template-columns:1fr 1fr}.gioKmRouteActions button{width:100%}.gioKmAmount{font-size:20px}}
+
 </style>
 <meta name="theme-color" content="#07111f"><link rel="manifest" href="/manifest.webmanifest">
 <meta name="theme-color" content="#07111f">
@@ -408,6 +419,44 @@ html[data-gio-theme="dark"] body{background:#080a0f!important;color:#f9fafb!impo
    </table>
   </div>
 
+
+<div class="card" id="gioKmCard">
+  <h2>🚗 KM-vergoeding</h2>
+  <p><b>KM wordt automatisch aan de gekoppelde klant of het gekoppelde project doorberekend.</b></p>
+  <div class="gioKmTabs"><button type="button" class="btn" onclick="gioKmShowTab('rit')">🚗 Nieuwe rit</button><button type="button" class="btn2" onclick="gioKmShowTab('locaties')">📍 Locaties</button></div>
+  <div id="gioKmRitTab">
+   <div class="row">
+    <div><label>Klant</label><select id="kmKlant"></select></div>
+    <div><label>Project</label><select id="kmProject" onchange="gioKmProjectChanged()"></select></div>
+    <div><label>Datum</label><input id="kmDatum" type="date"></div>
+   </div>
+   <div class="row">
+    <div><label>Van opgeslagen locatie</label><select id="kmVanLocatie" onchange="gioKmUseSavedLocation('van')"><option value="">Handmatig invoeren</option></select></div>
+    <div><label>Naar opgeslagen locatie</label><select id="kmNaarLocatie" onchange="gioKmUseSavedLocation('naar')"><option value="">Handmatig invoeren</option></select></div>
+    <div><label>Reis</label><select id="kmRetour" onchange="gioKmApplyRouteResult()"><option value="enkel">Enkele reis</option><option value="retour" selected>Heen en terug</option></select></div>
+   </div>
+   <div class="row">
+    <div><label>Van</label><input id="kmVan" placeholder="Vertrekadres" oninput="gioKmClearRouteResult()"></div>
+    <div><label>Naar</label><input id="kmNaar" placeholder="Bestemmingsadres" oninput="gioKmClearRouteResult()"></div>
+    <div><label>Aantal km</label><input id="kmAantal" type="number" step="0.1" min="0" oninput="gioKmUpdateAmountPreview()"></div>
+   </div>
+   <div class="row">
+    <div><label>Tarief per km</label><input id="kmTarief" type="number" step="0.01" min="0" value="0.23" oninput="gioKmUpdateAmountPreview()"></div>
+    <div><label>Omschrijving</label><input id="kmOms" placeholder="Bijv. heen en terug naar klant"></div>
+    <div><label>Te doorberekenen</label><div class="gioKmAmount" id="gioKmAmountPreview">€ 0,00</div></div>
+   </div>
+   <div class="gioKmRouteActions"><button type="button" class="btn" onclick="gioKmCalculateRoute()">🗺️ Route berekenen</button><button type="button" class="btn2" onclick="gioKmOpenGoogleMaps()">📍 Open in Google Maps</button><button type="button" class="btn2" onclick="gioKmSaveCurrentLocations()">💾 Locaties onthouden</button></div>
+   <div id="gioKmRouteStatus" class="gioKmRouteStatus">Vul vertrek- en bestemmingsadres in. Zonder Google Maps API-key blijft handmatige KM-invoer beschikbaar.</div>
+   <button class="btn" onclick="gioAddKm()">🚗 KM opslaan</button>
+  </div>
+  <div id="gioKmLocationsTab" style="display:none">
+   <h3>Opgeslagen locaties</h3>
+   <div class="row"><div><label>Naam</label><input id="kmLocNaam" placeholder="Bijv. Thuis, Werkplaats, Toolstation"></div><div><label>Adres</label><input id="kmLocAdres" placeholder="Straat, huisnummer, postcode, plaats"></div></div>
+   <button type="button" class="btn" onclick="gioKmAddSavedLocation()">📍 Locatie opslaan</button>
+   <div id="gioKmSavedLocationsList" style="margin-top:12px"></div>
+  </div>
+  <div id="gioKmList" style="margin-top:14px"></div>
+</div>
 </section>
 
 <section id="vrijedagen" class="page">
@@ -595,26 +644,6 @@ html[data-gio-theme="dark"] body{background:#080a0f!important;color:#f9fafb!impo
  <div class="card"><h2>Over deze versie</h2><p><b>GIO Business Planner PRO</b><br>Versie 2.0<br>Gebouwd voor GIO Klus Baas</p></div>
 </section>
 
-
-<div class="card" id="gioKmCard">
-  <h2>🚗 KM-vergoeding</h2><p><b>KM wordt automatisch aan de gekoppelde klant of het gekoppelde project doorberekend.</b></p>
-  <div class="row">
-    <div><label>Klant</label><select id="kmKlant"></select></div>
-    <div><label>Project</label><select id="kmProject"></select></div>
-    <div><label>Datum</label><input id="kmDatum" type="date"></div>
-  </div>
-  <div class="row">
-    <div><label>Van</label><input id="kmVan" placeholder="Vertrekadres"></div>
-    <div><label>Naar</label><input id="kmNaar" placeholder="Bestemmingsadres"></div>
-    <div><label>Aantal km</label><input id="kmAantal" type="number" step="0.1" min="0"></div>
-  </div>
-  <div class="row">
-    <div><label>Tarief per km</label><input id="kmTarief" type="number" step="0.01" min="0" value="0.23"></div>
-    <div><label>Omschrijving</label><input id="kmOms" placeholder="Bijv. heen en terug naar klant"></div>
-  </div>
-  <button class="btn" onclick="gioAddKm()">🚗 KM opslaan</button>
-  <div id="gioKmList" style="margin-top:14px"></div>
-</div>
 
 </main>
 </div>
@@ -1072,7 +1101,7 @@ function gioHours(x){let h=gioNum(x.uren??x.hours??x.totaalUren);if(h>0&&h<1000)
 function gioAmountHour(x,tarief){let a=gioNum(x.bedrag??x.amount??x.totaal);return a>0?a:gioHours(x)*(gioNum(tarief)||35)}
 function gioAmountMat(x){return gioNum(x.bedrag??x.amount??x.totaal??x.prijs)}
 function gioAmountPay(x){return gioNum(x.bedrag??x.amount??x.totaal)}
-function gioEnsureV2(){if(!data.offertes)data.offertes=[];if(!data.facturen)data.facturen=[];if(!data.kmRegistraties)data.kmRegistraties=[];(data.projecten||[]).forEach(p=>{if(p.archived===undefined)p.archived=false})}
+function gioEnsureV2(){if(!data.offertes)data.offertes=[];if(!data.facturen)data.facturen=[];if(!data.kmRegistraties)data.kmRegistraties=[];if(!data.kmLocaties)data.kmLocaties=[];(data.projecten||[]).forEach(p=>{if(p.archived===undefined)p.archived=false})}
 function gioProjectNames(){let a=[];(data.projecten||[]).forEach(p=>{if(p.naam&&!a.includes(p.naam))a.push(p.naam)});(data.uren||[]).forEach(x=>{if(x.project&&!a.includes(x.project))a.push(x.project)});(data.materiaal||[]).forEach(x=>{if(x.project&&!a.includes(x.project))a.push(x.project)});return a}
 function gioClient(project){let p=(data.projecten||[]).find(x=>x.naam===project)||{},n=p.klant||((data.uren||[]).find(u=>u.project===project)||{}).klant||'',k=(data.klanten||[]).find(x=>x.naam===n)||{};return{naam:n||k.naam||'',data:k}}
 function gioRows(project){return{u:(data.uren||[]).filter(x=>x.project===project),m:(data.materiaal||[]).filter(x=>x.project===project),pay:(data.klantBetalingen||[]).filter(x=>x.project===project),uit:(data.uitgaven||[]).filter(x=>x.project===project&&x.doorberekenen===true)}}
@@ -1288,13 +1317,13 @@ const gioV2OldRender=render;render=function(){gioEnsureV2();gioV2OldRender();ren
 document.addEventListener('DOMContentLoaded',()=>{gioEnsureV2();renderGioDashboardAgenda();gioFillProjectSelects()});
 
 
-function gioEnsureKm(){if(!data.kmRegistraties)data.kmRegistraties=[]}
+function gioEnsureKm(){if(!data.kmRegistraties)data.kmRegistraties=[];if(!data.kmLocaties)data.kmLocaties=[]}
 function gioFillKmSelects(){
   gioEnsureKm();
   if(!document.getElementById('kmKlant'))return;
   kmKlant.innerHTML='<option value="">Kies klant</option>'+data.klanten.map(k=>`<option>${gioEsc(k.naam||k.name||'')}</option>`).join('');
   kmProject.innerHTML='<option value="">Kies project</option>'+data.projecten.filter(p=>!p.archived).map(p=>`<option>${gioEsc(p.naam||p.project||'')}</option>`).join('');
-  if(!kmDatum.value)kmDatum.value=today();
+  if(!kmDatum.value)kmDatum.value=today();gioKmFillSavedLocationSelects();gioKmUpdateAmountPreview();
 }
 function gioAddKm(){
   gioEnsureKm();
@@ -1302,9 +1331,9 @@ function gioAddKm(){
   let tarief=+String(kmTarief.value||0.23).replace(',','.');
   if(!kmKlant.value){alert('Kies eerst een klant.');return}
   if(!(aantal>0)){alert('Vul het aantal kilometers in.');return}
-  data.kmRegistraties.push({id:Date.now(),datum:kmDatum.value||today(),klant:kmKlant.value,project:kmProject.value||'',van:kmVan.value||'',naar:kmNaar.value||'',km:aantal,tarief,bedrag:aantal*tarief,omschrijving:kmOms.value||'KM-vergoeding'});
+  data.kmRegistraties.push({id:Date.now(),datum:kmDatum.value||today(),klant:kmKlant.value,project:kmProject.value||'',van:kmVan.value||'',naar:kmNaar.value||'',km:aantal,tarief,bedrag:aantal*tarief,omschrijving:kmOms.value||'KM-vergoeding',reis:kmRetour.value||'retour',reistijdNormaal:gioKmLastRoute?gioKmLastRoute.normalMinutes*(kmRetour.value==='retour'?2:1):null,reistijdVerkeer:gioKmLastRoute?gioKmLastRoute.trafficMinutes*(kmRetour.value==='retour'?2:1):null});
   save();gioRenderKm();
-  kmAantal.value='';kmVan.value='';kmNaar.value='';kmOms.value='';
+  kmAantal.value='';kmOms.value='';gioKmLastRoute=null;gioKmUpdateAmountPreview();
 }
 function gioDeleteKm(id){
   if(!confirm('Deze KM-registratie verwijderen?'))return;
@@ -1336,7 +1365,7 @@ function gioDeleteOffer(i){
 
 function gioKmForCustomerOrProject(projectName,customerName){
   if(typeof gioEnsureKm==='function')gioEnsureKm();
-  if(!data.kmRegistraties)data.kmRegistraties=[];
+  if(!data.kmRegistraties)data.kmRegistraties=[];if(!data.kmLocaties)data.kmLocaties=[];
   return data.kmRegistraties.filter(x=>{
     const pm=projectName&&x.project&&String(x.project)===String(projectName);
     const cm=customerName&&x.klant&&String(x.klant)===String(customerName);
@@ -1404,6 +1433,74 @@ function gioProjectExtraCharges(project){
 }
 </script>
 
-<script src="/gio-v21-rc-testperiode.js"></script>
+<script src="/gio-v21-rc-testperiode.js">
+
+let gioKmLastRoute=null;
+function gioKmEnsureSmart(){if(!data.kmRegistraties)data.kmRegistraties=[];if(!data.kmLocaties)data.kmLocaties=[]}
+function gioKmShowTab(tab){
+ document.getElementById('gioKmRitTab').style.display=tab==='rit'?'block':'none';
+ document.getElementById('gioKmLocationsTab').style.display=tab==='locaties'?'block':'none';
+ if(tab==='locaties')gioKmRenderSavedLocations();
+}
+function gioKmFillSavedLocationSelects(){
+ gioKmEnsureSmart();
+ const options='<option value="">Handmatig invoeren</option>'+data.kmLocaties.map((x,i)=>`<option value="${i}">${gioEsc(x.naam)} — ${gioEsc(x.adres)}</option>`).join('');
+ if(document.getElementById('kmVanLocatie'))kmVanLocatie.innerHTML=options;
+ if(document.getElementById('kmNaarLocatie'))kmNaarLocatie.innerHTML=options;
+}
+function gioKmUseSavedLocation(side){
+ const sel=side==='van'?kmVanLocatie:kmNaarLocatie, input=side==='van'?kmVan:kmNaar;
+ if(sel.value==='')return;
+ const loc=data.kmLocaties[+sel.value];if(loc)input.value=loc.adres||'';
+ gioKmClearRouteResult();
+}
+function gioKmAddSavedLocation(){
+ gioKmEnsureSmart();const naam=kmLocNaam.value.trim(),adres=kmLocAdres.value.trim();
+ if(!naam||!adres){alert('Vul een naam en adres in.');return}
+ const existing=data.kmLocaties.find(x=>x.naam.toLowerCase()===naam.toLowerCase());
+ if(existing)existing.adres=adres;else data.kmLocaties.push({id:Date.now(),naam,adres});
+ save();kmLocNaam.value='';kmLocAdres.value='';gioKmFillSavedLocationSelects();gioKmRenderSavedLocations();
+}
+function gioKmDeleteSavedLocation(id){
+ if(!confirm('Weet je zeker dat je deze opgeslagen locatie wilt verwijderen?'))return;
+ data.kmLocaties=data.kmLocaties.filter(x=>String(x.id)!==String(id));save();gioKmFillSavedLocationSelects();gioKmRenderSavedLocations();
+}
+function gioKmRenderSavedLocations(){
+ const box=document.getElementById('gioKmSavedLocationsList');if(!box)return;gioKmEnsureSmart();
+ box.innerHTML=data.kmLocaties.length?data.kmLocaties.map(x=>`<div class="gioKmSavedRow"><span><b>${gioEsc(x.naam)}</b><br><small>${gioEsc(x.adres)}</small></span><button class="del" title="Verwijderen" onclick="gioKmDeleteSavedLocation('${x.id}')">🗑️</button></div>`).join(''):'Nog geen locaties opgeslagen.';
+}
+function gioKmSaveCurrentLocations(){
+ const van=kmVan.value.trim(),naar=kmNaar.value.trim();if(!van&&!naar){alert('Vul eerst een adres in.');return}
+ if(van&&!data.kmLocaties.some(x=>x.adres.toLowerCase()===van.toLowerCase()))data.kmLocaties.push({id:Date.now(),naam:'Vertrek '+(data.kmLocaties.length+1),adres:van});
+ if(naar&&!data.kmLocaties.some(x=>x.adres.toLowerCase()===naar.toLowerCase()))data.kmLocaties.push({id:Date.now()+1,naam:'Bestemming '+(data.kmLocaties.length+1),adres:naar});
+ save();gioKmFillSavedLocationSelects();alert('Locaties opgeslagen. Je kunt de namen aanpassen onder Locaties.');
+}
+function gioKmProjectChanged(){
+ const project=kmProject.value||'';if(!project)return;
+ const p=(data.projecten||[]).find(x=>(x.naam||x.project||'')===project)||{};if(p.klant)kmKlant.value=p.klant;
+ const k=(data.klanten||[]).find(x=>(x.naam||x.name||'')===(p.klant||''))||{};
+ const adres=[k.adres,k.postcode,k.plaats].filter(Boolean).join(' ');if(adres&&!kmNaar.value)kmNaar.value=adres;
+}
+function gioKmClearRouteResult(){gioKmLastRoute=null;const s=document.getElementById('gioKmRouteStatus');if(s){s.className='gioKmRouteStatus';s.textContent='Adres gewijzigd. Klik opnieuw op Route berekenen of vul het aantal km handmatig in.'}}
+function gioKmApplyRouteResult(){
+ if(!gioKmLastRoute)return;const factor=kmRetour.value==='retour'?2:1;
+ kmAantal.value=(gioKmLastRoute.distanceKm*factor).toFixed(1);gioKmUpdateAmountPreview();
+ const normal=Math.round(gioKmLastRoute.normalMinutes*factor),traffic=Math.round(gioKmLastRoute.trafficMinutes*factor);
+ const s=document.getElementById('gioKmRouteStatus');if(s){s.className='gioKmRouteStatus ok';s.textContent=`${kmRetour.value==='retour'?'Heen en terug':'Enkele reis'}: ${kmAantal.value} km • normale reistijd ${normal} min • met verkeer circa ${traffic} min`;}
+}
+function gioKmUpdateAmountPreview(){const km=+String(kmAantal.value||0).replace(',','.'),tarief=+String(kmTarief.value||0).replace(',','.');if(document.getElementById('gioKmAmountPreview'))gioKmAmountPreview.textContent=euro(km*tarief)}
+async function gioKmCalculateRoute(){
+ const origin=kmVan.value.trim(),destination=kmNaar.value.trim(),s=document.getElementById('gioKmRouteStatus');
+ if(!origin||!destination){alert('Vul vertrek- en bestemmingsadres in.');return}
+ s.className='gioKmRouteStatus';s.textContent='Route, afstand en reistijd worden berekend…';
+ try{
+  const r=await fetch('/api/maps-route',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({origin,destination})});
+  const j=await r.json();if(!r.ok)throw new Error(j.error||'Route kon niet worden berekend');
+  gioKmLastRoute=j;gioKmApplyRouteResult();
+ }catch(e){s.className='gioKmRouteStatus warn';s.textContent=e.message+' Je kunt Google Maps openen en de kilometers handmatig invullen.';}
+}
+function gioKmOpenGoogleMaps(){const a=kmVan.value.trim(),b=kmNaar.value.trim();if(!a||!b){alert('Vul vertrek- en bestemmingsadres in.');return}window.open('https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(a)+'&destination='+encodeURIComponent(b)+'&travelmode=driving','_blank')}
+
+</script>
 </body>
 </html>
