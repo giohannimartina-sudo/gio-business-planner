@@ -37,3 +37,8 @@
 @media(max-width:430px){
   .gioV2 .grid,.gioTileGrid,.gioProjectSummary{grid-template-columns:1fr!important}
 }
+
+/* RC2.1: betaalde projectregels donker groen en goed leesbaar */
+.project-paid, tr.project-paid, .project-paid td{background:#3d7d30!important;color:#fff!important}
+.project-paid td, .project-paid td *, .project-paid a, .project-paid small, .project-paid b{color:#fff!important}
+.project-paid:hover, tr.project-paid:hover, .project-paid:hover td{background:#326a28!important}
