@@ -1,0 +1,72 @@
+/* GIO Mobile Work App — display only; desktop and data logic remain untouched */
+:root{--gio-mobile-green:#3d7d30;--gio-mobile-gold:#f4c400;--gio-mobile-bg:#07080a;--gio-mobile-card:#111318;--gio-mobile-border:#2c3038}
+.project-paid,.statusPaid{background:var(--gio-mobile-green)!important;color:#fff!important}
+.project-paid td,.project-paid td *,.statusPaid *{color:#fff!important}
+.gioArchiveCard,.archive-card,#archief .kpi,#archief .gioFinanceTile{color:#202124!important;background:#fff!important}
+.gioArchiveCard b,.archive-card b,#archief .kpi b,#archief .gioFinanceTile b{color:#202124!important}
+
+#gioMobileActionSheet{display:none}
+@media (max-width:800px){
+ html,body{width:100%;max-width:100%;overflow-x:hidden!important}
+ body.gioV2{background:var(--gio-mobile-bg)!important}
+ .gioV2 .wrap{display:block!important;width:100%!important;max-width:100%!important}
+ .gioV2 main{width:100%!important;max-width:100%!important;padding:0 10px 118px!important;overflow:hidden!important}
+ .gioV2 .page{width:100%!important;max-width:100%!important}
+ .gioV2 .userbar{padding:9px 11px!important;margin:8px 0!important;border-radius:13px!important;gap:7px!important;flex-wrap:wrap!important}
+ .gioV2 .card{width:100%!important;max-width:100%!important;margin:0 0 10px!important;padding:12px!important;border-radius:14px!important;overflow:hidden!important}
+ .gioV2 .dark{padding:12px!important}
+ .gioV2 h1{font-size:21px!important;margin:7px 0 10px!important}
+ .gioV2 h2{font-size:18px!important;margin:6px 0 9px!important}
+ .gioV2 h3{font-size:15px!important;margin:5px 0 8px!important}
+ .gioV2 p{margin:6px 0!important;line-height:1.35}
+ .gioV2 .grid,.gioV2 .gioTileGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+ .gioV2 .kpi,.gioV2 .gioFinanceTile,.gioV2 .gioProjectTile{min-width:0!important;padding:10px!important;border-radius:12px!important;min-height:68px!important}
+ .gioV2 .kpi small,.gioV2 .gioFinanceTile small{font-size:11px!important}
+ .gioV2 .kpi b,.gioV2 .gioFinanceTile b{font-size:18px!important;line-height:1.15!important;overflow-wrap:anywhere}
+ .gioV2 .row{grid-template-columns:1fr!important;gap:7px!important}
+ .gioV2 label{font-size:12px!important;margin:6px 0 3px!important}
+ .gioV2 input,.gioV2 select,.gioV2 textarea{width:100%!important;max-width:100%!important;min-height:42px!important;padding:9px 10px!important;font-size:16px!important;border-radius:10px!important}
+ .gioV2 textarea{min-height:64px!important;resize:vertical}
+ .gioV2 button,.gioV2 .btn,.gioV2 .btn2,.gioV2 .urenBtn{min-height:42px!important;padding:9px 11px!important;font-size:13px!important;border-radius:10px!important;margin-top:6px!important;max-width:100%}
+ .gioV2 .rcIconBtn,.gioV2 .gioIconEdit{width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important;padding:0!important;margin:0!important}
+ .gioV2 .gioQuickActions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}
+ .gioV2 .gioQuickActions a,.gioV2 .gioQuickActions button{width:100%!important;padding:9px 7px!important;margin:0!important;font-size:12px!important;min-height:40px!important}
+
+ /* Tables become compact app cards; empty cells are not shown. */
+ .gioV2 table.gioMobileCards{display:block!important;width:100%!important;background:transparent!important;overflow:visible!important;white-space:normal!important;margin:8px 0!important}
+ .gioV2 table.gioMobileCards thead{display:none!important}
+ .gioV2 table.gioMobileCards tbody{display:grid!important;gap:8px!important;width:100%!important}
+ .gioV2 table.gioMobileCards tr{display:block!important;width:100%!important;background:linear-gradient(180deg,#151820,#0d0f13)!important;border:1px solid var(--gio-mobile-border)!important;border-radius:13px!important;padding:9px 10px!important;box-shadow:0 7px 18px rgba(0,0,0,.22)!important;overflow:hidden!important}
+ .gioV2 table.gioMobileCards tr.project-paid{background:var(--gio-mobile-green)!important;border-color:#4d963f!important}
+ .gioV2 table.gioMobileCards td{display:grid!important;grid-template-columns:minmax(88px,36%) minmax(0,1fr)!important;gap:8px!important;width:100%!important;padding:5px 0!important;border:0!important;white-space:normal!important;overflow-wrap:anywhere!important;font-size:13px!important;align-items:start!important}
+ .gioV2 table.gioMobileCards td:before{content:attr(data-label);font-size:11px!important;font-weight:800!important;color:#aeb4bf!important;text-transform:none}
+ .gioV2 table.gioMobileCards tr.project-paid td:before{color:#e4f7df!important}
+ .gioV2 table.gioMobileCards td.gioEmptyCell{display:none!important}
+ .gioV2 table.gioMobileCards td.gioActionsCell{display:flex!important;justify-content:flex-end!important;gap:6px!important;padding-top:7px!important}
+ .gioV2 table.gioMobileCards td.gioActionsCell:before{display:none!important}
+
+ #gioMobileTop{height:58px!important;margin:0 -10px 8px!important;padding:8px 11px!important;background:rgba(5,6,7,.96)!important;backdrop-filter:blur(14px);box-shadow:0 7px 20px rgba(0,0,0,.28)}
+ #gioMobileTop img{width:38px!important;height:38px!important;border-radius:9px!important}
+ #gioMobileTop b{font-size:14px!important}#gioMobileTop small{font-size:10px!important}
+ #gioActionDock{display:none!important}
+ #gioBottomDock{height:59px!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;padding-bottom:env(safe-area-inset-bottom)!important;background:rgba(8,9,12,.97)!important;backdrop-filter:blur(15px)!important}
+ #gioBottomDock button{height:58px!important;min-height:58px!important;padding:6px 2px!important;margin:0!important;font-size:10px!important;line-height:1.25!important;border-radius:0!important}
+
+ .gioMobileMoreBtn{position:fixed!important;right:13px!important;bottom:70px!important;z-index:10000!important;width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;padding:0!important;border-radius:50%!important;background:linear-gradient(180deg,#ffd22b,#f4b800)!important;color:#111!important;border:0!important;box-shadow:0 10px 25px rgba(0,0,0,.38)!important;font-size:20px!important;margin:0!important}
+ #gioMobileActionSheet{position:fixed!important;inset:0!important;z-index:120000!important;background:rgba(0,0,0,.62)!important;align-items:flex-end!important;justify-content:center!important;padding:10px!important}
+ #gioMobileActionSheet.open{display:flex!important}
+ #gioMobileActionSheet .gioSheetPanel{width:100%!important;max-width:520px!important;max-height:72vh!important;overflow:auto!important;background:#111318!important;border:1px solid #373b44!important;border-radius:18px 18px 12px 12px!important;padding:10px!important;box-shadow:0 -18px 48px rgba(0,0,0,.5)!important}
+ #gioMobileActionSheet .gioSheetHandle{width:42px;height:4px;border-radius:99px;background:#666;margin:1px auto 10px}
+ #gioMobileActionSheet .gioSheetTitle{font-size:14px;font-weight:900;color:#fff;margin:0 4px 8px}
+ #gioMobileActionSheet .gioSheetGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+ #gioMobileActionSheet .gioSheetGrid button{width:100%!important;min-height:42px!important;margin:0!important;background:#1a1d24!important;color:#fff!important;border:1px solid #343944!important;text-align:left!important;padding:9px 10px!important;font-size:12px!important}
+ #gioMobileActionSheet .gioSheetClose{width:100%!important;margin-top:8px!important;background:#2a2d34!important;color:#fff!important}
+ .gioOriginalActionsMobileHidden{display:none!important}
+
+ .modalOverlay{padding:10px!important;align-items:flex-end!important}
+ .modalBox{width:100%!important;max-width:520px!important;max-height:85vh!important;overflow:auto!important;border-radius:18px 18px 12px 12px!important;padding:14px!important}
+}
+@media(max-width:390px){
+ .gioV2 .grid,.gioV2 .gioTileGrid{grid-template-columns:1fr 1fr!important}
+ .gioV2 .kpi b,.gioV2 .gioFinanceTile b{font-size:16px!important}
+}
