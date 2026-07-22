@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>GIO Business Planner PRO v2.0</title>
+<link rel="stylesheet" href="/gio-mobile-stable.css?v=20260722-1">
 <style>
 :root{--geel:#f4c400;--zwart:#101010;--bg:#f4f4f4;--groen:#d8f5dc}
 *{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:#111}
@@ -194,7 +195,6 @@ html[data-gio-theme="dark"] body{background:#080a0f!important;color:#f9fafb!impo
 <link rel="apple-touch-icon" href="/icon-180.png">
 
 <link rel="stylesheet" href="/gio-v21-rc-testperiode.css">
-<link rel="stylesheet" href="/gio-mobile-workapp.css?v=220726">
 </head>
 <body class="gioV2">
 <div id="gioMobileTop"><div style="display:flex;align-items:center;gap:10px"><img src="/gio-logo-192.png" alt="GIO logo"><div><b>GIO Planner PRO</b><br><small>Live verbonden</small></div></div><div>☁️</div></div>
@@ -1116,8 +1116,7 @@ let kmDoorberekend=gioKmChargeTotal(p,cl.naam);
 if(kmFactuurRows.length){
  detailRows+=`<h3>KM-vergoeding (doorberekend)</h3><table class="gioInvoiceTable"><thead><tr><th>Datum</th><th>Van</th><th>Naar</th><th>KM</th><th>Tarief</th><th>Bedrag</th></tr></thead><tbody>${kmFactuurRows.map(x=>`<tr><td>${formatDateNL(x.datum)}</td><td>${gioEsc(x.van||'')}</td><td>${gioEsc(x.naar||'')}</td><td>${Number(x.km||0).toFixed(1)} km</td><td>${euro(x.tarief||0)}</td><td>${euro(x.bedrag||((+x.km||0)*(+x.tarief||0)))}</td></tr>`).join('')}</tbody></table>`;
 }if(su){detailRows+=`<h3>Uren specificatie</h3><table class="gioInvoiceTable"><thead><tr><th>Datum</th><th>Klant</th>${st?'<th>Start</th><th>Einde</th>':''}<th>Uren</th><th>Bedrag</th></tr></thead><tbody>${r.u.map(x=>`<tr><td>${formatDateNL(x.datum)}</td><td>${gioEsc(x.klant||cl.naam)}</td>${st?`<td>${gioEsc(x.start||'')}</td><td>${gioEsc(x.einde||x.eind||'')}</td>`:''}<td>${gioHours(x).toFixed(2)}</td><td>${euro(gioAmountHour(x,gioInvTarief.value))}</td></tr>`).join('')||'<tr><td colspan="6">Geen uren.</td></tr>'}</tbody></table>`}if(sm){detailRows+=`<h3>Materiaal specificatie</h3><table class="gioInvoiceTable"><thead><tr><th>Datum</th><th>Leverancier</th><th>Materiaal</th>${sb?'<th>Bon</th>':''}<th>Bedrag</th></tr></thead><tbody>${r.m.map(x=>`<tr><td>${formatDateNL(x.datum)}</td><td>${gioEsc(x.lev||x.leverancier||'')}</td><td>${gioEsc(x.oms||x.materiaal||x.omschrijving||'')}</td>${sb?`<td>${gioEsc(x.bon||x.bonnummer||'')}</td>`:''}<td>${euro(gioAmountMat(x))}</td></tr>`).join('')||'<tr><td colspan="5">Geen materiaal.</td></tr>'}</tbody></table>`}let invoiceDate=gioInvDate?.value||today(),due=gioInvDue?.value||'',inv=gioInvNumber.value||'F2026-001';gioInvoicePreview.innerHTML=`<div class="gioInvTopActions"><button class="pdf" onclick="gioPrintInvoice()">PDF</button><button class="print" onclick="gioPrintInvoice()">Print</button><button class="save" onclick="gioSaveInvoiceRecord()">Opslaan</button></div><div class="gioInvoiceExportShell"><div class="gioInvoiceExportPanel"><h3>Export opties</h3><button class="exportBigBtn exportPdf" onclick="gioPrintInvoice()">📄 Exporteren als PDF</button><button class="exportBigBtn exportPrint" onclick="gioPrintInvoice()">🖨 Printen</button><button class="exportBigBtn exportExcel" onclick="gioExportInvoiceCSV()">📊 Exporteren als Excel</button><button class="exportBigBtn exportMail" onclick="gioEmailInvoice()">✉️ E-mail versturen</button><button class="exportBigBtn exportComputer" onclick="gioDownloadInvoiceHTML()">⬇️ Opslaan op computer</button><h3>Opslaan in historie</h3><button class="exportBigBtn exportSave" onclick="gioSaveInvoiceRecord()">💾 Opslaan in factuurhistorie</button><hr><p><b>Factuurnummer</b><br>${gioEsc(inv)}</p><p><b>Project</b><br>${gioEsc(p)}</p><p><b>Vervaldatum</b><br>${formatDateNL(due)}</p></div><div class="gioInvoicePaper" id="gioInvoicePrintable"><div class="gioInvoiceTop"><div><img src="/gio-factuur-logo.png" class="gioInvoiceFactuurLogo" onerror="this.style.display='none'"><br><b>GIO Klus Baas</b><br>info@gioklusbaas.nl<br>06 12345678<br>Brouwerij 25<br>3641 LN Mijdrecht<br>Nederland<br>KVK: 12345678<br>BTW: NL123456789B01</div><div class="gioInvoiceMeta"><b>Factuurnummer:</b> ${gioEsc(inv)}<br><b>Project:</b> ${gioEsc(p)}<br><b>Projectnummer:</b> ${gioEsc(pr.projectNr||'')}<br><b>Datum:</b> ${formatDateNL(invoiceDate)}<br><b>Vervaldatum:</b> ${formatDateNL(due)}<br><br><b>Bankgegevens</b><br>NL12 RABO 0123 4567 89<br>t.n.v. GIO Klus Baas</div></div><div class="gioInvoiceBoxGrid"><div class="gioInvoiceInfoBox"><h3>Factuur aan</h3><b>${gioEsc(cl.naam)}</b><br>${gioEsc(cl.data.adres||'')}<br>${gioEsc(cl.data.postcode||'')} ${gioEsc(cl.data.plaats||'')}<br>${gioEsc(cl.data.email||'')}</div><div class="gioInvoiceInfoBox"><h3>Omschrijving</h3>${gioEsc(gioInvIntro.value).replace(/\n/g,'<br>')}</div></div><table class="gioInvoiceTable"><thead><tr><th>Omschrijving</th><th>Aantal</th><th>Eenheid</th><th>Prijs p/st</th><th>BTW</th><th>Totaal</th></tr></thead><tbody>${lines.join('')}</tbody></table>${detailRows}<div class="gioInvoiceTotal"><div class="line"><span>Subtotaal (excl. BTW)</span><b>${euro(t.sub)}</b></div><div class="line"><span>BTW ${(+gioInvBtwPct.value||0).toFixed(0)}%</span><b>${euro(t.btw)}</b></div>${sp?`<div class="line"><span>Reeds betaald</span><b>-${euro(t.paid)}</b></div>`:''}<div class="grand"><span>Totaal te voldoen</span><b>${euro(t.open)}</b></div></div><div class="gioInvoiceTerms"><b>Betalingsvoorwaarden:</b><br>Betaling binnen ${gioInvPayDays.value||14} dagen na factuurdatum<br>o.v.v. factuurnummer ${gioEsc(inv)}</div><div class="gioInvoiceThanks">Bedankt voor uw vertrouwen in GIO Klus Baas!</div><div class="gioInvoiceFooter"><span>📞 06 12345678</span><span>✉️ info@gioklusbaas.nl</span><span>🌐 www.gioklusbaas.nl</span></div></div></div>`;renderGioFactuurHistorie()}
-function gioDownloadInvoiceHTML(){gioRenderInvoice();let el=document.getElementById('gioInvoicePrintable');let blob=new Blob(['<!doctype html><html><head><meta charset="utf-8"><title>Factuur</title></head><body>'+el.outerHTML+'<script src="/gio-mobile-workapp.js?v=220726"></script>
-</body></html>'],{type:'text/html'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(gioInvNumber.value||'factuur')+'.html';a.click();URL.revokeObjectURL(a.href)}
+function gioDownloadInvoiceHTML(){gioRenderInvoice();let el=document.getElementById('gioInvoicePrintable');let blob=new Blob(['<!doctype html><html><head><meta charset="utf-8"><title>Factuur</title></head><body>'+el.outerHTML+'</body></html>'],{type:'text/html'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(gioInvNumber.value||'factuur')+'.html';a.click();URL.revokeObjectURL(a.href)}
 function gioPrintInvoice(){gioRenderInvoice();window.print()}
 function gioExportInvoiceCSV(){let p=gioInvProject.value,r=gioRows(p),t=gioInvoiceTotals(p),rows=[['PROJECT FACTURATIE'],['Project',p],['Factuur',gioInvNumber.value],[],['Samenvatting'],['Uren',t.uren.toFixed(2)],['Arbeid',t.arbeid.toFixed(2)],['Materiaal',t.mat.toFixed(2)],['Betaald',t.paid.toFixed(2)],['Open',t.open.toFixed(2)],[],['Uren'],['Datum','Klant','Start','Einde','Uren','Bedrag']];r.u.forEach(x=>rows.push([formatDateNL(x.datum),x.klant||'',x.start||'',x.einde||x.eind||'',gioHours(x).toFixed(2),gioAmountHour(x,gioInvTarief.value).toFixed(2)]));rows.push([],['Materiaal'],['Datum','Leverancier','Materiaal','Bon','Bedrag']);r.m.forEach(x=>rows.push([formatDateNL(x.datum),x.lev||x.leverancier||'',x.oms||x.materiaal||x.omschrijving||'',x.bon||x.bonnummer||'',gioAmountMat(x).toFixed(2)]));downloadCSV(rows,'Factuur_'+(gioInvNumber.value||'nieuw')+'_'+p+'.csv')}
 function gioEmailInvoice(){let p=gioInvProject.value,cl=gioClient(p),t=gioInvoiceTotals(p);location.href=`mailto:${cl.data.email||''}?subject=${encodeURIComponent('Factuur '+gioInvNumber.value+' - '+p)}&body=${encodeURIComponent('Beste '+cl.naam+',\n\nHierbij ontvang je de factuur voor project '+p+'.\nNog te betalen: '+euro(t.open)+'\n\nMet vriendelijke groet,\nGIO Klus Baas\ninfo@gioklusbaas.nl')}`}
@@ -1278,8 +1277,7 @@ function gioOfferPrint(){
  const win=window.open('','_blank','width=900,height=1100');
  if(!win){alert('Sta pop-ups toe om de offerte als PDF/print te openen.');return}
  win.document.open();
- win.document.write('<!doctype html><html><head><meta charset="utf-8"><title>'+(offNr.value||'Offerte')+'</title><style>'+css+'</style></head><body>'+el.outerHTML+'<script>window.onload=()=>setTimeout(()=>window.print(),250)<\/script><script src="/gio-mobile-workapp.js?v=220726"></script>
-</body></html>');
+ win.document.write('<!doctype html><html><head><meta charset="utf-8"><title>'+(offNr.value||'Offerte')+'</title><style>'+css+'</style></head><body>'+el.outerHTML+'<script>window.onload=()=>setTimeout(()=>window.print(),250)<\/script></body></html>');
  win.document.close();
 }
 function gioOfferExportCSV(){
@@ -1291,8 +1289,7 @@ function gioOfferExportCSV(){
 function gioOfferDownloadHTML(){
  gioRenderOfferPreview();const el=document.getElementById('gioOfferPrintable');if(!el)return;
  const css=[...document.querySelectorAll('style')].map(x=>x.textContent).join('\n');
- const doc='<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+(offNr.value||'Offerte')+'</title><style>'+css+'</style></head><body>'+el.outerHTML+'<script src="/gio-mobile-workapp.js?v=220726"></script>
-</body></html>';
+ const doc='<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+(offNr.value||'Offerte')+'</title><style>'+css+'</style></head><body>'+el.outerHTML+'</body></html>';
  const blob=new Blob([doc],{type:'text/html;charset=utf-8'});
  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(offNr.value||'offerte')+'.html';a.click();URL.revokeObjectURL(a.href);
 }
@@ -1506,6 +1503,5 @@ async function gioKmCalculateRoute(){
 function gioKmOpenGoogleMaps(){const a=kmVan.value.trim(),b=kmNaar.value.trim();if(!a||!b){alert('Vul vertrek- en bestemmingsadres in.');return}window.open('https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(a)+'&destination='+encodeURIComponent(b)+'&travelmode=driving','_blank')}
 
 </script>
-<script src="/gio-mobile-workapp.js?v=220726"></script>
 </body>
 </html>
