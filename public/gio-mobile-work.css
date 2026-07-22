@@ -1,0 +1,87 @@
+/* GIO Business Planner PRO - stabiele mobiele werklaag
+   Alleen responsieve weergave; desktop en gegevenslogica blijven intact. */
+:root{--gio-paid:#3d7d30;--gio-paid-dark:#2f6426}
+
+/* Betaalde projecten: duidelijke donkergroene status */
+tr.gioPaidRow, tr.paid, tr.betaald,
+[data-status="Betaald"], [data-status="betaald"]{
+  background:var(--gio-paid)!important;color:#fff!important
+}
+tr.gioPaidRow td, tr.paid td, tr.betaald td,
+[data-status="Betaald"] *, [data-status="betaald"] *{color:#fff!important}
+
+/* Archief-KPI's leesbaar */
+#gioArchiveStats .gioV2Summary>div,
+#archief .metric,#archief .stat,#archief .kpi,#archief .summary-card{
+  background:#fff!important;color:#172033!important;border:1px solid #d8dee8!important
+}
+#gioArchiveStats .gioV2Summary small,
+#archief .metric small,#archief .stat small,#archief .kpi small,#archief .summary-card small{color:#526070!important}
+#gioArchiveStats .gioV2Summary b,
+#archief .metric b,#archief .stat b,#archief .kpi b,#archief .summary-card b{color:#111827!important}
+
+@media(max-width:800px){
+  html,body{max-width:100%;overflow-x:hidden!important}
+  .gioV2 .wrap{display:block!important;min-width:0!important}
+  .gioV2 aside{display:none!important}
+  .gioV2 main{width:100%!important;max-width:100%!important;min-width:0!important;padding:0 10px 132px!important;box-sizing:border-box!important}
+  .gioV2 section,.gioV2 .card,.gioV2 .panel,.gioV2 .box{max-width:100%!important;min-width:0!important;box-sizing:border-box!important}
+
+  #gioMobileTop{
+    min-height:54px!important;margin:0 -10px 10px!important;padding:8px 12px!important;
+    border-radius:0 0 16px 16px!important;background:rgba(5,6,7,.96)!important;
+    backdrop-filter:blur(12px);box-shadow:0 8px 24px rgba(0,0,0,.25)
+  }
+  #gioMobileTop img{width:36px!important;height:36px!important;border-radius:9px!important}
+  #gioMobileTop b{font-size:14px!important}
+  #gioMobileTop small{font-size:10px!important;opacity:.75}
+
+  .gioV2 h1{font-size:24px!important;line-height:1.15!important}
+  .gioV2 h2{font-size:20px!important;line-height:1.2!important}
+  .gioV2 h3{font-size:16px!important}
+  .gioV2 .card{padding:13px!important;margin-bottom:10px!important;border-radius:16px!important}
+  .gioV2 .grid,.gioTileGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+  .gioV2 .row{gap:9px!important}
+  .gioV2 .row>*{min-width:0!important}
+
+  .gioV2 input,.gioV2 select,.gioV2 textarea{
+    width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;
+    font-size:16px!important;min-height:44px!important;padding:9px 11px!important
+  }
+  .gioV2 textarea{min-height:82px!important}
+  .gioV2 button,.gioV2 .btn,.gioV2 .btn2{
+    min-height:42px!important;padding:9px 12px!important;font-size:13px!important;line-height:1.15!important;
+    max-width:100%;white-space:normal
+  }
+
+  /* Tabellen blijven bruikbaar, maar kunnen niet de hele pagina verbreden */
+  .gioV2 table{display:block!important;width:100%!important;max-width:100%!important;overflow-x:auto!important;-webkit-overflow-scrolling:touch;white-space:nowrap!important}
+
+  /* Compacte actiebalk boven de hoofdnavigatie */
+  #gioActionDock{
+    display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important;
+    left:8px!important;right:8px!important;bottom:61px!important;padding:7px!important;
+    border:1px solid #2a2d34!important;border-radius:15px!important;background:rgba(7,7,7,.96)!important;
+    box-shadow:0 12px 30px rgba(0,0,0,.38)!important;backdrop-filter:blur(12px)
+  }
+  #gioActionDock button{min-height:44px!important;padding:6px 3px!important;font-size:10px!important;border-radius:10px!important}
+  #gioActionDock button:nth-child(n+5){display:none!important}
+
+  #gioBottomDock{
+    display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;min-height:58px!important;
+    padding-bottom:max(3px,env(safe-area-inset-bottom))!important;background:rgba(8,9,12,.98)!important;
+    box-shadow:0 -8px 24px rgba(0,0,0,.28)!important
+  }
+  #gioBottomDock button{min-height:55px!important;padding:7px 2px!important;font-size:10px!important;line-height:1.15!important}
+
+  /* Project- en dashboardkaarten: subtiel overlaygevoel */
+  .gioV2 .card,.gioV2 .panel,.gioV2 .box{
+    box-shadow:0 10px 24px rgba(0,0,0,.24)!important;border:1px solid #2d3139!important
+  }
+}
+
+@media(max-width:430px){
+  .gioV2 .grid,.gioTileGrid{grid-template-columns:1fr!important}
+  .gioV2 main{padding-left:8px!important;padding-right:8px!important}
+  #gioMobileTop{margin-left:-8px!important;margin-right:-8px!important}
+}

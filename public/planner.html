@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>GIO Business Planner PRO v2.0</title>
 <style>
-:root{--geel:#f4c400;--zwart:#101010;--bg:#f4f4f4;--groen:#3d7d30}
+:root{--geel:#f4c400;--zwart:#101010;--bg:#f4f4f4;--groen:#d8f5dc}
 *{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:#111}
 .wrap{display:grid;grid-template-columns:245px 1fr;min-height:100vh}
 aside{background:#0b0b0b;color:#fff;padding:20px}
@@ -48,7 +48,7 @@ th{background:var(--geel)}
 
 .openMoney{color:#c62828;font-weight:900}
 .totalKlant{font-weight:900;color:#111}
-.project-paid{background:#3d7d30!important;color:#fff!important}.project-paid td{color:#fff!important}.project-paid .totalKlant,.project-paid .openMoney,.project-paid small{color:#fff!important}
+.project-paid{background:#d8f5dc!important}
 .project-paid td:nth-child(2){text-decoration:line-through;font-weight:900}
 .paid-badge{color:#2e7d32;font-weight:900}
 
@@ -194,12 +194,7 @@ html[data-gio-theme="dark"] body{background:#080a0f!important;color:#f9fafb!impo
 <link rel="apple-touch-icon" href="/icon-180.png">
 
 <link rel="stylesheet" href="/gio-v21-rc-testperiode.css">
-
-<style id="gioRcSafeMobileCss">
-#gioArchiveStats .gioV2Summary>div{background:#fff!important;color:#1f2937!important;border:1px solid #d1d5db!important}#gioArchiveStats .gioV2Summary small,#gioArchiveStats .gioV2Summary b{color:#1f2937!important}.gioMaterialTotal{display:flex;flex-direction:column;justify-content:flex-end;padding:8px 0}.gioMaterialTotal b{font-size:20px;color:#f4c400}
-.gioMobileActionOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.58);z-index:100000;align-items:flex-end;justify-content:center;padding:12px}.gioMobileActionOverlay.open{display:flex}.gioMobileActionSheet{width:min(460px,100%);max-height:72vh;overflow:auto;background:#111318;border:1px solid #343943;border-radius:18px;padding:12px;box-shadow:0 18px 60px rgba(0,0,0,.55)}.gioMobileActionSheet h3{margin:4px 4px 10px;color:#f4c400}.gioOverlayGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.gioOverlayGrid button{min-height:44px;padding:8px 6px;border-radius:11px;background:#1a1d24;color:#fff;border:1px solid #343943;font-size:12px;font-weight:800}.gioMobileActionClose{width:100%;margin-top:10px!important;background:#f4c400!important;color:#111!important}
-@media(max-width:800px){html,body{overflow-x:hidden!important}.gioV2 main{padding:0 10px 118px!important}.gioV2 .card{padding:12px!important;margin-bottom:10px!important}.gioV2 .row{grid-template-columns:1fr!important;gap:6px!important}.gioV2 .grid,.gioTileGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}.gioV2 .kpi,.gioFinanceTile{padding:11px!important;min-width:0!important}.gioV2 .kpi b,.gioFinanceTile b{font-size:18px!important}.gioV2 button,.gioV2 .btn,.gioV2 .btn2,.gioV2 .urenBtn{min-height:42px!important;padding:8px 10px!important;font-size:13px!important}.gioV2 input,.gioV2 select,.gioV2 textarea{max-width:100%!important}.gioV2 table{width:100%!important;display:table!important;white-space:normal!important}.gioV2 table thead{display:none!important}.gioV2 table tbody,.gioV2 table tr,.gioV2 table td{display:block!important;width:100%!important}.gioV2 table tr{margin:0 0 9px!important;padding:10px!important;border:1px solid #30343d!important;border-radius:13px!important;background:#0b0d11!important}.gioV2 table td{border:0!important;padding:4px 2px!important;overflow-wrap:anywhere!important}.gioV2 table td:empty{display:none!important}.gioV2 table td:last-child{display:flex!important;gap:6px!important;flex-wrap:wrap!important}.gioV2 .project-paid{background:#3d7d30!important}.gioV2 .project-paid td{color:#fff!important}.rcIconBtn{width:40px!important;height:40px!important;min-width:40px!important}}
-</style>
+<link rel="stylesheet" href="/gio-mobile-work.css">
 </head>
 <body class="gioV2">
 <div id="gioMobileTop"><div style="display:flex;align-items:center;gap:10px"><img src="/gio-logo-192.png" alt="GIO logo"><div><b>GIO Planner PRO</b><br><small>Live verbonden</small></div></div><div>☁️</div></div>
@@ -280,7 +275,7 @@ html[data-gio-theme="dark"] body{background:#080a0f!important;color:#f9fafb!impo
  <div class="card">
   <h2>👥 Klant toevoegen</h2>
   <div class="row">
-   <div id="klantNaamWrap"><label id="klantNaamLabel">Naam</label><input id="klantNaam"></div><div id="klantBedrijfWrap" style="display:none"><label>Bedrijfsnaam</label><input id="klantBedrijf" placeholder="Bijv. Bouwbedrijf Jansen B.V."></div><div><label>Type</label><select id="klantType" onchange="gioKlantTypeChanged()"><option>Privé</option><option>Zakelijk</option></select></div><div><label>Contactpersoon</label><input id="klantContact"></div>
+   <div><label>Naam</label><input id="klantNaam"></div><div><label>Type</label><select id="klantType" onchange="gioKlantTypeChanged()"><option>Privé</option><option>Zakelijk</option></select></div><div><label>Contactpersoon</label><input id="klantContact"></div>
    <div><label>Adres</label><input id="klantAdres"></div>
    <div><label>Postcode</label><input id="klantPostcode"></div>
    <div><label>Plaats</label><input id="klantPlaats"></div>
@@ -348,7 +343,7 @@ html[data-gio-theme="dark"] body{background:#080a0f!important;color:#f9fafb!impo
   <div id="bonPrevBox" style="display:none;margin-top:10px"><img id="bonPrev" class="receipt" style="max-width:150px;max-height:150px"></div>
   <button class="btn" onclick="addMateriaal()">+ Materiaal toevoegen</button>
  </div>
- <div class="card"><h2>Materiaal lijst</h2><div class="row"><div><label>Projectoverzicht</label><select id="gioMateriaalProjectFilter" onchange="gioRenderMateriaalProjectFilter()"><option value="">Alle projecten</option></select></div><div class="gioMaterialTotal"><small>Totaal geselecteerd project</small><b id="gioMateriaalProjectTotal">€ 0,00</b></div></div><table><thead><tr><th>Datum</th><th>Project</th><th>Leverancier</th><th>Materiaal</th><th>Bon</th><th>Bedrag</th><th>Foto</th><th>PDF</th><th></th></tr></thead><tbody id="matList"></tbody></table></div>
+ <div class="card"><h2>Materiaal lijst</h2><table><thead><tr><th>Datum</th><th>Project</th><th>Leverancier</th><th>Materiaal</th><th>Bon</th><th>Bedrag</th><th>Foto</th><th>PDF</th><th></th></tr></thead><tbody id="matList"></tbody></table></div>
 </section>
 
 
@@ -449,9 +444,6 @@ html[data-gio-theme="dark"] body{background:#080a0f!important;color:#f9fafb!impo
    <div class="row">
     <div><label>Tarief per km</label><input id="kmTarief" type="number" step="0.01" min="0" value="0.23" oninput="gioKmUpdateAmountPreview()"></div>
     <div><label>Omschrijving</label><input id="kmOms" placeholder="Bijv. heen en terug naar klant"></div>
-    <div><label>Doorberekenen aan klant</label><select id="kmDoorberekenen"><option value="ja" selected>Ja</option><option value="nee">Nee, alleen intern</option></select></div>
-    <div><label>Reisuren</label><input id="kmReisuren" type="number" step="0.25" min="0" value="0"></div>
-    <div><label>Tarief reisuur</label><input id="kmReisTarief" type="number" step="0.01" min="0" value="35"></div>
     <div><label>Te doorberekenen</label><div class="gioKmAmount" id="gioKmAmountPreview">€ 0,00</div></div>
    </div>
    <div class="gioKmRouteActions"><button type="button" class="btn" onclick="gioKmCalculateRoute()">🗺️ Route berekenen</button><button type="button" class="btn2" onclick="gioKmOpenGoogleMaps()">📍 Open in Google Maps</button><button type="button" class="btn2" onclick="gioKmSaveCurrentLocations()">💾 Locaties onthouden</button></div>
@@ -897,15 +889,12 @@ function nextFactuurNumber(){return nextNumber('F',data.projecten,'factuurNr')}
 function nextKlantNumber(){return nextNumber('K',data.klanten,'klantNr')}
 function addKlant(){
  if(!data.klanten)data.klanten=[];
- let type=document.getElementById('klantType')?klantType.value:'Privé';
- let bedrijf=document.getElementById('klantBedrijf')?klantBedrijf.value.trim():'';
- let naam=type==='Zakelijk'?(bedrijf||klantNaam.value.trim()):klantNaam.value.trim();
- if(!naam){alert(type==='Zakelijk'?'Vul een bedrijfsnaam in':'Vul een klantnaam in');return;}
+ let naam=klantNaam.value.trim();
+ if(!naam){alert('Vul een klantnaam in');return;}
  data.klanten.push({
   klantNr:nextKlantNumber(),
   naam,
-  type,
-  bedrijfsnaam:type==='Zakelijk'?(bedrijf||naam):'',
+  type:document.getElementById('klantType')?klantType.value:'Privé',
   contact:document.getElementById('klantContact')?klantContact.value:'',
   adres:klantAdres.value,
   postcode:klantPostcode.value,
@@ -919,7 +908,6 @@ function addKlant(){
  });
  klantNaam.value=klantAdres.value=klantPostcode.value=klantPlaats.value=klantTelefoon.value=klantEmail.value=klantOpmerking.value='';
  if(document.getElementById('klantContact'))klantContact.value='';
- if(document.getElementById('klantBedrijf'))klantBedrijf.value='';
  if(document.getElementById('klantKvk'))klantKvk.value='';
  if(document.getElementById('klantBtw'))klantBtw.value='';
  save();render();
@@ -936,7 +924,7 @@ function renderKlanten(){
 function gioProjectToKlant(){try{let p=(data.projecten||[]).find(x=>x.naam===uProject.value);if(p&&p.klant&&!uKlant.value)uKlant.value=p.klant}catch(e){}}
 function gioClockStatus(cls,html){if(!document.getElementById('urenStatusTekst'))return;urenStatusTekst.className='gioClockStatus '+cls;urenStatusTekst.innerHTML=html}
 function pauseClock(){if(data.activeClock&&data.activeClock.running){data.activeClock.paused=true;data.activeClock.pauseAt=new Date().toISOString();save();gioClockStatus('paused','🟡 STATUS: PAUZE<br><small>Sinds '+new Date().toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})+'</small>')}else{gioClockStatus('idle','🟠 STATUS: NIET INGEKLOKT<br><small>Klik op Inklokken nu om te starten</small>')}}
-function gioKlantTypeChanged(){let t=document.getElementById('klantType')?.value;let zak=t==='Zakelijk';let bw=document.getElementById('klantBedrijfWrap'),nl=document.getElementById('klantNaamLabel');if(bw)bw.style.display=zak?'block':'none';if(nl)nl.textContent=zak?'Naam contactpersoon (optioneel)':'Naam';if(document.getElementById('klantKvk')){if(!zak){klantKvk.value='n.v.t.';klantKvk.disabled=true}else{if(klantKvk.value==='n.v.t.')klantKvk.value='';klantKvk.disabled=false}}}
+function gioKlantTypeChanged(){let t=document.getElementById('klantType')?.value;if(!document.getElementById('klantKvk'))return;if(t==='Privé'){klantKvk.value='n.v.t.';klantKvk.disabled=true}else{if(klantKvk.value==='n.v.t.')klantKvk.value='';klantKvk.disabled=false}}
 const gioOldAddKlant=addKlant;addKlant=function(){if(document.getElementById('klantType')&&klantType.value==='Privé'&&document.getElementById('klantKvk'))klantKvk.value='n.v.t.';gioOldAddKlant();gioKlantTypeChanged()}
 const gioOldClockIn=clockIn;clockIn=function(){let d=new Date();gioProjectToKlant();if(!uProject.value){alert('Kies eerst een project');return}if(!uDatum.value)uDatum.value=today();uStart.value=d.toTimeString().slice(0,5);uEinde.value='';data.activeClock={running:true,klant:uKlant.value||'',project:uProject.value,datum:uDatum.value,start:uStart.value,tarief:+uTarief.value||35,startedAt:d.toISOString()};save();gioClockStatus('running','✅ STATUS: JE BENT INGEKLOKT<br><small>Sinds '+uStart.value+' - '+formatDateNL(uDatum.value)+'</small>');berekenUren();renderProjectClock()}
 clockOut=function(){let d=new Date();uEinde.value=d.toTimeString().slice(0,5);if(data.activeClock&&data.activeClock.running){uKlant.value=data.activeClock.klant||uKlant.value;uProject.value=data.activeClock.project||uProject.value;uDatum.value=data.activeClock.datum||uDatum.value;uStart.value=data.activeClock.start||uStart.value;uTarief.value=data.activeClock.tarief||uTarief.value}gioClockStatus('stopped','🔴 STATUS: UITGEKLOKT<br><small>Om '+uEinde.value+'</small>');berekenUren();renderProjectClock()}
@@ -1344,7 +1332,7 @@ function gioAddKm(){
   let tarief=+String(kmTarief.value||0.23).replace(',','.');
   if(!kmKlant.value){alert('Kies eerst een klant.');return}
   if(!(aantal>0)){alert('Vul het aantal kilometers in.');return}
-  data.kmRegistraties.push({id:Date.now(),datum:kmDatum.value||today(),klant:kmKlant.value,project:kmProject.value||'',van:kmVan.value||'',naar:kmNaar.value||'',km:aantal,tarief,bedrag:aantal*tarief,omschrijving:kmOms.value||'KM-vergoeding',reis:kmRetour.value||'retour',doorberekenen:(document.getElementById('kmDoorberekenen')?.value||'ja')==='ja',reisuren:+document.getElementById('kmReisuren')?.value||0,reisTarief:+document.getElementById('kmReisTarief')?.value||35,reistijdNormaal:gioKmLastRoute?gioKmLastRoute.normalMinutes*(kmRetour.value==='retour'?2:1):null,reistijdVerkeer:gioKmLastRoute?gioKmLastRoute.trafficMinutes*(kmRetour.value==='retour'?2:1):null});
+  data.kmRegistraties.push({id:Date.now(),datum:kmDatum.value||today(),klant:kmKlant.value,project:kmProject.value||'',van:kmVan.value||'',naar:kmNaar.value||'',km:aantal,tarief,bedrag:aantal*tarief,omschrijving:kmOms.value||'KM-vergoeding',reis:kmRetour.value||'retour',reistijdNormaal:gioKmLastRoute?gioKmLastRoute.normalMinutes*(kmRetour.value==='retour'?2:1):null,reistijdVerkeer:gioKmLastRoute?gioKmLastRoute.trafficMinutes*(kmRetour.value==='retour'?2:1):null});
   save();gioRenderKm();
   kmAantal.value='';kmOms.value='';gioKmLastRoute=null;gioKmUpdateAmountPreview();
 }
@@ -1379,7 +1367,7 @@ function gioDeleteOffer(i){
 function gioKmForCustomerOrProject(projectName,customerName){
   if(typeof gioEnsureKm==='function')gioEnsureKm();
   if(!data.kmRegistraties)data.kmRegistraties=[];if(!data.kmLocaties)data.kmLocaties=[];
-  return data.kmRegistraties.filter(x=>x.doorberekenen!==false).filter(x=>{
+  return data.kmRegistraties.filter(x=>{
     const pm=projectName&&x.project&&String(x.project)===String(projectName);
     const cm=customerName&&x.klant&&String(x.klant)===String(customerName);
     return pm||cm;
@@ -1514,19 +1502,6 @@ async function gioKmCalculateRoute(){
 }
 function gioKmOpenGoogleMaps(){const a=kmVan.value.trim(),b=kmNaar.value.trim();if(!a||!b){alert('Vul vertrek- en bestemmingsadres in.');return}window.open('https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(a)+'&destination='+encodeURIComponent(b)+'&travelmode=driving','_blank')}
 
-</script>
-
-<script id="gioRcSafeEnhancements">
-(function(){
- function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
- window.gioRenderMateriaalProjectFilter=function(){const sel=document.getElementById('gioMateriaalProjectFilter'),list=document.getElementById('matList'),total=document.getElementById('gioMateriaalProjectTotal');if(!sel||!list)return;const chosen=sel.value;let rows=(data.materiaal||[]).map((m,i)=>({m,i})).filter(x=>!chosen||x.m.project===chosen);if(total)total.textContent=euro(rows.reduce((s,x)=>s+(+x.m.bedrag||0),0));if(!chosen)return;list.innerHTML=rows.map(x=>`<tr><td>${formatDateNL(x.m.datum)}</td><td>${esc(x.m.project||'-')}</td><td>${esc(x.m.lev||'-')}</td><td>${esc(x.m.oms||'-')}</td><td>${esc(x.m.bon||'-')}</td><td>${euro(x.m.bedrag||0)}</td><td>${x.m.foto?`<img src="${x.m.foto}" class="receipt">`:'-'}</td><td>${x.m.pdf?`<a class="pdfLink" href="${x.m.pdf}" download="${esc(x.m.pdfNaam||'document.pdf')}">PDF</a>`:'-'}</td><td><button class="del" onclick="del('materiaal',${x.i})">🗑️</button></td></tr>`).join('')||'<tr><td>Geen materiaal voor dit project.</td></tr>'};
- function fillMaterialFilter(){const sel=document.getElementById('gioMateriaalProjectFilter');if(!sel)return;const old=sel.value;sel.innerHTML='<option value="">Alle projecten</option>'+[...new Set((data.materiaal||[]).map(x=>x.project).filter(Boolean))].sort().map(x=>`<option>${esc(x)}</option>`).join('');sel.value=old;if(old)gioRenderMateriaalProjectFilter();else if(document.getElementById('gioMateriaalProjectTotal'))gioMateriaalProjectTotal.textContent=euro((data.materiaal||[]).reduce((s,x)=>s+(+x.bedrag||0),0))}
- function overlay(){if(document.getElementById('gioMobileActionOverlay'))return;const o=document.createElement('div');o.id='gioMobileActionOverlay';o.className='gioMobileActionOverlay';o.innerHTML='<div class="gioMobileActionSheet"><h3>Projectacties</h3><div class="gioOverlayGrid" id="gioOverlayGrid"></div><button class="gioMobileActionClose" onclick="gioCloseProjectOverlay()">Sluiten</button></div>';o.addEventListener('click',e=>{if(e.target===o)gioCloseProjectOverlay()});document.body.appendChild(o)}
- window.gioCloseProjectOverlay=function(){document.getElementById('gioMobileActionOverlay')?.classList.remove('open')};window.gioOpenProjectOverlay=function(i){overlay();const p=(data.projecten||[])[i];if(!p)return;const name=String(p.naam||'').replace(/'/g,"\'");document.getElementById('gioOverlayGrid').innerHTML=`<button onclick="projectDetailSelect.value='${name}';renderProjectDetails();show('projecten');gioCloseProjectOverlay()">📋<br>Projectkaart</button><button onclick="show('uren');uProject.value='${name}';gioProjectToKlant();gioCloseProjectOverlay()">⏱️<br>Uren</button><button onclick="show('materiaal');mProject.value='${name}';gioCloseProjectOverlay()">📦<br>Materiaal</button><button onclick="setProjectStatus(${i},'Werk done');gioCloseProjectOverlay()">✅<br>Werk done</button><button onclick="setProjectStatus(${i},'Factureren');gioCloseProjectOverlay()">🧾<br>Factureren</button><button onclick="del('projecten',${i});gioCloseProjectOverlay()">🗑️<br>Verwijderen</button>`;document.getElementById('gioMobileActionOverlay').classList.add('open')};
- function mobileButtons(){if(innerWidth>800)return;document.querySelectorAll('#projectList tr').forEach((tr,i)=>{const td=tr.lastElementChild;if(!td||td.querySelector('.gioProjectMore'))return;td.querySelectorAll('button').forEach(b=>b.style.display='none');const b=document.createElement('button');b.className='btn2 gioProjectMore';b.textContent='••• Acties';b.onclick=()=>gioOpenProjectOverlay(i);td.appendChild(b)})}
- function decorate(){fillMaterialFilter();mobileButtons();gioKlantTypeChanged()}
- const ro=window.render;if(ro&&!ro.__gioSafe){const w=function(){const r=ro.apply(this,arguments);setTimeout(decorate,30);return r};w.__gioSafe=true;window.render=w}document.readyState==='loading'?document.addEventListener('DOMContentLoaded',()=>setTimeout(decorate,100)):setTimeout(decorate,100);window.addEventListener('resize',()=>setTimeout(decorate,50));
-})();
 </script>
 </body>
 </html>
