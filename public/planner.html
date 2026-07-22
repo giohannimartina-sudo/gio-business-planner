@@ -48,7 +48,7 @@ th{background:var(--geel)}
 
 .openMoney{color:#c62828;font-weight:900}
 .totalKlant{font-weight:900;color:#111}
-.project-paid{background:#d8f5dc!important}
+.project-paid{background:#3d7d30!important;color:#fff!important}
 .project-paid td:nth-child(2){text-decoration:line-through;font-weight:900}
 .paid-badge{color:#2e7d32;font-weight:900}
 
@@ -194,7 +194,7 @@ html[data-gio-theme="dark"] body{background:#080a0f!important;color:#f9fafb!impo
 <link rel="apple-touch-icon" href="/icon-180.png">
 
 <link rel="stylesheet" href="/gio-v21-rc-testperiode.css">
-<link rel="stylesheet" href="/gio-mobile-work.css">
+<link rel="stylesheet" href="/gio-refresh-update.css">
 </head>
 <body class="gioV2">
 <div id="gioMobileTop"><div style="display:flex;align-items:center;gap:10px"><img src="/gio-logo-192.png" alt="GIO logo"><div><b>GIO Planner PRO</b><br><small>Live verbonden</small></div></div><div>☁️</div></div>
@@ -1503,5 +1503,6 @@ async function gioKmCalculateRoute(){
 function gioKmOpenGoogleMaps(){const a=kmVan.value.trim(),b=kmNaar.value.trim();if(!a||!b){alert('Vul vertrek- en bestemmingsadres in.');return}window.open('https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(a)+'&destination='+encodeURIComponent(b)+'&travelmode=driving','_blank')}
 
 </script>
+<script src="/gio-refresh-update.js"></script>
 </body>
 </html>
