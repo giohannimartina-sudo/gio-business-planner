@@ -1,5 +1,5 @@
-const CACHE='gio-business-planner-pro-v2-mobile-stable-20260722-1';
-const ASSETS=['/','/planner.html','/manifest.webmanifest','/gio-logo-192.png','/gio-logo-512.png','/favicon.png','/gio-mobile-stable.css?v=20260722-1'];
-self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())));
-self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
-self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(fetch(e.request).then(r=>{const copy=r.clone();caches.open(CACHE).then(c=>c.put(e.request,copy)).catch(()=>{});return r}).catch(()=>caches.match(e.request).then(r=>r||caches.match('/planner.html'))));});
+const CACHE='gio-business-planner-mobile-test-002';
+const CORE=['/','/planner.html','/gio-mobile-pro.css?v=002','/gio-mobile-pro.js?v=002','/gio-v21-rc-testperiode.css','/gio-v21-rc-testperiode.js','/gio-logo-192.png','/manifest.webmanifest'];
+self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).catch(()=>{}));self.skipWaiting()});
+self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim()});
+self.addEventListener('fetch',event=>{if(event.request.method!=='GET')return;event.respondWith(fetch(event.request).then(res=>{const copy=res.clone();caches.open(CACHE).then(c=>c.put(event.request,copy));return res}).catch(()=>caches.match(event.request).then(r=>r||caches.match('/planner.html'))))});
