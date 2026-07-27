@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>GIO Business Planner PRO v2.0</title>
+<link rel="stylesheet" href="/gio-mobile-stable.css?v=20260722-1">
 <style>
 :root{--geel:#f4c400;--zwart:#101010;--bg:#f4f4f4;--groen:#d8f5dc}
 *{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:#111}
@@ -194,13 +195,11 @@ html[data-gio-theme="dark"] body{background:#080a0f!important;color:#f9fafb!impo
 <link rel="apple-touch-icon" href="/icon-180.png">
 
 <link rel="stylesheet" href="/gio-v21-rc-testperiode.css">
-<link rel="stylesheet" href="/gio-mobile-test003.css?v=003">
 </head>
 <body class="gioV2">
-<div id="gioMobileTop"><div class="gioMobileBrand"><img src="/gio-logo-192.png" alt="GIO logo"><div><b>GIO Planner PRO</b><small id="gioMobileVersion">MOBILE TEST 003</small></div></div><button class="gioCloudMini" type="button" onclick="gioMobileGo('cloud',this)" aria-label="Cloud">☁️</button></div>
-<button id="gioMobileFab" type="button" onclick="gioToggleQuickOverlay()" aria-label="Snelle actie">＋</button>
-<div id="gioBottomDock"><button type="button" class="active" data-mobile-page="dashboard" onclick="gioMobileGo('dashboard',this)">🏠<span>Vandaag</span></button><button type="button" data-mobile-page="planning" onclick="gioMobileGo('planning',this)">📅<span>Planning</span></button><button type="button" data-mobile-page="projecten" onclick="gioMobileGo('projecten',this)">📁<span>Projecten</span></button><button type="button" data-mobile-page="werkboek" onclick="gioMobileGo('werkboek',this)">📝<span>Werkboek</span></button><button type="button" onclick="gioOpenMoreOverlay()">☰<span>Meer</span></button></div>
-<div id="gioMobileOverlay" class="gioMobileOverlay" onclick="gioOverlayBackdrop(event)"><div class="gioMobileSheet"><div class="gioSheetHandle"></div><div class="gioSheetHead"><b id="gioOverlayTitle">Meer</b><button onclick="gioCloseMobileOverlay()">✕</button></div><div id="gioOverlayBody"></div></div></div>
+<div id="gioMobileTop"><div style="display:flex;align-items:center;gap:10px"><img src="/gio-logo-192.png" alt="GIO logo"><div><b>GIO Planner PRO</b><br><small>Live verbonden</small></div></div><div>☁️</div></div>
+<div id="gioActionDock"><button type="button" onclick="show('uren',this)">▶ Inklok</button><button type="button" onclick="show('projectkaartpro',this)">📁 Kaart</button><button type="button" onclick="show('materiaal',this)">🧰 Mat.</button><button type="button" onclick="show('uitgaven',this)">💸 Uitgave</button><button type="button" onclick="show('betalingen',this)">💳 Betaal</button><button type="button" onclick="show('cloud',this)">☁️ Sync</button></div>
+<div id="gioBottomDock"><button type="button" class="active" onclick="show('dashboard',this)">🏠<br>Home</button><button type="button" onclick="show('planning',this)">📅<br>Plan</button><button type="button" onclick="show('projecten',this)">📁<br>Project</button><button type="button" onclick="show('uren',this)">⏱<br>Uren</button><button type="button" onclick="show('rapport',this)">📊<br>Balans</button></div>
 
 <div id="loginScreen" class="loginScreen">
   <div class="loginBox">
@@ -646,32 +645,6 @@ html[data-gio-theme="dark"] body{background:#080a0f!important;color:#f9fafb!impo
  <div class="card"><h2>Over deze versie</h2><p><b>GIO Business Planner PRO</b><br>Versie 2.0<br>Gebouwd voor GIO Klus Baas</p></div>
 </section>
 
-
-<section id="werkboek" class="page">
- <div class="card dark"><h2>📝 Werkboek</h2><p>Notities, taken, inkoop en ideeën. Koppel ze aan een klant of opdracht.</p></div>
- <div class="card">
-  <input type="hidden" id="wbEditId">
-  <div class="row"><div><label>Titel</label><input id="wbTitel" placeholder="Bijv. Zwarte kit bestellen"></div><div><label>Soort</label><select id="wbSoort"><option>Notitie</option><option>Taak</option><option>Inkoop</option><option>Idee</option><option>Herinnering</option></select></div></div>
-  <div class="row"><div><label>Klant (optioneel)</label><select id="wbKlant"><option value="">Niet gekoppeld</option></select></div><div><label>Project / opdracht (optioneel)</label><select id="wbProject"><option value="">Niet gekoppeld</option></select></div></div>
-  <label>Notitie</label><textarea id="wbTekst" placeholder="Schrijf hier je notitie..."></textarea>
-  <div class="gioInlineActions"><button class="btn" onclick="gioWerkboekOpslaan()">💾 Opslaan</button><button class="btn2" onclick="gioWerkboekLeegmaken()">Annuleren</button></div>
- </div>
- <div class="card"><div class="row"><div><label>Zoeken</label><input id="wbZoek" placeholder="Zoek in notities" oninput="gioRenderWerkboek()"></div><div><label>Filter project</label><select id="wbFilterProject" onchange="gioRenderWerkboek()"><option value="">Alle projecten</option></select></div></div><div id="wbLijst" class="gioMobileList"></div></div>
-</section>
-
-<section id="voorraad" class="page">
- <div class="card dark"><h2>📦 Voorraad</h2><p>Bus, magazijn en werkplaats. Producten zijn op desktop en mobiel hetzelfde.</p></div>
- <div class="card">
-  <input type="hidden" id="voorraadEditId">
-  <div class="row"><div><label>Productnaam</label><input id="voorraadNaam" placeholder="Bijv. High Tack wit"></div><div><label>Categorie</label><input id="voorraadCategorie" placeholder="Kit, elektra, PVC..."></div></div>
-  <div class="row"><div><label>Locatie</label><select id="voorraadLocatie"><option>Bus</option><option>Magazijn</option><option>Werkplaats</option><option>Schuur</option></select></div><div><label>Eenheid</label><select id="voorraadEenheid"><option>stuk</option><option>doos</option><option>meter</option><option>liter</option><option>set</option></select></div></div>
-  <div class="row"><div><label>Voorraad</label><input id="voorraadAantal" type="number" step="0.01" min="0"></div><div><label>Minimum</label><input id="voorraadMinimum" type="number" step="0.01" min="0"></div></div>
-  <div class="row"><div><label>Inkoopprijs</label><input id="voorraadInkoop" type="number" step="0.01" min="0"></div><div><label>Verkoopprijs</label><input id="voorraadVerkoop" type="number" step="0.01" min="0"></div></div>
-  <label>Productfoto</label><input id="voorraadFoto" type="file" accept="image/*" onchange="gioVoorraadFotoKiezen(event)"><div id="voorraadFotoPreview"></div>
-  <div class="gioInlineActions"><button class="btn" onclick="gioVoorraadOpslaan()">💾 Opslaan</button><button class="btn2" onclick="gioVoorraadLeegmaken()">Annuleren</button></div>
- </div>
- <div class="card"><label>Zoeken</label><input id="voorraadZoek" placeholder="Zoek product" oninput="gioRenderVoorraad()"><div id="voorraadKpis" class="gioMiniKpis"></div><div id="voorraadLijst" class="gioMobileList"></div></div>
-</section>
 
 </main>
 </div>
@@ -1530,6 +1503,5 @@ async function gioKmCalculateRoute(){
 function gioKmOpenGoogleMaps(){const a=kmVan.value.trim(),b=kmNaar.value.trim();if(!a||!b){alert('Vul vertrek- en bestemmingsadres in.');return}window.open('https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(a)+'&destination='+encodeURIComponent(b)+'&travelmode=driving','_blank')}
 
 </script>
-<script src="/gio-mobile-test003.js?v=003"></script>
 </body>
 </html>
