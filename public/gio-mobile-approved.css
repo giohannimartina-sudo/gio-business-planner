@@ -1,0 +1,107 @@
+/* GIO Mobile Approved PATCH 001
+   Alleen mobiele presentatie. Desktop en gegevenslogica blijven intact. */
+@media (max-width:800px){
+  :root{
+    --gm-bg:#050607;--gm-panel:#0f1217;--gm-card:#151922;--gm-line:#2c333e;
+    --gm-gold:#f4c400;--gm-gold2:#ffd633;--gm-green:#3d7d30;
+    --gm-text:#f8fafc;--gm-muted:#9ca3af;
+  }
+  html,body{width:100%;max-width:100%;overflow-x:hidden!important;background:var(--gm-bg)!important}
+  body.gioV2{background:linear-gradient(180deg,#030405,#080a0e)!important;color:var(--gm-text)!important}
+  .gioV2 .wrap{display:block!important;min-width:0!important}
+  .gioV2 aside{display:none!important}
+  .gioV2 main{width:100%!important;max-width:100%!important;min-width:0!important;padding:0 12px calc(84px + env(safe-area-inset-bottom))!important}
+
+  #gioMobileTop{
+    display:flex!important;position:sticky!important;top:0!important;z-index:10010!important;
+    height:66px!important;margin:0 -12px 12px!important;padding:9px 14px!important;
+    background:rgba(4,5,7,.95)!important;border-bottom:1px solid #20252e!important;
+    backdrop-filter:blur(16px)!important;align-items:center!important;justify-content:space-between!important;
+  }
+  .gioMobileBrand{display:flex!important;align-items:center!important;gap:10px!important;min-width:0!important}
+  #gioMobileTop img{width:42px!important;height:42px!important;border-radius:11px!important}
+  .gioMobileBrand b{font-size:15px!important;color:var(--gm-gold2)!important}
+  .gioMobileBrand small{display:block!important;font-size:10px!important;color:var(--gm-muted)!important}
+  .gioCloudMini{width:40px!important;height:40px!important;border-radius:12px!important;background:var(--gm-card)!important;border:1px solid var(--gm-line)!important;color:white!important}
+
+  #gioMobileHero{
+    display:block!important;background:linear-gradient(135deg,#1d1704,#0e1117 68%)!important;
+    border:1px solid #4a3d08!important;border-radius:18px!important;padding:15px!important;
+    margin:0 0 12px!important;box-shadow:0 16px 36px rgba(0,0,0,.35)!important;
+  }
+  #gioMobileHero h2{margin:0 0 4px!important;font-size:20px!important;color:white!important}
+  #gioMobileHero p{margin:0!important;color:var(--gm-muted)!important;font-size:12px!important}
+  #gioMobileHero .gioHeroActions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important;margin-top:12px!important}
+  #gioMobileHero button{min-height:42px!important;border-radius:11px!important;border:1px solid #3b414c!important;background:#171b23!important;color:white!important;font-weight:800!important}
+  #gioMobileHero button:first-child{background:linear-gradient(180deg,var(--gm-gold2),#e5aa00)!important;color:#111!important;border:0!important}
+
+  .gioV2 .userbar,.gioV2 #titel{display:none!important}
+  .gioV2 section,.gioV2 .card,.gioV2 .panel,.gioV2 .box{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important}
+  .gioV2 .card,.gioV2 .panel,.gioV2 .box{
+    padding:13px!important;margin:0 0 10px!important;border-radius:16px!important;
+    background:linear-gradient(180deg,#151922,#0d1015)!important;border:1px solid var(--gm-line)!important;
+    box-shadow:0 10px 26px rgba(0,0,0,.28)!important;
+  }
+  .gioV2 .card h2{font-size:17px!important;margin:0 0 10px!important}
+  .gioV2 .card h3{font-size:15px!important}
+
+  .gioV2 .grid,.gioTileGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+  .gioV2 .kpi,.gioFinanceTile,.gioProjectTile{min-height:82px!important;padding:11px!important;border-radius:14px!important}
+  .gioV2 .kpi small{font-size:10px!important;color:var(--gm-muted)!important}
+  .gioV2 .kpi b{font-size:18px!important;line-height:1.2!important;overflow-wrap:anywhere!important}
+
+  .gioV2 .row{grid-template-columns:1fr!important;gap:6px!important}
+  .gioV2 label{font-size:12px!important;margin:7px 0 4px!important}
+  .gioV2 input,.gioV2 select,.gioV2 textarea{
+    width:100%!important;max-width:100%!important;min-width:0!important;min-height:43px!important;
+    padding:9px 10px!important;border-radius:10px!important;font-size:16px!important;
+  }
+  .gioV2 textarea{min-height:76px!important}
+  .gioV2 button,.gioV2 .btn,.gioV2 .btn2,.gioV2 .urenBtn,.gioV2 .editBtn,.gioV2 .del{
+    min-height:40px!important;padding:8px 10px!important;border-radius:10px!important;
+    font-size:12px!important;line-height:1.15!important;max-width:100%!important;
+  }
+
+  .gioV2 table{display:block!important;width:100%!important;max-width:100%!important;overflow:visible!important;white-space:normal!important;background:transparent!important}
+  .gioV2 thead{display:none!important}
+  .gioV2 tbody{display:grid!important;gap:8px!important}
+  .gioV2 tr{display:block!important;width:100%!important;background:#101319!important;border:1px solid #29303a!important;border-left:4px solid var(--gm-gold)!important;border-radius:13px!important;padding:8px!important;margin:0!important}
+  .gioV2 td{display:block!important;width:100%!important;padding:4px 5px!important;border:0!important;overflow-wrap:anywhere!important}
+  .gioV2 td:empty{display:none!important}
+  .gioV2 td:has(button){display:flex!important;gap:6px!important;flex-wrap:wrap!important}
+
+  .project-paid,.gioPaidRow,tr.paid,tr.betaald,[data-status="Betaald"],[data-status="betaald"]{
+    background:var(--gm-green)!important;color:white!important;border-color:#76a36b!important;
+  }
+  .project-paid *,.gioPaidRow *,tr.paid *,tr.betaald *{color:white!important}
+
+  .gioAgendaGrid{grid-template-columns:1fr!important;gap:8px!important}
+  .gioAgendaDay{min-height:0!important;background:#101319!important;color:white!important;border-color:#2d343f!important}
+  .gioEvent{padding:10px!important;border-radius:11px!important}
+
+  #gioBottomDock{
+    display:grid!important;grid-template-columns:repeat(5,1fr)!important;position:fixed!important;
+    left:0!important;right:0!important;bottom:0!important;z-index:10020!important;min-height:64px!important;
+    background:rgba(7,8,11,.97)!important;border-top:1px solid #272d37!important;
+    backdrop-filter:blur(16px)!important;padding-bottom:env(safe-area-inset-bottom)!important;
+  }
+  #gioBottomDock button{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:3px!important;min-height:60px!important;padding:5px 1px!important;background:transparent!important;border:0!important;color:#c5cad2!important;font-size:18px!important}
+  #gioBottomDock button span{font-size:10px!important}
+  #gioBottomDock button.active{color:var(--gm-gold2)!important}
+
+  #gioMobileFab{display:block!important;position:fixed!important;right:16px!important;bottom:78px!important;z-index:10021!important;width:48px!important;height:48px!important;border-radius:50%!important;background:linear-gradient(180deg,var(--gm-gold2),#e5aa00)!important;color:#111!important;border:0!important;box-shadow:0 10px 30px rgba(0,0,0,.5)!important;font-size:24px!important}
+
+  .gioMobileOverlay.open{display:flex!important}
+  .gioMobileSheet{max-height:86vh!important;background:#0c0f14!important;border-color:#323944!important}
+  .gioOverlayGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+  .gioOverlayGrid button{min-height:66px!important;padding:9px 7px!important;border-radius:13px!important;background:#151922!important;border:1px solid #303744!important;font-size:12px!important}
+  .gioOverlayGrid button i{font-size:21px!important}
+  .gioOverlayGrid button.gioPrimary{background:linear-gradient(180deg,var(--gm-gold2),#e7ac00)!important;color:#111!important}
+  .gioOverlayGrid button.gioGreen{background:#17381a!important;border-color:var(--gm-green)!important}
+
+  .gioMobileSectionTitle{display:flex;align-items:center;justify-content:space-between;margin:14px 2px 8px}
+  .gioMobileSectionTitle h3{margin:0;font-size:15px}
+  .gioMobileSectionTitle button{min-height:34px!important;padding:6px 9px!important;background:#151922!important;color:var(--gm-gold2)!important;border:1px solid #303744!important}
+
+  .gioV2 p:empty,.gioV2 small:empty,.gioV2 .card:empty{display:none!important}
+}
