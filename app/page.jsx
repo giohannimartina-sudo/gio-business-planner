@@ -11,12 +11,12 @@ export default function Home() {
     const css = doc.createElement('link');
     css.id = 'gio-approved-css';
     css.rel = 'stylesheet';
-    css.href = '/gio-mobile-approved.css?v=001';
+    css.href = '/gio-mobile-approved.css?v=002';
     doc.head.appendChild(css);
 
     const script = doc.createElement('script');
     script.id = 'gio-approved-js';
-    script.src = '/gio-mobile-approved.js?v=001';
+    script.src = '/gio-mobile-approved.js?v=002';
     script.defer = true;
     doc.body.appendChild(script);
   }, []);

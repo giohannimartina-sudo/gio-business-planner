@@ -1,4 +1,4 @@
-/* GIO Mobile Approved PATCH 001
+/* GIO Mobile Approved PATCH 002
    Alleen mobiele presentatie. Desktop en gegevenslogica blijven intact. */
 @media (max-width:800px){
   :root{
@@ -105,3 +105,16 @@
 
   .gioV2 p:empty,.gioV2 small:empty,.gioV2 .card:empty{display:none!important}
 }
+
+.gioEmployeeProfile{display:flex;gap:12px;align-items:center;margin-bottom:10px}
+.gioEmployeeAvatar{width:68px;height:68px;border-radius:50%;object-fit:cover;border:2px solid #f4c400;background:#151922}
+.gioEmployeeAvatarPlaceholder{width:68px;height:68px;border-radius:50%;display:grid;place-items:center;background:#151922;border:2px solid #3a414d;font-size:28px}
+.gioCertificateList{display:grid;gap:8px;margin-top:10px}
+.gioCertificateCard{background:#101319;border:1px solid #2c333e;border-left:4px solid #f4c400;border-radius:12px;padding:10px}
+.gioCertificateCard.expiring{border-left-color:#f59e0b;background:#1c1408}
+.gioCertificateCard.expired{border-left-color:#ef4444;background:#1d0b0b}
+.gioCertificateBadge{display:inline-block;padding:4px 8px;border-radius:999px;font-size:11px;font-weight:800;background:#242a33;color:#fff}
+.gioCertificateBadge.warn{background:#7c4a03;color:#fff3c4}
+.gioCertificateBadge.danger{background:#7f1d1d;color:#fee2e2}
+.gioEmployeeAlarm{margin-top:10px;padding:10px 12px;border-radius:11px;border:1px solid #854d0e;background:#251605;color:#fde68a;font-weight:800}
+.gioEmployeeAlarm.danger{border-color:#991b1b;background:#2a0b0b;color:#fecaca}
