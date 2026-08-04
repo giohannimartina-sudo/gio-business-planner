@@ -211,3 +211,21 @@
 .gioVehicleAlert{padding:9px 11px;border-radius:10px;margin:7px 0;background:#251605;border:1px solid #a16207;color:#fde68a}
 .gioVehicleAlert.danger{background:#2a0b0b;border-color:#991b1b;color:#fecaca}
 @media(max-width:800px){.gioVehicleKpis{grid-template-columns:repeat(2,minmax(0,1fr))}.gioVehicleTop{align-items:flex-start}}
+
+/* Gereedschap PRO */
+.gioToolTabs{display:flex;gap:7px;overflow-x:auto;margin:8px 0 12px}
+.gioToolTabs button{white-space:nowrap}
+.gioToolTabs button.active{background:#f4c400!important;color:#111!important}
+.gioToolCard{background:#101319;border:1px solid #2d343f;border-left:4px solid #f4c400;border-radius:14px;padding:12px;margin:8px 0}
+.gioToolTop{display:flex;gap:12px;align-items:center}
+.gioToolPhoto{width:76px;height:76px;object-fit:cover;border-radius:11px;border:1px solid #39414d;background:#151922}
+.gioToolPhotoFallback{width:76px;height:76px;display:grid;place-items:center;border-radius:11px;border:1px solid #39414d;background:#151922;font-size:28px}
+.gioToolActions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.gioToolKpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0}
+.gioToolKpi{background:#0c0f14;border:1px solid #2d343f;border-radius:12px;padding:10px}
+.gioToolKpi small{display:block;color:#9ca3af}.gioToolKpi b{display:block;color:#f4c400;font-size:17px;margin-top:4px}
+.gioToolAlert{padding:9px 11px;border-radius:10px;margin:7px 0;background:#251605;border:1px solid #a16207;color:#fde68a}
+.gioToolAlert.danger{background:#2a0b0b;border-color:#991b1b;color:#fecaca}
+.gioQrBox{display:grid;place-items:center;background:#fff;border-radius:12px;padding:12px;margin-top:10px}
+.gioQrBox canvas{max-width:180px}
+@media(max-width:800px){.gioToolKpis{grid-template-columns:repeat(2,minmax(0,1fr))}.gioToolTop{align-items:flex-start}}
