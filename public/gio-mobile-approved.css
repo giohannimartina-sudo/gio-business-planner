@@ -166,3 +166,7 @@
 .gioDossierRow{padding:8px 0;border-bottom:1px solid #29303a}.gioDossierRow:last-child{border-bottom:0}
 .gioDossierActions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
 @media(max-width:800px){.gioDossierGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.gioScanBox{background:#101319;border:1px solid #2d343f;border-radius:14px;padding:12px;margin:10px 0}
+.gioScanPreview{display:grid;place-items:center;min-height:160px;border:1px dashed #475569;border-radius:12px;overflow:hidden;background:#0b0d11}.gioScanPreview img{max-width:100%;max-height:340px;object-fit:contain}
+.gioScanStatus{margin:10px 0;padding:10px 12px;border-radius:11px;background:#101827;border:1px solid #334155;color:#dbeafe}.gioScanStatus.ok{background:#0d2110;border-color:#3d7d30;color:#bbf7d0}.gioScanStatus.warn{background:#251605;border-color:#a16207;color:#fde68a}
+.gioScanGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}@media(max-width:800px){.gioScanGrid{grid-template-columns:1fr}.gioScanPreview{min-height:120px}}
