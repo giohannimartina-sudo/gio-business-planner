@@ -11,70 +11,77 @@ export default function Home() {
     const css = doc.createElement('link');
     css.id = 'gio-approved-css';
     css.rel = 'stylesheet';
-    css.href = '/gio-mobile-approved.css?v=012';
+    css.href = '/gio-mobile-approved.css?v=013';
     doc.head.appendChild(css);
 
     const script = doc.createElement('script');
     script.id = 'gio-approved-js';
-    script.src = '/gio-mobile-approved.js?v=012';
+    script.src = '/gio-mobile-approved.js?v=013';
     script.defer = true;
     doc.body.appendChild(script);
 
     const trips = doc.createElement('script');
     trips.id = 'gio-trips-js';
-    trips.src = '/gio-trips-pro.js?v=012';
+    trips.src = '/gio-trips-pro.js?v=013';
     trips.defer = true;
     doc.body.appendChild(trips);
 
     const personnel = doc.createElement('script');
     personnel.id = 'gio-personnel-js';
-    personnel.src = '/gio-personnel-pro.js?v=012';
+    personnel.src = '/gio-personnel-pro.js?v=013';
     personnel.defer = true;
     doc.body.appendChild(personnel);
     const menu = doc.createElement('script');
     menu.id='gio-smart-menu-js';
-    menu.src='/gio-smart-menu.js?v=012';
+    menu.src='/gio-smart-menu.js?v=013';
     menu.defer=true;
     doc.body.appendChild(menu);
     const master=document.createElement('script');
     master.id='gio-master-dashboard-js';
-    master.src='/gio-master-dashboard.js?v=012';
+    master.src='/gio-master-dashboard.js?v=013';
     master.defer=true;
     doc.body.appendChild(master);
     const dossier=document.createElement('script');
     dossier.id='gio-project-dossier-js';
-    dossier.src='/gio-project-dossier.js?v=012';
+    dossier.src='/gio-project-dossier.js?v=013';
     dossier.defer=true;
     doc.body.appendChild(dossier);
     const scanner=document.createElement('script');
     scanner.id='gio-receipt-scanner-js';
-    scanner.src='/gio-receipt-scanner.js?v=012';
+    scanner.src='/gio-receipt-scanner.js?v=013';
     scanner.defer=true;
     doc.body.appendChild(scanner);
 
     const workbook = doc.createElement('script');
     workbook.id = 'gio-workbook-pro-js';
-    workbook.src = '/gio-workbook-pro.js?v=012';
+    workbook.src = '/gio-workbook-pro.js?v=013';
     workbook.defer = true;
     doc.body.appendChild(workbook);
 
     const clients = doc.createElement('script');
     clients.id = 'gio-clients-pro-js';
-    clients.src = '/gio-clients-pro.js?v=012';
+    clients.src = '/gio-clients-pro.js?v=013';
     clients.defer = true;
     doc.body.appendChild(clients);
 
     const vehicles = doc.createElement('script');
     vehicles.id = 'gio-vehicles-pro-js';
-    vehicles.src = '/gio-vehicles-pro.js?v=012';
+    vehicles.src = '/gio-vehicles-pro.js?v=013';
     vehicles.defer = true;
     doc.body.appendChild(vehicles);
 
     const tools = doc.createElement('script');
     tools.id = 'gio-tools-pro-js';
-    tools.src = '/gio-tools-pro.js?v=012';
+    tools.src = '/gio-tools-pro.js?v=013';
     tools.defer = true;
     doc.body.appendChild(tools);
+
+    const offers = doc.createElement('script');
+    offers.id = 'gio-offers-pro-js';
+    offers.src = '/gio-offers-pro.js?v=013';
+    offers.defer = true;
+    doc.body.appendChild(offers);
+
 
 
 
