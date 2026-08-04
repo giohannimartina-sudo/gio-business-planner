@@ -170,3 +170,14 @@
 .gioScanPreview{display:grid;place-items:center;min-height:160px;border:1px dashed #475569;border-radius:12px;overflow:hidden;background:#0b0d11}.gioScanPreview img{max-width:100%;max-height:340px;object-fit:contain}
 .gioScanStatus{margin:10px 0;padding:10px 12px;border-radius:11px;background:#101827;border:1px solid #334155;color:#dbeafe}.gioScanStatus.ok{background:#0d2110;border-color:#3d7d30;color:#bbf7d0}.gioScanStatus.warn{background:#251605;border-color:#a16207;color:#fde68a}
 .gioScanGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}@media(max-width:800px){.gioScanGrid{grid-template-columns:1fr}.gioScanPreview{min-height:120px}}
+/* Werkboek PRO DEV 009 */
+.gioWbToolbar{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0 12px}
+.gioWbToolbar button.active{background:#f4c400!important;color:#111!important}
+.gioWbGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.gioWbCard{background:#101319;border:1px solid #2d343f;border-left:4px solid #f4c400;border-radius:14px;padding:12px;margin:8px 0}
+.gioWbCard.high{border-left-color:#ef4444}.gioWbCard.medium{border-left-color:#f59e0b}.gioWbCard.done{opacity:.72;border-left-color:#3d7d30}
+.gioWbHead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.gioWbMeta{font-size:11px;color:#9ca3af;margin-top:4px}
+.gioWbAttachments{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.gioWbAttachments img{width:74px;height:74px;object-fit:cover;border-radius:9px;border:1px solid #364152}
+.gioWbBadge{display:inline-block;padding:4px 8px;border-radius:999px;background:#252a32;color:#e5e7eb;font-size:10px;font-weight:800}
+.gioWbActions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+@media(max-width:800px){.gioWbGrid{grid-template-columns:1fr}.gioWbHead{flex-direction:column}}
