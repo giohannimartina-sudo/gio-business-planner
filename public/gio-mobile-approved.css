@@ -181,3 +181,17 @@
 .gioWbBadge{display:inline-block;padding:4px 8px;border-radius:999px;background:#252a32;color:#e5e7eb;font-size:10px;font-weight:800}
 .gioWbActions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
 @media(max-width:800px){.gioWbGrid{grid-template-columns:1fr}.gioWbHead{flex-direction:column}}
+
+/* Klantenboek PRO */
+.gioClientTabs{display:flex;gap:7px;overflow-x:auto;margin:8px 0 12px;padding-bottom:5px}
+.gioClientTabs button{white-space:nowrap;min-height:38px!important}
+.gioClientTabs button.active{background:#f4c400!important;color:#111!important}
+.gioClientCard{background:#101319;border:1px solid #2d343f;border-left:4px solid #f4c400;border-radius:14px;padding:12px;margin:8px 0}
+.gioClientCard.favorite{border-left-color:#f59e0b}
+.gioClientTop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.gioClientActions{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.gioClientDetails{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+.gioClientBox{background:#0c0f14;border:1px solid #29303a;border-radius:11px;padding:9px}
+.gioClientDoc{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid #29303a}
+.gioClientHistory{padding:8px 0;border-bottom:1px solid #29303a}
+@media(max-width:800px){.gioClientDetails{grid-template-columns:1fr}}
