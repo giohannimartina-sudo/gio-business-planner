@@ -292,3 +292,17 @@
  .gioDashPanels{grid-template-columns:1fr}
  .gioDashHeroTop{align-items:flex-start;flex-direction:column}
 }
+
+/* Stabiliteit & Back-up PRO */
+.gioGuardGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:10px 0}
+.gioGuardTile{background:#101319;border:1px solid #2d343f;border-bottom:4px solid #f4c400;border-radius:14px;padding:11px}
+.gioGuardTile small{display:block;color:#9ca3af}.gioGuardTile b{display:block;color:#f4c400;font-size:18px;margin-top:4px}
+.gioGuardStatus{padding:10px 12px;border-radius:11px;margin:8px 0;background:#101827;border:1px solid #334155;color:#dbeafe}
+.gioGuardStatus.ok{background:#0d2110;border-color:#3d7d30;color:#bbf7d0}
+.gioGuardStatus.warn{background:#251605;border-color:#a16207;color:#fde68a}
+.gioGuardStatus.danger{background:#2a0b0b;border-color:#991b1b;color:#fecaca}
+.gioGuardActions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.gioGuardList{display:grid;gap:8px;margin-top:10px}
+.gioGuardRow{background:#101319;border:1px solid #2d343f;border-radius:12px;padding:10px;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.gioGuardPreview{max-height:240px;overflow:auto;background:#0b0d11;border:1px solid #29303a;border-radius:12px;padding:10px;font-family:monospace;font-size:11px;white-space:pre-wrap}
+@media(max-width:800px){.gioGuardGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.gioGuardRow{align-items:flex-start;flex-direction:column}}
