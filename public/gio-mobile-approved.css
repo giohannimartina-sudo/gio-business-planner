@@ -150,3 +150,11 @@
 .gioMenuGroupBody button.gioFav{border-color:#f4c400!important}
 #gioFavoritesGroup .gioMenuGroupBody{display:block!important}.gioMenuHidden{display:none!important}
 }
+
+.gioMasterGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:10px 0}
+.gioMasterTile{background:#101319;border:1px solid #2d343f;border-bottom:4px solid #f4c400;border-radius:15px;padding:12px}
+.gioMasterTile small{display:block;color:#9ca3af}.gioMasterTile b{display:block;color:#f4c400;font-size:21px;margin-top:5px}
+.gioMasterList{display:grid;gap:8px}.gioMasterRow{background:#101319;border:1px solid #2d343f;border-radius:12px;padding:10px;display:flex;justify-content:space-between;gap:10px}
+.gioMasterRow.ok{border-left:4px solid #3d7d30}.gioMasterRow.warn{border-left:4px solid #f59e0b}.gioMasterRow.danger{border-left:4px solid #ef4444}
+.gioMasterQuick{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+@media(max-width:800px){.gioMasterGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.gioMasterRow{flex-direction:column}}
