@@ -195,3 +195,19 @@
 .gioClientDoc{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid #29303a}
 .gioClientHistory{padding:8px 0;border-bottom:1px solid #29303a}
 @media(max-width:800px){.gioClientDetails{grid-template-columns:1fr}}
+
+/* Voertuigen PRO */
+.gioVehicleTabs{display:flex;gap:7px;overflow-x:auto;margin:8px 0 12px}
+.gioVehicleTabs button{white-space:nowrap}
+.gioVehicleTabs button.active{background:#f4c400!important;color:#111!important}
+.gioVehicleCard{background:#101319;border:1px solid #2d343f;border-left:4px solid #f4c400;border-radius:14px;padding:12px;margin:8px 0}
+.gioVehicleTop{display:flex;gap:12px;align-items:center}
+.gioVehiclePhoto{width:84px;height:64px;object-fit:cover;border-radius:10px;border:1px solid #39414d;background:#151922}
+.gioVehiclePhotoFallback{width:84px;height:64px;display:grid;place-items:center;border-radius:10px;border:1px solid #39414d;background:#151922;font-size:28px}
+.gioVehicleActions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.gioVehicleKpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0}
+.gioVehicleKpi{background:#0c0f14;border:1px solid #2d343f;border-radius:12px;padding:10px}
+.gioVehicleKpi small{display:block;color:#9ca3af}.gioVehicleKpi b{display:block;color:#f4c400;font-size:17px;margin-top:4px}
+.gioVehicleAlert{padding:9px 11px;border-radius:10px;margin:7px 0;background:#251605;border:1px solid #a16207;color:#fde68a}
+.gioVehicleAlert.danger{background:#2a0b0b;border-color:#991b1b;color:#fecaca}
+@media(max-width:800px){.gioVehicleKpis{grid-template-columns:repeat(2,minmax(0,1fr))}.gioVehicleTop{align-items:flex-start}}
