@@ -118,3 +118,9 @@
 .gioCertificateBadge.danger{background:#7f1d1d;color:#fee2e2}
 .gioEmployeeAlarm{margin-top:10px;padding:10px 12px;border-radius:11px;border:1px solid #854d0e;background:#251605;color:#fde68a;font-weight:800}
 .gioEmployeeAlarm.danger{border-color:#991b1b;background:#2a0b0b;color:#fecaca}
+
+.gioTripCard{background:#101319;border:1px solid #2d343f;border-left:4px solid #f4c400;border-radius:13px;padding:11px;margin:8px 0}
+.gioTripCard.business{border-left-color:#3d7d30}.gioTripCard.private{border-left-color:#8b5cf6}
+.gioTripActive{border:1px solid #3d7d30;background:#0d2110;border-radius:14px;padding:12px;margin:10px 0}
+.gioTripWarning{border:1px solid #b45309;background:#241503;color:#fde68a;border-radius:11px;padding:10px;margin:8px 0}
+.gioTripActions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
