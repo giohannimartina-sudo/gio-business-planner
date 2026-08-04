@@ -11,20 +11,26 @@ export default function Home() {
     const css = doc.createElement('link');
     css.id = 'gio-approved-css';
     css.rel = 'stylesheet';
-    css.href = '/gio-mobile-approved.css?v=003';
+    css.href = '/gio-mobile-approved.css?v=004';
     doc.head.appendChild(css);
 
     const script = doc.createElement('script');
     script.id = 'gio-approved-js';
-    script.src = '/gio-mobile-approved.js?v=003';
+    script.src = '/gio-mobile-approved.js?v=004';
     script.defer = true;
     doc.body.appendChild(script);
 
     const trips = doc.createElement('script');
     trips.id = 'gio-trips-js';
-    trips.src = '/gio-trips-pro.js?v=003';
+    trips.src = '/gio-trips-pro.js?v=004';
     trips.defer = true;
     doc.body.appendChild(trips);
+
+    const personnel = doc.createElement('script');
+    personnel.id = 'gio-personnel-js';
+    personnel.src = '/gio-personnel-pro.js?v=004';
+    personnel.defer = true;
+    doc.body.appendChild(personnel);
   }, []);
 
   return (
