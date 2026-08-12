@@ -364,3 +364,21 @@
 .gioAnalyticsBar{height:9px;background:#222832;border-radius:999px;overflow:hidden;margin-top:5px}.gioAnalyticsBar span{display:block;height:100%;background:#f4c400}
 .gioAnalyticsPos{color:#86efac;font-weight:800}.gioAnalyticsNeg{color:#fca5a5;font-weight:800}
 @media(max-width:800px){.gioAnalyticsKpis{grid-template-columns:repeat(2,minmax(0,1fr))}.gioAnalyticsPanels{grid-template-columns:1fr}}
+
+/* Meldingen & Herinneringen PRO */
+.gioReminderTabs{display:flex;gap:7px;overflow-x:auto;margin:8px 0 12px;padding-bottom:4px}
+.gioReminderTabs button{white-space:nowrap}
+.gioReminderTabs button.active{background:#f4c400!important;color:#111!important}
+.gioReminderKpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0}
+.gioReminderKpi{background:#0c0f14;border:1px solid #2d343f;border-radius:12px;padding:10px}
+.gioReminderKpi small{display:block;color:#9ca3af}.gioReminderKpi b{display:block;color:#f4c400;font-size:18px;margin-top:4px}
+.gioReminderCard{background:#101319;border:1px solid #2d343f;border-left:4px solid #f59e0b;border-radius:14px;padding:12px;margin:8px 0}
+.gioReminderCard.red{border-left-color:#ef4444;background:#1d0b0b}
+.gioReminderCard.green{border-left-color:#3d7d30;background:#0d2110}
+.gioReminderCard.blue{border-left-color:#3b82f6}
+.gioReminderActions{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.gioReminderBadge{display:inline-block;padding:4px 8px;border-radius:999px;background:#252a32;color:#cbd5e1;font-size:11px;font-weight:800}
+.gioReminderBadge.red{background:#681919;color:#fecaca}.gioReminderBadge.warn{background:#5b3905;color:#fde68a}.gioReminderBadge.green{background:#17391d;color:#bbf7d0}
+.gioBellPulse{animation:gioBellPulse 1.2s infinite}
+@keyframes gioBellPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+@media(max-width:800px){.gioReminderKpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
