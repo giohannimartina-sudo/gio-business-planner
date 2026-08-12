@@ -339,3 +339,12 @@
 .gioHoursCard{background:#101319;border:1px solid #2d343f;border-left:4px solid #f4c400;border-radius:14px;padding:12px;margin:8px 0}.gioHoursCard.active{border-left-color:#3d7d30;background:#0d2110}
 .gioHoursActions{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
 @media(max-width:800px){.gioHoursKpis{grid-template-columns:repeat(2,minmax(0,1fr))}.gioHoursButtons{grid-template-columns:1fr}}
+
+.gioMatTabs{display:flex;gap:7px;overflow-x:auto;margin:8px 0 12px}.gioMatTabs button{white-space:nowrap}.gioMatTabs button.active{background:#f4c400!important;color:#111!important}
+.gioMatCard{background:#101319;border:1px solid #2d343f;border-left:4px solid #f4c400;border-radius:14px;padding:12px;margin:8px 0}
+.gioMatCard.paid{border-left-color:#3d7d30;background:#0d2110}.gioMatCard.open{border-left-color:#f59e0b}
+.gioMatActions{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.gioMatKpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0}.gioMatKpi{background:#0c0f14;border:1px solid #2d343f;border-radius:12px;padding:10px}.gioMatKpi small{display:block;color:#9ca3af}.gioMatKpi b{display:block;color:#f4c400;font-size:18px;margin-top:4px}
+.gioMatReceipt{max-width:220px;max-height:280px;object-fit:contain;border-radius:12px;margin-top:8px}
+.gioMatPayment{background:#0c0f14;border:1px solid #29303a;border-radius:11px;padding:9px;margin:7px 0}
+@media(max-width:800px){.gioMatKpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
