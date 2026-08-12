@@ -321,3 +321,12 @@
 .gioExpenseKpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0}.gioExpenseKpi{background:#0c0f14;border:1px solid #2d343f;border-radius:12px;padding:10px}.gioExpenseKpi small{display:block;color:#9ca3af}.gioExpenseKpi b{display:block;color:#f4c400;font-size:18px;margin-top:4px}
 .gioExpenseReceipt{max-width:220px;max-height:280px;object-fit:contain;border-radius:12px;margin-top:8px}
 @media(max-width:800px){.gioExpenseKpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.gioPlanTabs{display:flex;gap:7px;overflow-x:auto;margin:8px 0 12px}.gioPlanTabs button{white-space:nowrap}.gioPlanTabs button.active{background:#f4c400!important;color:#111!important}
+.gioPlanCard{background:#101319;border:1px solid #2d343f;border-left:4px solid #f4c400;border-radius:14px;padding:12px;margin:8px 0}
+.gioPlanCard.overdue{border-left-color:#ef4444;background:#1d0b0b}.gioPlanCard.today{border-left-color:#3d7d30}
+.gioPlanActions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.gioPlanKpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0}.gioPlanKpi{background:#0c0f14;border:1px solid #2d343f;border-radius:12px;padding:10px}.gioPlanKpi small{display:block;color:#9ca3af}.gioPlanKpi b{display:block;color:#f4c400;font-size:18px;margin-top:4px}
+.gioPlanPeople{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.gioPlanPerson{padding:5px 8px;border-radius:999px;background:#1f2937;font-size:11px}
+.gioPlanFree{border-left-color:#8b5cf6;background:#151020}
+@media(max-width:800px){.gioPlanKpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
