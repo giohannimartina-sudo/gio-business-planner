@@ -348,3 +348,11 @@
 .gioMatReceipt{max-width:220px;max-height:280px;object-fit:contain;border-radius:12px;margin-top:8px}
 .gioMatPayment{background:#0c0f14;border:1px solid #29303a;border-radius:11px;padding:9px;margin:7px 0}
 @media(max-width:800px){.gioMatKpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.gioProjectTabs{display:flex;gap:7px;overflow-x:auto;margin:8px 0 12px}.gioProjectTabs button{white-space:nowrap}.gioProjectTabs button.active{background:#f4c400!important;color:#111!important}
+.gioProjectStatusCard{background:#101319;border:1px solid #2d343f;border-left:4px solid #f4c400;border-radius:14px;padding:12px;margin:8px 0}
+.gioProjectStatusCard.done{border-left-color:#3d7d30}.gioProjectStatusCard.overdue{border-left-color:#ef4444;background:#1d0b0b}.gioProjectStatusCard.archive{border-left-color:#64748b}
+.gioProjectStatusActions{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.gioProjectStatusKpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0}.gioProjectStatusKpi{background:#0c0f14;border:1px solid #2d343f;border-radius:12px;padding:10px}.gioProjectStatusKpi small{display:block;color:#9ca3af}.gioProjectStatusKpi b{display:block;color:#f4c400;font-size:18px;margin-top:4px}
+.gioQuarterGroup{background:#101319;border:1px solid #2d343f;border-radius:14px;padding:12px;margin:10px 0}.gioQuarterGroup h3{margin:0 0 8px}
+@media(max-width:800px){.gioProjectStatusKpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
