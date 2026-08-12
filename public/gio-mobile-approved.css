@@ -306,3 +306,10 @@
 .gioGuardRow{background:#101319;border:1px solid #2d343f;border-radius:12px;padding:10px;display:flex;justify-content:space-between;gap:10px;align-items:center}
 .gioGuardPreview{max-height:240px;overflow:auto;background:#0b0d11;border:1px solid #29303a;border-radius:12px;padding:10px;font-family:monospace;font-size:11px;white-space:pre-wrap}
 @media(max-width:800px){.gioGuardGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.gioGuardRow{align-items:flex-start;flex-direction:column}}
+
+.gioStockTabs{display:flex;gap:7px;overflow-x:auto;margin:8px 0 12px}.gioStockTabs button{white-space:nowrap}.gioStockTabs button.active{background:#f4c400!important;color:#111!important}
+.gioStockCard{background:#101319;border:1px solid #2d343f;border-left:4px solid #f4c400;border-radius:14px;padding:12px;margin:8px 0}.gioStockCard.low{border-left-color:#ef4444;background:#1a0e0e}
+.gioStockTop{display:flex;gap:12px;align-items:center}.gioStockPhoto{width:70px;height:70px;object-fit:cover;border-radius:11px;border:1px solid #39414d}.gioStockPhotoFallback{width:70px;height:70px;display:grid;place-items:center;border-radius:11px;border:1px solid #39414d;background:#151922;font-size:26px}
+.gioStockActions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.gioStockKpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0}.gioStockKpi{background:#0c0f14;border:1px solid #2d343f;border-radius:12px;padding:10px}.gioStockKpi small{display:block;color:#9ca3af}.gioStockKpi b{display:block;color:#f4c400;font-size:18px;margin-top:4px}
+.gioStockHistoryRow{padding:8px 0;border-bottom:1px solid #29303a}.gioStockHistoryRow:last-child{border-bottom:0}.gioStockQr{display:grid;place-items:center;background:#fff;border-radius:12px;padding:12px;margin-top:10px}.gioReorderRow{background:#1d0b0b;border:1px solid #7f1d1d;border-radius:11px;padding:10px;margin:7px 0}
+@media(max-width:800px){.gioStockKpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
