@@ -3,11 +3,16 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 function env() {
-  const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const url =
+    process.env.SUPABASE_URL ||
+    process.env.NEXT_PUBLIC_SUPABASE_URL;
+
   const key =
     process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.SUPABASE_SECRET_KEY ||
     process.env.SUPABASE_ANON_KEY ||
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
   return { url, key };
 }
 
@@ -38,7 +43,7 @@ export async function GET(req) {
     const { url, key } = env();
     if (!url || !key) {
       return Response.json(
-        { configured: false, error: 'Supabase environment variables ontbreken.' },
+        { configured: false, error: 'Supabase environment variables ontbreken.', diagnostic: '/api/gio-env-check' },
         { status: 503 }
       );
     }
@@ -55,7 +60,7 @@ export async function POST(req) {
     const { url, key } = env();
     if (!url || !key) {
       return Response.json(
-        { configured: false, error: 'Supabase environment variables ontbreken.' },
+        { configured: false, error: 'Supabase environment variables ontbreken.', diagnostic: '/api/gio-env-check' },
         { status: 503 }
       );
     }
