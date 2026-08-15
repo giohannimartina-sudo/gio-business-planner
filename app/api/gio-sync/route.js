@@ -17,11 +17,19 @@ function env() {
 }
 
 function headers(key) {
-  return {
+  const base = {
     apikey: key,
-    Authorization: `Bearer ${key}`,
     'Content-Type': 'application/json',
     Prefer: 'return=representation'
+  };
+
+  if (String(key).startsWith('sb_')) {
+    return base;
+  }
+
+  return {
+    ...base,
+    Authorization: `Bearer ${key}`
   };
 }
 
@@ -49,7 +57,11 @@ export async function GET(req) {
     }
     const deviceKey = new URL(req.url).searchParams.get('device_key') || 'gio-master';
     const row = await readRow(url, key, deviceKey);
-    return Response.json({ configured: true, row });
+    return Response.json({
+      configured: true,
+      row,
+      keyMode: String(key).startsWith('sb_') ? 'secret/publishable api key' : 'legacy jwt key'
+    });
   } catch (e) {
     return Response.json({ configured: true, error: e.message }, { status: 500 });
   }
