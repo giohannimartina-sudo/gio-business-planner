@@ -422,3 +422,17 @@
 .gioKmWarning{background:#3a2500;border:1px solid #b87800;border-radius:12px;padding:12px;margin:12px 0;color:#ffd86a}
 .gioKmOk{background:#082d17;border:1px solid #22a447;border-radius:12px;padding:12px;margin:12px 0;color:#8affad}
 @media(max-width:600px){.gioKmBigActions{grid-template-columns:1fr}.gioKmTotals{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* DEV 030 Openstaand & Betalingen PRO */
+.gioPayKpis,.gioPayBreakdown{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0}
+.gioPayBreakdown{grid-template-columns:repeat(6,minmax(0,1fr))}
+.gioPayKpis>div,.gioPayBreakdown>div{background:#0b0f14;border:1px solid #303846;border-radius:12px;padding:12px}
+.gioPayKpis small,.gioPayBreakdown small{display:block;color:#aab6c8}.gioPayKpis b,.gioPayBreakdown b{font-size:1.15rem}
+.gioPayActions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.gioPayCard,.gioPayHistoryRow{background:#0b0f14;border:1px solid #303846;border-radius:12px;padding:12px;margin-bottom:10px}
+.gioPayCard.paid{border-color:#22a447;background:#082d17}
+.gioPayHead,.gioPayHistoryRow{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.gioPayMini{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0}
+.gioPayMini span{background:#141a22;border-radius:8px;padding:8px}
+@media(max-width:850px){.gioPayBreakdown{grid-template-columns:repeat(3,minmax(0,1fr))}.gioPayKpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.gioPayBreakdown,.gioPayMini{grid-template-columns:repeat(2,minmax(0,1fr))}.gioPayActions button{flex:1 1 100%}}
