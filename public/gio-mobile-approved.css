@@ -436,3 +436,10 @@
 .gioPayMini span{background:#141a22;border-radius:8px;padding:8px}
 @media(max-width:850px){.gioPayBreakdown{grid-template-columns:repeat(3,minmax(0,1fr))}.gioPayKpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.gioPayBreakdown,.gioPayMini{grid-template-columns:repeat(2,minmax(0,1fr))}.gioPayActions button{flex:1 1 100%}}
+
+/* DEV 031 Projectstatus & Auto-Archief PRO */
+.gioArchiveMoney{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0}
+.gioArchiveMoney span{background:#111821;border-radius:9px;padding:8px}.gioArchiveMoney b{display:block}
+.gioArchiveWarn{background:#3a2500;border:1px solid #b87800;color:#ffd86a;border-radius:10px;padding:9px;margin:8px 0}
+.gioArchiveOk{background:#082d17;border:1px solid #22a447;color:#8affad;border-radius:10px;padding:9px;margin:8px 0}
+@media(max-width:600px){.gioArchiveMoney{grid-template-columns:repeat(2,minmax(0,1fr))}}
