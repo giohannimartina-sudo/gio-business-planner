@@ -16,8 +16,9 @@ export async function GET() {
   const safe = {};
   for (const [name, value] of Object.entries(candidates)) {
     safe[name] = {
-      present: Boolean(value),
-      length: value ? String(value).length : 0
+      present: Boolean(value && String(value).trim()),
+      length: value ? String(value).trim().length : 0,
+      hadOuterWhitespace: Boolean(value && String(value) !== String(value).trim())
     };
   }
 

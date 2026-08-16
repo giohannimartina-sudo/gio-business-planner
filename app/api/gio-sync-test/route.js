@@ -3,16 +3,21 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 function env() {
-  const url =
+  const rawUrl =
     process.env.SUPABASE_URL ||
-    process.env.NEXT_PUBLIC_SUPABASE_URL;
+    process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    '';
 
-  const key =
+  const rawKey =
     process.env.SUPABASE_SECRET_KEY ||
     process.env.SUPABASE_SERVICE_ROLE_KEY ||
     process.env.SUPABASE_ANON_KEY ||
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+    '';
+
+  const url = String(rawUrl).trim();
+  const key = String(rawKey).trim();
 
   return { url, key };
 }
