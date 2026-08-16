@@ -402,3 +402,11 @@
 
 /* DEV027 */
 #cloudpro2 .gioCloudKpis{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px!important}#cloudpro2 .gioCloudActions{display:flex;flex-wrap:wrap;gap:10px}@media(max-width:720px){#cloudpro2 .gioCloudKpis{grid-template-columns:repeat(2,minmax(0,1fr))!important}#cloudpro2 .gioCloudActions button{flex:1 1 calc(50% - 8px)}}
+
+.gioLiveReadyGrid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin:14px 0}
+.gioReadyTile,.gioReadyIssues{background:#0b0f14;border:1px solid #303846;border-radius:12px;padding:12px}
+.gioReadyTile small{display:block;color:#aab6c8}.gioReadyTile b{font-size:1.35rem}
+.gioReadyActions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.gioReadyScore{display:flex;gap:14px;align-items:center;border-radius:14px;padding:14px;margin:12px 0}.gioReadyScore.ok{background:#082d17;border:1px solid #22a447}.gioReadyScore.warn{background:#362100;border:1px solid #b87800}.gioReadyScore b{font-size:1.8rem}
+.gioReadyRow{display:flex;justify-content:space-between;gap:12px;background:#0b0f14;border:1px solid #303846;border-radius:12px;padding:12px;margin-bottom:8px}.gioReadyPill{padding:6px 10px;border-radius:999px;font-weight:700}.gioReadyPill.ok{background:#0b4a23;color:#8affad}.gioReadyPill.warn{background:#4a2d00;color:#ffd86a}
+@media(max-width:900px){.gioLiveReadyGrid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:600px){.gioLiveReadyGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.gioReadyActions button{flex:1 1 100%}}
