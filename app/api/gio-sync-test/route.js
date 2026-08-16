@@ -1,68 +1,80 @@
-
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-function env() {
-  const rawUrl =
-    process.env.SUPABASE_URL ||
-    process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    '';
-
-  const rawKey =
-    process.env.SUPABASE_SECRET_KEY ||
-    process.env.SUPABASE_SERVICE_ROLE_KEY ||
-    process.env.SUPABASE_ANON_KEY ||
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
-    '';
-
-  const url = String(rawUrl).trim();
-  const key = String(rawKey).trim();
-
-  return { url, key };
+function clean(value) {
+  return String(value || '').trim();
 }
 
-function headers(key) {
-  const base = {
+function env() {
+  const url = clean(
+    process.env.SUPABASE_URL ||
+    process.env.NEXT_PUBLIC_SUPABASE_URL
+  );
+
+  const secretKey = clean(process.env.SUPABASE_SECRET_KEY);
+  const serviceRoleKey = clean(process.env.SUPABASE_SERVICE_ROLE_KEY);
+
+  const key = secretKey || serviceRoleKey;
+  const keyType = secretKey
+    ? (secretKey.startsWith('sb_secret_') ? 'secret' : 'invalid-secret')
+    : (serviceRoleKey ? 'legacy-service-role' : 'missing');
+
+  return { url, key, keyType };
+}
+
+function headers(key, keyType) {
+  const h = {
     apikey: key,
     'Content-Type': 'application/json',
     Prefer: 'resolution=merge-duplicates,return=representation'
   };
 
-  if (String(key).startsWith('sb_')) return base;
+  if (keyType === 'legacy-service-role') {
+    h.Authorization = `Bearer ${key}`;
+  }
 
-  return {
-    ...base,
-    Authorization: `Bearer ${key}`
-  };
+  return h;
 }
 
 export async function GET() {
   try {
-    const { url, key } = env();
+    const { url, key, keyType } = env();
 
     if (!url || !key) {
       return Response.json(
-        { ok: false, error: 'Supabase environment variables ontbreken.' },
+        { ok: false, error: 'Supabase serverconfiguratie ontbreekt.', keyType },
         { status: 503 }
       );
     }
 
-    const endpoint = `${url}/rest/v1/gio_sync_state?on_conflict=device_key`;
+    if (keyType === 'invalid-secret') {
+      return Response.json(
+        {
+          ok: false,
+          error: 'SUPABASE_SECRET_KEY heeft niet het verwachte sb_secret_ formaat.',
+          keyType
+        },
+        { status: 503 }
+      );
+    }
+
+    const endpoint =
+      `${url}/rest/v1/gio_sync_state?on_conflict=device_key`;
+
     const payload = [{
       device_key: 'gio-connection-test',
       payload: {
         test: true,
-        note: 'DEV 026B veilige verbindingstest',
+        version: 'DEV 026E',
         timestamp: new Date().toISOString()
       },
       updated_at: new Date().toISOString(),
-      updated_by: 'DEV 026B connection test'
+      updated_by: 'DEV 026E connection test'
     }];
 
     const res = await fetch(endpoint, {
       method: 'POST',
-      headers: headers(key),
+      headers: headers(key, keyType),
       body: JSON.stringify(payload)
     });
 
@@ -73,7 +85,7 @@ export async function GET() {
         {
           ok: false,
           status: res.status,
-          keyMode: String(key).startsWith('sb_') ? 'sb_secret/publishable' : 'legacy-jwt',
+          keyType,
           error: text
         },
         { status: res.status }
@@ -86,10 +98,13 @@ export async function GET() {
     return Response.json({
       ok: true,
       status: res.status,
-      keyMode: String(key).startsWith('sb_') ? 'sb_secret/publishable' : 'legacy-jwt',
+      keyType,
       testRecord: rows[0] || null
     });
   } catch (e) {
-    return Response.json({ ok: false, error: e.message }, { status: 500 });
+    return Response.json(
+      { ok: false, error: e instanceof Error ? e.message : String(e) },
+      { status: 500 }
+    );
   }
 }
