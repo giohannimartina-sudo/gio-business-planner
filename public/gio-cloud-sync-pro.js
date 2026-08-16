@@ -4,8 +4,10 @@
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const KEY='gio-master';
-const META='gioCloudSyncMetaV026';
-const QUEUE='gioCloudPendingV026';
+const META='gioCloudSyncMetaV027';
+const DEVICE='gioCloudDeviceV027';
+const SNAPSHOT='gioCloudLocalSnapshotV027';
+const QUEUE='gioCloudPendingV027';
 let busy=false, autoTimer=null;
 
 function ensure(){
@@ -18,6 +20,21 @@ function meta(){
 }
 function setMeta(v){
   try{localStorage.setItem(META,JSON.stringify(v))}catch(e){}
+}
+function device(){
+  let d={};try{d=JSON.parse(localStorage.getItem(DEVICE)||'{}')}catch(e){}
+  if(!d.id){d={id:'dev-'+Math.random().toString(36).slice(2,10),name:/Mobi|Android|iPhone/i.test(navigator.userAgent)?'Master mobiel':'Master desktop',createdAt:new Date().toISOString()};try{localStorage.setItem(DEVICE,JSON.stringify(d))}catch(e){}}
+  return d;
+}
+function saveSnapshot(reason='Voor cloud-wijziging'){
+  try{localStorage.setItem(SNAPSHOT,JSON.stringify({at:new Date().toISOString(),reason,data:JSON.parse(JSON.stringify(data))}));return true}catch(e){return false}
+}
+function restoreSnapshot(){
+  let snap=null;try{snap=JSON.parse(localStorage.getItem(SNAPSHOT)||'null')}catch(e){}
+  if(!snap?.data){state('Er is nog geen lokale herstelkopie beschikbaar.','warn');return false}
+  if(!confirm('Lokale herstelkopie terugzetten van '+new Date(snap.at).toLocaleString('nl-NL')+'?'))return false;
+  const before=JSON.parse(JSON.stringify(data));
+  try{Object.keys(data).forEach(k=>delete data[k]);Object.assign(data,JSON.parse(JSON.stringify(snap.data)));if(typeof window.save==='function')window.save();log('Lokale herstelkopie teruggezet','ok');state('Lokale herstelkopie teruggezet.','ok');setPending(true);refresh();return true}catch(e){Object.keys(data).forEach(k=>delete data[k]);Object.assign(data,before);state('Herstellen mislukt: '+e.message,'bad');return false}
 }
 function pending(){
   try{return localStorage.getItem(QUEUE)==='1'}catch(e){return false}
@@ -42,6 +59,7 @@ function safePayload(){
 }
 function replaceData(payload){
   if(!payload||typeof payload!=='object')return false;
+  saveSnapshot('Automatisch vóór Van cloud');
   const before=JSON.parse(JSON.stringify(data));
   try{
     Object.keys(data).forEach(k=>delete data[k]);
@@ -103,7 +121,7 @@ async function push(force=false,silent=false){
       payload:safePayload(),
       base_updated_at:m.lastRemote||null,
       force,
-      updated_by:'GIO master'
+      updated_by:device().name+' ('+device().id+')'
     });
     if(res.status===409){
       setPending(true);
@@ -134,7 +152,8 @@ function refresh(){
     <div class="gioCloudKpi"><small>Verbinding</small><b>${navigator.onLine?'Online':'Offline'}</b></div>
     <div class="gioCloudKpi"><small>Wachtrij</small><b>${pending()?'Ja':'Nee'}</b></div>
     <div class="gioCloudKpi"><small>Laatste push</small><b>${m.lastPush?new Date(m.lastPush).toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'}):'-'}</b></div>
-    <div class="gioCloudKpi"><small>Projecten</small><b>${c.projecten}</b></div>`;
+    <div class="gioCloudKpi"><small>Projecten</small><b>${c.projecten}</b></div>
+    <div class="gioCloudKpi"><small>Apparaat</small><b>${esc(device().name)}</b></div>`;
   $('gioCloudLog').innerHTML=(data.syncLog||[]).length?data.syncLog.map(x=>`<div><b>${new Date(x.time).toLocaleString('nl-NL')}</b><br>${esc(x.msg)}</div>`).join(''):'Nog geen sync-log.';
 }
 function inject(){
@@ -148,6 +167,8 @@ function inject(){
       <button class="btn" onclick="gioCloudSyncNow()">🔄 Synchroniseren</button>
       <button class="btn2" onclick="gioCloudPull()">⬇️ Van cloud</button>
       <button class="btn2" onclick="gioCloudPush()">⬆️ Naar cloud</button>
+      <button class="btn2" onclick="gioCloudRestore()">↩️ Herstel lokale versie</button>
+      <button class="btn2" onclick="gioCloudRenameDevice()">✏️ Apparaatnaam</button>
       <button class="btn2" onclick="gioCloudForcePush()">⚠️ Forceer lokale versie</button>
     </div>
     <p><small>Automatische sync gebruikt een korte vertraging na wijzigingen. Bij internetuitval blijft de lokale app werken en wordt een wachtrij gemarkeerd.</small></p>
@@ -164,6 +185,8 @@ function inject(){
   }
 }
 window.gioCloudPull=()=>pull(false);
+window.gioCloudRestore=()=>restoreSnapshot();
+window.gioCloudRenameDevice=()=>{const d=device();const n=prompt('Naam van dit apparaat:',d.name);if(n){d.name=String(n).trim().slice(0,60)||d.name;try{localStorage.setItem(DEVICE,JSON.stringify(d))}catch(e){}refresh();}};
 window.gioCloudPush=()=>push(false,false);
 window.gioCloudForcePush=()=>confirm('Alleen gebruiken als je zeker weet dat de lokale gegevens de juiste nieuwste versie zijn. Cloud overschrijven?')&&push(true,false);
 window.gioCloudSyncNow=async()=>{
@@ -220,8 +243,8 @@ function init(){
   window.addEventListener('online',()=>{state('Internet terug. Wachtrij wordt gesynchroniseerd…','ok');if(pending())setTimeout(()=>push(false,true),1000)});
   window.addEventListener('offline',()=>state('Offline: lokale modus actief. Wijzigingen blijven bewaard.','warn'));
   setInterval(()=>{if(navigator.onLine&&!pending())pull(true)},120000);
-  document.title='GIO Business Planner PRO — MOBILE DEV 026';
-  try{localStorage.setItem('gioMobileBuild','MOBILE DEV 026')}catch(e){}
+  document.title='GIO Business Planner PRO — MOBILE DEV 027';
+  try{localStorage.setItem('gioMobileBuild','MOBILE DEV 027')}catch(e){}
 }
 document.readyState==='loading'?document.addEventListener('DOMContentLoaded',()=>setTimeout(init,2200)):setTimeout(init,2200);
 })();

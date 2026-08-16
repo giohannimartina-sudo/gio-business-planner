@@ -399,3 +399,6 @@
 .gioCloudLog{max-height:230px;overflow:auto;background:#0b0d11;border:1px solid #29303a;border-radius:12px;padding:10px;font-size:12px}
 .gioCloudLog div{padding:6px 0;border-bottom:1px solid #222832}.gioCloudLog div:last-child{border-bottom:0}
 @media(max-width:800px){.gioCloudKpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* DEV027 */
+#cloudpro2 .gioCloudKpis{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px!important}#cloudpro2 .gioCloudActions{display:flex;flex-wrap:wrap;gap:10px}@media(max-width:720px){#cloudpro2 .gioCloudKpis{grid-template-columns:repeat(2,minmax(0,1fr))!important}#cloudpro2 .gioCloudActions button{flex:1 1 calc(50% - 8px)}}
