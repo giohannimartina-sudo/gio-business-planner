@@ -410,3 +410,15 @@
 .gioReadyScore{display:flex;gap:14px;align-items:center;border-radius:14px;padding:14px;margin:12px 0}.gioReadyScore.ok{background:#082d17;border:1px solid #22a447}.gioReadyScore.warn{background:#362100;border:1px solid #b87800}.gioReadyScore b{font-size:1.8rem}
 .gioReadyRow{display:flex;justify-content:space-between;gap:12px;background:#0b0f14;border:1px solid #303846;border-radius:12px;padding:12px;margin-bottom:8px}.gioReadyPill{padding:6px 10px;border-radius:999px;font-weight:700}.gioReadyPill.ok{background:#0b4a23;color:#8affad}.gioReadyPill.warn{background:#4a2d00;color:#ffd86a}
 @media(max-width:900px){.gioLiveReadyGrid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:600px){.gioLiveReadyGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.gioReadyActions button{flex:1 1 100%}}
+
+/* DEV 029 KM Registratie & Belasting PRO */
+.gioKmBigActions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.gioKmBigActions button{min-height:62px;border:0;border-radius:14px;font-weight:900;font-size:1.1rem;cursor:pointer}
+.gioKmAan{background:#159447;color:white}.gioKmUit{background:#c83e3e;color:white}
+.gioKmIdle{padding:10px 12px;border-radius:10px;background:#171c24;border:1px solid #303846}
+.gioKmTotals{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0}
+.gioKmTotals>div{background:#0b0f14;border:1px solid #303846;border-radius:12px;padding:12px}
+.gioKmTotals small{display:block;color:#aab6c8}.gioKmTotals b{font-size:1.25rem}
+.gioKmWarning{background:#3a2500;border:1px solid #b87800;border-radius:12px;padding:12px;margin:12px 0;color:#ffd86a}
+.gioKmOk{background:#082d17;border:1px solid #22a447;border-radius:12px;padding:12px;margin:12px 0;color:#8affad}
+@media(max-width:600px){.gioKmBigActions{grid-template-columns:1fr}.gioKmTotals{grid-template-columns:repeat(2,minmax(0,1fr))}}
