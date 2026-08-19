@@ -447,62 +447,112 @@
 /* DEV032 */
 .gioBrandCopyright{padding:18px;text-align:center;font-size:.82rem;line-height:1.5;opacity:.9}.gioBrandColors{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:12px 0}.gioBrandColors label{display:flex;flex-direction:column;gap:6px}.gioBrandColors input[type=color]{width:100%;height:44px;border:0;border-radius:10px;background:transparent}.gioBrandPresets,.gioBrandActions,.gioTodoActions{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}.gioBrandPreviewShell{border:1px solid #303846;border-radius:14px;overflow:hidden;margin:14px 0}.gioBrandPreviewHead{display:flex;align-items:center;gap:12px;padding:14px}.gioBrandPreviewLogo{width:58px;height:58px;border-radius:12px;border:1px solid #485265;display:grid;place-items:center;overflow:hidden}.gioBrandPreviewLogo img{width:100%;height:100%;object-fit:contain}.gioBrandPreviewBody{padding:14px;display:flex;flex-wrap:wrap;gap:10px}.gioBrandPreviewBody button{padding:10px 14px;border:1px solid;border-radius:10px;font-weight:800}.gioBrandPreviewCard{flex:1 1 100%;padding:18px;border-radius:12px}.gioBrandSecurityNotice,.gioBrandCopyrightBox{border:1px solid #485265;border-radius:12px;padding:14px;line-height:1.6}.gioTodoKpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0}.gioTodoKpis>div{background:#0b0f14;border:1px solid #303846;border-radius:12px;padding:12px}.gioTodoKpis small{display:block;color:#aab6c8}.gioTodoKpis b{font-size:1.25rem}.gioTodoRow,.gioAppointmentRow{display:flex;justify-content:space-between;gap:10px;align-items:center;background:#0b0f14;border:1px solid #303846;border-radius:12px;padding:12px;margin-bottom:8px}.gioTodoRow.late{border-color:#b64747;background:#2d1010}.gioTodoRow.done{opacity:.72}.gioTodoRowActions{display:flex;gap:6px;flex-shrink:0}.gioTodoDashCols{display:grid;grid-template-columns:1fr 1fr;gap:14px}.gioTodoDashCols>div{background:#0b0f14;border:1px solid #303846;border-radius:12px;padding:12px}.gioTodoDashCols>div>div{padding:4px 0;border-bottom:1px solid rgba(255,255,255,.06)}@media(max-width:850px){.gioBrandColors{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:600px){.gioBrandColors{grid-template-columns:repeat(2,minmax(0,1fr))}.gioBrandActions button,.gioTodoActions button{flex:1 1 100%}.gioTodoKpis{grid-template-columns:repeat(2,minmax(0,1fr))}.gioTodoRow,.gioAppointmentRow{align-items:flex-start}.gioTodoDashCols{grid-template-columns:1fr}}
 
-/* DEV 033 Agenda UX & Leesbaarheid PRO */
-.gioAgendaShell{overflow:hidden}
-.gioAgendaHeader{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:14px}
-.gioAgendaHeader h2{margin:0 0 4px;font-size:1.8rem}
-.gioAgendaHeader p{margin:0;color:#aab6c8}
-.gioAgendaNav{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.gioAgendaArrow{width:46px;min-width:46px;font-size:1.4rem}
-.gioAgendaFilters{align-items:end}
-.gioAgendaWeekLabel{font-weight:800;color:#d7e0ec;margin:10px 0 14px}
-.gioAgendaGrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;min-height:520px}
-.gioAgendaGrid.oneDay{grid-template-columns:minmax(280px,520px)}
-.gioAgendaGrid.allDays{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-.gioAgendaDay{background:#111923;border:1px solid #334052;border-radius:12px;overflow:hidden;min-width:0}
-.gioAgendaDay.isToday{border-color:#f3c623;box-shadow:0 0 0 1px rgba(243,198,35,.18)}
-.gioAgendaDay.weekend .gioAgendaDayHead span{color:#68a7ff}
-.gioAgendaDay:nth-child(7n) .gioAgendaDayHead span{color:#ff6158}
-.gioAgendaDayHead{padding:13px 10px;text-align:center;border-bottom:1px solid #334052;background:#182231;color:#f7f9fc}
-.gioAgendaDayHead b{display:block;font-size:1rem}
-.gioAgendaDayHead span{display:block;margin-top:4px;font-size:.9rem;color:#cbd6e4}
-.gioAgendaDayBody{padding:10px;min-height:450px}
-.gioAgendaEvent{position:relative;border-radius:9px;padding:11px 11px 11px 15px;margin-bottom:8px;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.12);color:#17202a!important;overflow:hidden}
-.gioAgendaEvent::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px}
-.gioAgendaEvent b{display:block;color:#17202a!important;font-size:.95rem;margin-bottom:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.gioAgendaEvent small{display:block;color:#303b48!important;font-weight:650;font-size:.77rem;line-height:1.45;margin-top:3px}
-.gioAgendaEvent.planned{background:#f6df9c}.gioAgendaEvent.planned::before{background:#f0b900}
-.gioAgendaEvent.soon{background:#ffd7a3}.gioAgendaEvent.soon::before{background:#ffb020}
-.gioAgendaEvent.overdue{background:#ffc1c1}.gioAgendaEvent.overdue::before{background:#ff4141}
-.gioAgendaEvent.today{background:#c8efcf}.gioAgendaEvent.today::before{background:#27b05d}
-.gioAgendaEvent.done{background:#cfd6df}.gioAgendaEvent.done::before{background:#7e8998}
-.gioAgendaEvent.appointment{background:#cbdfff}.gioAgendaEvent.appointment::before{background:#2f80ed}
-.gioAgendaEvent.free{background:#e0e4ea}.gioAgendaEvent.free::before{background:#8c98a7}
-.gioAgendaEmpty{min-height:30px}
-.gioAgendaLegend{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:16px 2px 2px;color:#cbd6e4}
-.gioAgendaLegend span{display:inline-flex;align-items:center;gap:7px;font-size:.86rem}
-.gioAgendaLegend i{display:inline-block;width:12px;height:12px;border-radius:4px}
-.gioAgendaLegend i.planned{background:#f0b900}.gioAgendaLegend i.soon{background:#ffb020}.gioAgendaLegend i.overdue{background:#ff4141}.gioAgendaLegend i.appointment{background:#2f80ed}.gioAgendaLegend i.free{background:#8c98a7}
-.gioAgendaLegend b{margin-left:auto;color:#d7e0ec}
 
-@media(max-width:1100px){
-  .gioAgendaGrid{overflow-x:auto;display:flex;padding-bottom:8px}
-  .gioAgendaDay{min-width:230px;flex:0 0 230px}
-}
-@media(max-width:700px){
-  .gioAgendaHeader{flex-direction:column}
-  .gioAgendaNav{width:100%}
-  .gioAgendaNav .btn{flex:1}
-  .gioAgendaDayBody{min-height:260px}
-  .gioAgendaLegend b{width:100%;margin-left:0}
+/* =========================================================
+   DEV 034A — LOCKED LAYOUT / CONTRAST FIX ONLY
+   Basis: exact DEV 032.
+   GEEN menu-, layout-, pagina-, knopvolgorde- of JS-wijzigingen.
+   Alleen leesbaarheid/contrast.
+   ========================================================= */
+
+/* 1) AGENDA / PLANNING:
+   lichte planningkaarten mogen nooit witte tekst krijgen */
+.gioV2 .gioAgendaDay,
+.gioV2 .gioAgendaDay *,
+.gioV2 .gioEvent,
+.gioV2 .gioEvent *,
+.gioV2 .gioAgendaEvent,
+.gioV2 .gioAgendaEvent * {
+  text-shadow:none!important;
 }
 
-/* DEV 034A — CONTRAST FIX ONLY
-   Geen menu-, layout- of functionele wijzigingen. */
-.gioV2 tr.project-paid,.gioV2 .project-paid{background:#d9f6df!important;color:#17202a!important}
-.gioV2 tr.project-paid td,.gioV2 tr.project-paid td *,.gioV2 .project-paid td,.gioV2 .project-paid td *,.gioV2 .project-paid b,.gioV2 .project-paid strong,.gioV2 .project-paid small{color:#17202a!important}
-.gioV2 .project-paid .paid-badge,.gioV2 .project-paid .statusPaid{color:#0b6b2a!important}
-.gioV2 .project-paid .openMoney,.gioV2 .project-paid .moneyMinus{color:#c62828!important}
-.gioV2 .project-paid .totalKlant{color:#17202a!important}
-.gioV2 .project-paid button,.gioV2 .project-paid .btn2,.gioV2 .project-paid .editBtn{background:#121821!important;color:#ffffff!important;border-color:#2f3947!important}
-.gioV2 .project-paid button *,.gioV2 .project-paid .btn2 *,.gioV2 .project-paid .editBtn *{color:#ffffff!important}
+/* Alleen lichte afspraak/planning kaarten donker maken.
+   Donkere/rode/groene statuskaarten behouden hun bestaande kleuren waar nodig. */
+.gioV2 .gioAgendaDay[style*="background:#fff"],
+.gioV2 .gioAgendaDay[style*="background: #fff"] {
+  color:#17202a!important;
+}
+.gioV2 .gioAgendaDay[style*="background:#fff"] *,
+.gioV2 .gioAgendaDay[style*="background: #fff"] * {
+  color:#17202a!important;
+}
+
+/* Algemene lichte afspraakkaart varianten */
+.gioV2 .gioEvent:not(.late):not(.done),
+.gioV2 .gioAgendaEvent.planned,
+.gioV2 .gioAgendaEvent.soon,
+.gioV2 .gioAgendaEvent.today,
+.gioV2 .gioAgendaEvent.appointment,
+.gioV2 .gioAgendaEvent.free {
+  color:#17202a!important;
+}
+.gioV2 .gioEvent:not(.late):not(.done) *,
+.gioV2 .gioAgendaEvent.planned *,
+.gioV2 .gioAgendaEvent.soon *,
+.gioV2 .gioAgendaEvent.today *,
+.gioV2 .gioAgendaEvent.appointment *,
+.gioV2 .gioAgendaEvent.free * {
+  color:#17202a!important;
+}
+
+/* Donkere statuskaarten blijven juist wit */
+.gioV2 .gioEvent.late,
+.gioV2 .gioEvent.late *,
+.gioV2 .gioEvent.done,
+.gioV2 .gioEvent.done * {
+  color:#ffffff!important;
+}
+
+/* 2) BETAALDE PROJECTEN:
+   lichtgroene rij = donkere tekst */
+.gioV2 tr.project-paid,
+.gioV2 .project-paid {
+  background:#d8f5dc!important;
+  color:#17202a!important;
+}
+.gioV2 tr.project-paid td,
+.gioV2 tr.project-paid td *,
+.gioV2 .project-paid td,
+.gioV2 .project-paid td *,
+.gioV2 .project-paid b,
+.gioV2 .project-paid strong,
+.gioV2 .project-paid small,
+.gioV2 .project-paid span {
+  color:#17202a!important;
+}
+
+/* Betaald-status blijft herkenbaar groen */
+.gioV2 .project-paid .paid-badge,
+.gioV2 .project-paid .statusPaid,
+.gioV2 .statusPaid {
+  color:#0b6b2a!important;
+  font-weight:900!important;
+}
+
+/* Openstaande bedragen blijven rood */
+.gioV2 .project-paid .openMoney,
+.gioV2 .project-paid .moneyMinus,
+.gioV2 .openMoney {
+  color:#c62828!important;
+  font-weight:900!important;
+}
+
+/* Totaal klant duidelijk donker */
+.gioV2 .project-paid .totalKlant {
+  color:#17202a!important;
+  font-weight:900!important;
+}
+
+/* Actieknoppen op betaalde rij blijven donker + witte tekst */
+.gioV2 .project-paid button,
+.gioV2 .project-paid .btn2,
+.gioV2 .project-paid .editBtn {
+  background:#121821!important;
+  color:#ffffff!important;
+  border-color:#2f3947!important;
+}
+.gioV2 .project-paid button *,
+.gioV2 .project-paid .btn2 *,
+.gioV2 .project-paid .editBtn * {
+  color:#ffffff!important;
+}
