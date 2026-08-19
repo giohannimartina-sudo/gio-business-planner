@@ -497,85 +497,12 @@
   .gioAgendaLegend b{width:100%;margin-left:0}
 }
 
-/* DEV 034 Facturatie Contrast PRO
-   Fix: gioV2 gaf tabeltekst standaard wit, ook op lichtgroene betaalde rijen.
-   Betaalde/statuslichte elementen krijgen nu expliciet donkere tekst. */
-
-/* Betaalde projectrij: altijd donkere leesbare tekst */
-.gioV2 tr.project-paid,
-.gioV2 .project-paid{
-  background:#d9f6df!important;
-  color:#17202a!important;
-}
-.gioV2 tr.project-paid td,
-.gioV2 tr.project-paid td *,
-.gioV2 .project-paid td,
-.gioV2 .project-paid td *,
-.gioV2 .project-paid b,
-.gioV2 .project-paid strong,
-.gioV2 .project-paid small,
-.gioV2 .project-paid span:not(.openMoney){
-  color:#17202a!important;
-}
-
-/* Status 'Betaald' blijft groen maar met donker tekstcontrast */
-.gioV2 .project-paid .paid-badge,
-.gioV2 .project-paid .statusPaid,
-.gioV2 .statusPaid{
-  color:#0b6b2a!important;
-  font-weight:900!important;
-}
-
-/* Openstaand bedrag moet ook op lichte rij rood zichtbaar blijven */
-.gioV2 .project-paid .openMoney,
-.gioV2 .project-paid .moneyMinus,
-.gioV2 .openMoney{
-  color:#c62828!important;
-  font-weight:900!important;
-}
-
-/* Totaal klant / financiële bedragen op lichte rij donker */
-.gioV2 .project-paid .totalKlant,
-.gioV2 .project-paid .moneyPlus:not(.paid-badge){
-  color:#17202a!important;
-  font-weight:900!important;
-}
-
-/* Actieknoppen blijven bewust donker met witte tekst */
-.gioV2 .project-paid button,
-.gioV2 .project-paid .btn2,
-.gioV2 .project-paid .editBtn{
-  background:#121821!important;
-  color:#ffffff!important;
-  border:1px solid #2f3947!important;
-}
-.gioV2 .project-paid button *,
-.gioV2 .project-paid .btn2 *,
-.gioV2 .project-paid .editBtn *{
-  color:#ffffff!important;
-}
-.gioV2 .project-paid .del{
-  background:#3a0d0d!important;
-  color:#ffffff!important;
-  border-color:#b42323!important;
-}
-
-/* Betaald-knop zelf groen accent */
-.gioV2 .project-paid .statusPaid,
-.gioV2 .project-paid button.statusPaid{
-  background:#c9efd1!important;
-  color:#0b6b2a!important;
-  border-color:#57b96c!important;
-}
-
-/* Algemene veilige regel: lichte succeskaarten krijgen donkere tekst */
-.gioV2 .gioPayCard.paid,
-.gioV2 .gioPayCard.paid *,
-.gioV2 .gioProjectStatusCard.done,
-.gioV2 .gioProjectStatusCard.done *{
-  color:#17202a!important;
-}
-.gioV2 .gioPayCard.paid button,
-.gioV2 .gioProjectStatusCard.done button{
-  color:#ffffff!important;
-}
+/* DEV 034A — CONTRAST FIX ONLY
+   Geen menu-, layout- of functionele wijzigingen. */
+.gioV2 tr.project-paid,.gioV2 .project-paid{background:#d9f6df!important;color:#17202a!important}
+.gioV2 tr.project-paid td,.gioV2 tr.project-paid td *,.gioV2 .project-paid td,.gioV2 .project-paid td *,.gioV2 .project-paid b,.gioV2 .project-paid strong,.gioV2 .project-paid small{color:#17202a!important}
+.gioV2 .project-paid .paid-badge,.gioV2 .project-paid .statusPaid{color:#0b6b2a!important}
+.gioV2 .project-paid .openMoney,.gioV2 .project-paid .moneyMinus{color:#c62828!important}
+.gioV2 .project-paid .totalKlant{color:#17202a!important}
+.gioV2 .project-paid button,.gioV2 .project-paid .btn2,.gioV2 .project-paid .editBtn{background:#121821!important;color:#ffffff!important;border-color:#2f3947!important}
+.gioV2 .project-paid button *,.gioV2 .project-paid .btn2 *,.gioV2 .project-paid .editBtn *{color:#ffffff!important}
