@@ -164,6 +164,12 @@ export default function Home() {
     todoAppointmentsPro.src='/gio-todo-appointments-pro.js?v=032';
     todoAppointmentsPro.defer=true;
     doc.body.appendChild(todoAppointmentsPro);
+    const todoFix=document.createElement('script');
+    todoFix.id='gio-todo-visible-fix-js';
+    todoFix.src='/gio-todo-visible-fix.js?v=035';
+    todoFix.defer=true;
+    doc.body.appendChild(todoFix);
+
     const cloudPro=document.createElement('script');
     cloudPro.id='gio-cloud-sync-pro-js';
     cloudPro.src='/gio-cloud-sync-pro.js?v=032';
