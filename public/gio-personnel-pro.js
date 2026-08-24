@@ -32,3 +32,14 @@ window.gioPersonnelInit=()=>{ensure();fill();tabs();gioRenderPeople();contractFi
 function init(){if(!ensure()){setTimeout(init,100);return}if(workPage())return;inject();fill();tabs();gioRenderPeople();contractFields();wrapWorkerFunctions();decorateWorkerCards();document.title='GIO Business Planner PRO — MOBILE DEV 036';const obs=new MutationObserver(()=>{contractFields();wrapWorkerFunctions();decorateWorkerCards()});obs.observe(document.body,{childList:true,subtree:true})}
 document.readyState==='loading'?document.addEventListener('DOMContentLoaded',()=>setTimeout(init,300)):setTimeout(init,300)
 })();
+
+
+/* DEV 037 - Onbepaalde tijd zichtbaar in Profiel en certificaten */
+(function(){'use strict';
+const $=id=>document.getElementById(id);
+function add(){const end=$('medEinddatum');if(!end||$('medOnbepaaldeTijd'))return;const l=document.createElement('label');l.style.cssText='display:flex;align-items:center;gap:10px;margin-top:10px;font-weight:700';l.innerHTML='<input id="medOnbepaaldeTijd" type="checkbox" style="width:auto;min-width:20px;height:20px"> Onbepaalde tijd';end.parentElement.appendChild(l);$('medOnbepaaldeTijd').onchange=()=>{const on=$('medOnbepaaldeTijd').checked;if(on)end.value='';end.disabled=on}}
+function load(p){add();const c=$('medOnbepaaldeTijd'),e=$('medEinddatum');if(!c||!e)return;c.checked=!!p.onbepaaldeTijd;if(c.checked)e.value='';e.disabled=c.checked}
+function wrap(){add();if(typeof window.gioMedewerkerOpslaan==='function'&&!window.gioMedewerkerOpslaan.__gio037){const o=window.gioMedewerkerOpslaan;window.gioMedewerkerOpslaan=function(){add();const id=$('medEditId')?.value||'',naam=$('medNaam')?.value?.trim()||'',on=!!$('medOnbepaaldeTijd')?.checked;if(on&&$('medEinddatum'))$('medEinddatum').value='';const r=o.apply(this,arguments);const p=id?(data.medewerkers||[]).find(x=>String(x.id)===String(id)):(data.medewerkers||[]).find(x=>String(x.naam||'')===naam)||(data.medewerkers||[])[0];if(p){p.onbepaaldeTijd=on;if(on)p.einddatum='';window.save?.();window.gioRenderMedewerkers?.();window.gioRenderPeople?.()}setTimeout(()=>load({}),0);return r};window.gioMedewerkerOpslaan.__gio037=true}if(typeof window.gioMedewerkerBewerk==='function'&&!window.gioMedewerkerBewerk.__gio037){const o=window.gioMedewerkerBewerk;window.gioMedewerkerBewerk=function(id){const r=o.apply(this,arguments);const p=(data.medewerkers||[]).find(x=>String(x.id)===String(id))||{};setTimeout(()=>load(p),0);return r};window.gioMedewerkerBewerk.__gio037=true}}
+function init(){if(!window.data){setTimeout(init,150);return}add();wrap();new MutationObserver(()=>{add();wrap()}).observe(document.body,{childList:true,subtree:true})}
+document.readyState==='loading'?document.addEventListener('DOMContentLoaded',()=>setTimeout(init,400)):setTimeout(init,400);
+})();
