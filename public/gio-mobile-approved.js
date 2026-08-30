@@ -249,3 +249,151 @@ function ensureDesktopWorkerNav(){
 function init(){addTypes();inject();ensureDesktopWorkerNav();if($('medOnbepaaldeTijd')){$('medOnbepaaldeTijd').addEventListener('change',()=>{const on=$('medOnbepaaldeTijd').checked;if($('medEinddatum')){if(on)$('medEinddatum').value='';$('medEinddatum').disabled=on}})}wrap();alarms();document.title='GIO Business Planner PRO — MOBILE DEV 040 / DESKTOP PERSONEEL';try{localStorage.setItem('gioMobileBuild','MOBILE DEV 040 / DESKTOP PERSONEEL')}catch(e){}}
 document.readyState==='loading'?document.addEventListener('DOMContentLoaded',()=>setTimeout(init,150)):setTimeout(init,150);
 })();
+
+
+/* === DEV 041: To-do & Afspraken PRO zichtbaar en bereikbaar === */
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+
+function injectTodoPage(){
+  if($('todoafsprakenpro')) return;
+  const main=document.querySelector('main');
+  if(!main) return;
+
+  const sec=document.createElement('section');
+  sec.id='todoafsprakenpro';
+  sec.className='page';
+  sec.innerHTML=`
+    <div class="card dark">
+      <h2>✅ To-do & Afspraken PRO</h2>
+      <p>Taken, deadlines en afspraken op één plek. Dezelfde gegevens op mobiel en desktop.</p>
+    </div>
+
+    <div class="card">
+      <h2>✅ To-do / Taken</h2>
+      <div id="gioTodoKpis" class="gioMiniKpis"></div>
+
+      <div class="row">
+        <div><label>Taak</label><input id="gioTodoTitle" placeholder="Bijv. materiaal bestellen"></div>
+        <div><label>Deadline</label><input id="gioTodoDue" type="date"></div>
+        <div><label>Prioriteit</label>
+          <select id="gioTodoPriority">
+            <option>Laag</option>
+            <option selected>Normaal</option>
+            <option>Hoog</option>
+            <option>Urgent</option>
+          </select>
+        </div>
+        <div><label>Klant</label><select id="gioTodoClient"><option value="">Niet gekoppeld</option></select></div>
+        <div><label>Project</label><select id="gioTodoProject"><option value="">Niet gekoppeld</option></select></div>
+      </div>
+
+      <label>Notitie</label>
+      <textarea id="gioTodoNote" placeholder="Extra informatie..."></textarea>
+
+      <div class="gioTodoActions">
+        <button type="button" class="btn">+ Taak</button>
+        <button type="button" class="btn2">Open</button>
+        <button type="button" class="btn2">Klaar</button>
+        <button type="button" class="btn2">Alles</button>
+      </div>
+      <div id="gioTodoList"></div>
+    </div>
+
+    <div class="card">
+      <h2>📅 Afspraken</h2>
+      <div class="row">
+        <div><label>Onderwerp</label><input id="gioAppointmentTitle" placeholder="Bijv. opname klant"></div>
+        <div><label>Datum</label><input id="gioAppointmentDate" type="date"></div>
+        <div><label>Start</label><input id="gioAppointmentStart" type="time"></div>
+        <div><label>Einde</label><input id="gioAppointmentEnd" type="time"></div>
+        <div><label>Type</label>
+          <select id="gioAppointmentType">
+            <option>Afspraak</option>
+            <option>Opname</option>
+            <option>Werk</option>
+            <option>Levering</option>
+            <option>Privé</option>
+          </select>
+        </div>
+        <div><label>Klant</label><select id="gioAppointmentClient"><option value="">Niet gekoppeld</option></select></div>
+        <div><label>Project</label><select id="gioAppointmentProject"><option value="">Niet gekoppeld</option></select></div>
+        <div><label>Locatie</label><input id="gioAppointmentLocation" placeholder="Adres / locatie"></div>
+        <div><label>Herinnering</label>
+          <select id="gioAppointmentReminder">
+            <option value="0">Geen</option>
+            <option value="15">15 minuten</option>
+            <option value="30">30 minuten</option>
+            <option value="60">1 uur</option>
+            <option value="1440">1 dag</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Notitie</label>
+      <textarea id="gioAppointmentNote" placeholder="Extra informatie..."></textarea>
+      <button type="button" class="btn">💾 Afspraak opslaan</button>
+      <div id="gioAppointmentList" style="margin-top:14px"></div>
+    </div>`;
+  main.appendChild(sec);
+}
+
+function ensureTodoNav(){
+  const nav=document.querySelector('aside nav');
+  if(!nav) return;
+  if([...nav.querySelectorAll('button')].some(b=>(b.textContent||'').includes('To-do & Afspraken'))) return;
+
+  const b=document.createElement('button');
+  b.type='button';
+  b.textContent='✅ To-do & Afspraken';
+  b.onclick=()=>{
+    if(typeof window.show==='function') window.show('todoafsprakenpro',b);
+    window.gioTodoAppointmentsInit?.();
+  };
+  nav.appendChild(b);
+}
+
+function ensureMobileTodoMenu(){
+  if(!window.matchMedia('(max-width:800px)').matches) return;
+  const body=$('gioOverlayBody');
+  if(!body || body.querySelector('[data-gio-todo-menu]')) return;
+  const grid=body.querySelector('.gioOverlayGrid');
+  if(!grid) return;
+
+  const b=document.createElement('button');
+  b.type='button';
+  b.dataset.gioTodoMenu='1';
+  b.innerHTML='<i>✅</i>To-do & Afspraken';
+  b.onclick=()=>{
+    document.getElementById('gioMobileOverlay')?.classList.remove('open');
+    const fake=[...document.querySelectorAll('aside nav button')]
+      .find(x=>(x.textContent||'').includes('To-do & Afspraken'));
+    if(typeof window.show==='function') window.show('todoafsprakenpro',fake||document.querySelector('aside nav button'));
+    window.gioTodoAppointmentsInit?.();
+    window.scrollTo({top:0,behavior:'smooth'});
+  };
+  grid.appendChild(b);
+}
+
+function init(){
+  injectTodoPage();
+  ensureTodoNav();
+
+  setTimeout(()=>window.gioTodoAppointmentsInit?.(),500);
+
+  const observer=new MutationObserver(()=>{
+    injectTodoPage();
+    ensureTodoNav();
+    ensureMobileTodoMenu();
+  });
+  observer.observe(document.body,{childList:true,subtree:true});
+
+  document.title='GIO Business Planner PRO — DEV 041';
+  try{localStorage.setItem('gioMobileBuild','DEV 041 - TODO PRO')}catch(e){}
+}
+
+document.readyState==='loading'
+  ? document.addEventListener('DOMContentLoaded',()=>setTimeout(init,250))
+  : setTimeout(init,250);
+})();
