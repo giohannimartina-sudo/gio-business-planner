@@ -82,126 +82,6 @@
     const date = document.getElementById('gioApprovedDate');
     if(date) date.textContent = d.toLocaleDateString('nl-NL',{
       weekday:'long',day:'numeric',month:'long',year:'numeric'
-
-      /* DEV 044 - Dashboard agenda week leesbaarheid */
-(function(){
-'use strict';
-
-function css(){
- if(document.getElementById('gioAgendaReadability044'))return;
- const s=document.createElement('style');
- s.id='gioAgendaReadability044';
- s.textContent=`
- #gioDashboardAgenda{width:100%;max-width:100%;overflow:hidden}
- #gioDashboardAgenda .gioAgendaGrid{
-   display:grid!important;
-   grid-template-columns:repeat(7,minmax(0,1fr))!important;
-   gap:8px!important;
-   width:100%!important;
-   min-width:0!important;
- }
- #gioDashboardAgenda .gioAgendaDay{
-   min-width:0!important;
-   min-height:150px!important;
-   padding:9px!important;
-   overflow:hidden!important;
-   background:#f8fafc!important;
-   color:#111827!important;
-   border:1px solid #d1d5db!important;
- }
- #gioDashboardAgenda .gioAgendaDay>b{
-   display:block!important;
-   min-height:38px!important;
-   padding-bottom:7px!important;
-   margin-bottom:7px!important;
-   border-bottom:1px solid #d1d5db!important;
-   color:#111827!important;
-   font-size:13px!important;
-   line-height:1.25!important;
-   font-weight:900!important;
- }
- #gioDashboardAgenda .gioEvent{
-   display:block!important;
-   width:100%!important;
-   max-width:100%!important;
-   margin:5px 0!important;
-   padding:7px 7px!important;
-   overflow:hidden!important;
-   white-space:normal!important;
-   overflow-wrap:anywhere!important;
-   line-height:1.25!important;
-   font-size:12px!important;
-   font-weight:800!important;
-   background:#172033!important;
-   color:#fff!important;
-   border-left:5px solid #f4c400!important;
- }
- #gioDashboardAgenda .gioEvent small{
-   display:block!important;
-   margin-top:3px!important;
-   color:#e5e7eb!important;
-   opacity:1!important;
-   font-size:10px!important;
-   font-weight:700!important;
- }
- #gioDashboardAgenda .gioEvent.late{background:#991b1b!important;color:#fff!important}
- #gioDashboardAgenda .gioEvent.done{background:#166534!important;color:#fff!important}
- @media(max-width:1100px){
-   #gioDashboardAgenda{overflow-x:auto!important;padding-bottom:6px}
-   #gioDashboardAgenda .gioAgendaGrid{min-width:840px!important}
- }
- @media(max-width:800px){
-   #gioDashboardAgenda .gioAgendaGrid{min-width:760px!important}
-   #gioDashboardAgenda .gioAgendaDay{min-height:135px!important}
- }
- `;
- document.head.appendChild(s);
-}
-
-function improveHeaders(){
- const days=[...document.querySelectorAll('#gioDashboardAgenda .gioAgendaDay')];
- if(!days.length)return;
- days.forEach(day=>{
-   const b=day.querySelector(':scope > b');
-   if(!b)return;
-   const txt=(b.textContent||'').trim();
-   if(!txt)return;
-   // Keep existing date information, but make bare numeric/ISO headers more readable.
-   const iso=txt.match(/\b(20\d{2})-(\d{2})-(\d{2})\b/);
-   if(iso){
-     const d=new Date(`${iso[1]}-${iso[2]}-${iso[3]}T12:00:00`);
-     b.textContent=d.toLocaleDateString('nl-NL',{weekday:'short',day:'numeric',month:'short'});
-   }
- });
-}
-
-function run(){
- css();
- improveHeaders();
-}
-
-function hook(){
- const old=window.renderGioDashboardAgenda;
- if(typeof old==='function'&&!old.__readable044){
-   window.renderGioDashboardAgenda=function(){
-     const r=old.apply(this,arguments);
-     setTimeout(run,0);
-     return r;
-   };
-   window.renderGioDashboardAgenda.__readable044=true;
- }
- run();
-}
-
-function init(){
- hook();
- new MutationObserver(()=>run()).observe(document.body,{childList:true,subtree:true});
- try{localStorage.setItem('gioMobileBuild','DEV 044 - AGENDA READABLE')}catch(e){}
-}
-document.readyState==='loading'
- ? document.addEventListener('DOMContentLoaded',()=>setTimeout(init,1800))
- : setTimeout(init,1800);
-})();
     });
   }
 
@@ -516,4 +396,156 @@ function init(){
 document.readyState==='loading'
   ? document.addEventListener('DOMContentLoaded',()=>setTimeout(init,250))
   : setTimeout(init,250);
+})();
+
+/* DEV 045 - Agenda week definitief leesbaar */
+(function(){
+'use strict';
+
+function mondayOfCurrentWeek(){
+  const now=new Date();
+  now.setHours(12,0,0,0);
+  const day=(now.getDay()+6)%7;
+  now.setDate(now.getDate()-day);
+  return now;
+}
+
+function installStyle(){
+  if(document.getElementById('gioAgendaReadable045')) return;
+  const s=document.createElement('style');
+  s.id='gioAgendaReadable045';
+  s.textContent=`
+    #gioDashboardAgenda{width:100%;max-width:100%;overflow-x:auto!important;padding-bottom:6px}
+    #gioDashboardAgenda .gioAgendaGrid{
+      display:grid!important;
+      grid-template-columns:repeat(7,minmax(135px,1fr))!important;
+      gap:8px!important;
+      width:100%!important;
+      min-width:980px!important;
+    }
+    #gioDashboardAgenda .gioAgendaDay{
+      min-width:135px!important;
+      min-height:170px!important;
+      padding:0 8px 8px!important;
+      overflow:hidden!important;
+      background:#f8fafc!important;
+      border:1px solid #d1d5db!important;
+      border-radius:14px!important;
+      color:#111827!important;
+    }
+    #gioDashboardAgenda .gioAgendaHeader045{
+      display:block!important;
+      margin:0 -8px 8px!important;
+      padding:9px 8px!important;
+      background:#f4c400!important;
+      color:#111!important;
+      font-size:13px!important;
+      line-height:1.2!important;
+      font-weight:900!important;
+      border-radius:13px 13px 0 0!important;
+      white-space:nowrap!important;
+    }
+    #gioDashboardAgenda .gioAgendaDay > b{display:none!important}
+    #gioDashboardAgenda .gioEvent{
+      display:block!important;
+      box-sizing:border-box!important;
+      width:100%!important;
+      max-width:100%!important;
+      margin:5px 0!important;
+      padding:8px!important;
+      border-radius:9px!important;
+      border-left:5px solid #f4c400!important;
+      background:#172033!important;
+      color:#fff!important;
+      font-size:12px!important;
+      line-height:1.3!important;
+      font-weight:800!important;
+      white-space:normal!important;
+      overflow-wrap:anywhere!important;
+      overflow:hidden!important;
+    }
+    #gioDashboardAgenda .gioEvent,
+    #gioDashboardAgenda .gioEvent *,
+    #gioDashboardAgenda .gioEvent b,
+    #gioDashboardAgenda .gioEvent small{
+      color:#fff!important;
+      opacity:1!important;
+    }
+    #gioDashboardAgenda .gioEvent small{
+      display:block!important;
+      margin-top:3px!important;
+      font-size:10px!important;
+    }
+    #gioDashboardAgenda .gioEvent.late{background:#991b1b!important}
+    #gioDashboardAgenda .gioEvent.done{background:#166534!important}
+    @media(max-width:800px){
+      #gioDashboardAgenda .gioAgendaGrid{min-width:945px!important}
+      #gioDashboardAgenda .gioAgendaDay{min-width:130px!important}
+    }
+  `;
+  document.head.appendChild(s);
+}
+
+function rebuildHeaders(){
+  const mode=document.getElementById('gioAgendaMode')?.value||'week';
+  if(mode!=='week') return;
+
+  const days=[...document.querySelectorAll('#gioDashboardAgenda .gioAgendaDay')];
+  if(days.length!==7) return;
+
+  const monday=mondayOfCurrentWeek();
+
+  days.forEach((day,i)=>{
+    let h=day.querySelector('.gioAgendaHeader045');
+    if(!h){
+      h=document.createElement('div');
+      h.className='gioAgendaHeader045';
+      day.prepend(h);
+    }
+    const d=new Date(monday);
+    d.setDate(monday.getDate()+i);
+    h.textContent=d.toLocaleDateString('nl-NL',{
+      weekday:'short',
+      day:'numeric',
+      month:'short'
+    });
+  });
+}
+
+function apply(){
+  installStyle();
+  rebuildHeaders();
+}
+
+function hookRenderer(){
+  const old=window.renderGioDashboardAgenda;
+  if(typeof old==='function'&&!old.__dev045){
+    window.renderGioDashboardAgenda=function(){
+      const result=old.apply(this,arguments);
+      setTimeout(apply,0);
+      return result;
+    };
+    window.renderGioDashboardAgenda.__dev045=true;
+  }
+}
+
+function init(){
+  hookRenderer();
+  apply();
+
+  const box=document.getElementById('gioDashboardAgenda');
+  if(box){
+    new MutationObserver(()=>setTimeout(apply,0))
+      .observe(box,{childList:true,subtree:true});
+  }
+
+  document.getElementById('gioAgendaMode')
+    ?.addEventListener('change',()=>setTimeout(apply,0));
+
+  try{localStorage.setItem('gioMobileBuild','DEV 045 - AGENDA WEEK FIX')}catch(e){}
+}
+
+document.readyState==='loading'
+  ? document.addEventListener('DOMContentLoaded',()=>setTimeout(init,1800))
+  : setTimeout(init,1800);
 })();
