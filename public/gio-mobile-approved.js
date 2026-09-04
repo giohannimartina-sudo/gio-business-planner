@@ -598,3 +598,237 @@ function hook(){const old=window.renderGioDashboardAgenda;if(typeof old==='funct
 function init(){hook();ensureStyle();$('gioAgendaMode')?.addEventListener('change',()=>setTimeout(correctView,0));if(($('gioAgendaMode')?.value||'week')==='maand')renderMonth();try{localStorage.setItem('gioMobileBuild','DEV 046 - MONTH AGENDA')}catch(e){}}
 document.readyState==='loading'?document.addEventListener('DOMContentLoaded',()=>setTimeout(init,1900)):setTimeout(init,1900);
 })();
+/* DEV 047 - Maandagenda hard override met datum per kalenderdag */
+(function(){
+'use strict';
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({
+  '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+}[c]));
+
+let busy = false;
+
+function isoLocal(d){
+  const y=d.getFullYear();
+  const m=String(d.getMonth()+1).padStart(2,'0');
+  const day=String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
+
+function ensureStyle(){
+  if($('gioMonth047Style')) return;
+  const st=document.createElement('style');
+  st.id='gioMonth047Style';
+  st.textContent=`
+    #gioDashboardAgenda .gioMonth047Wrap{
+      width:100%;
+      overflow-x:auto;
+      padding-bottom:6px;
+    }
+    #gioDashboardAgenda .gioMonth047Title{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin:4px 0 10px;
+      color:#fff;
+      font-weight:900;
+      font-size:18px;
+    }
+    #gioDashboardAgenda .gioMonth047Grid{
+      display:grid;
+      grid-template-columns:repeat(7,minmax(135px,1fr));
+      gap:7px;
+      min-width:980px;
+    }
+    #gioDashboardAgenda .gioMonth047Week{
+      background:#f4c400;
+      color:#111;
+      font-weight:900;
+      text-align:center;
+      padding:8px 4px;
+      border-radius:8px;
+      text-transform:capitalize;
+    }
+    #gioDashboardAgenda .gioMonth047Day{
+      min-height:145px;
+      background:#f8fafc;
+      color:#111827;
+      border:1px solid #d1d5db;
+      border-radius:12px;
+      padding:0 7px 7px;
+      overflow:hidden;
+    }
+    #gioDashboardAgenda .gioMonth047Day.outside{
+      background:#e5e7eb;
+      opacity:.55;
+    }
+    #gioDashboardAgenda .gioMonth047Date{
+      margin:0 -7px 7px;
+      padding:8px;
+      background:#111827;
+      color:#fff;
+      font-size:13px;
+      line-height:1.15;
+      font-weight:900;
+      border-radius:11px 11px 0 0;
+    }
+    #gioDashboardAgenda .gioMonth047Day.today .gioMonth047Date{
+      background:#f4c400;
+      color:#111;
+    }
+    #gioDashboardAgenda .gioMonth047Event{
+      margin:5px 0;
+      padding:7px;
+      border-radius:8px;
+      border-left:5px solid #f4c400;
+      background:#172033;
+      color:#fff!important;
+      font-size:11px;
+      line-height:1.25;
+      font-weight:800;
+      white-space:normal;
+      overflow-wrap:anywhere;
+    }
+    #gioDashboardAgenda .gioMonth047Event *,
+    #gioDashboardAgenda .gioMonth047Event small{
+      color:#fff!important;
+      opacity:1!important;
+    }
+    #gioDashboardAgenda .gioMonth047Event small{
+      display:block;
+      margin-top:3px;
+      font-size:9px;
+      font-weight:700;
+    }
+    #gioDashboardAgenda .gioMonth047Empty{
+      font-size:10px;
+      color:#6b7280;
+    }
+    @media(max-width:800px){
+      #gioDashboardAgenda .gioMonth047Grid{
+        min-width:945px;
+        grid-template-columns:repeat(7,minmax(130px,1fr));
+      }
+    }
+  `;
+  document.head.appendChild(st);
+}
+
+function itemOnDate(x, iso){
+  const s=x.startdatum || x.datum || '';
+  const e=x.einddatum || s;
+  return !!s && s<=iso && e>=iso;
+}
+
+function eventsFor(iso){
+  return (window.data?.planning || [])
+    .filter(x => itemOnDate(x, iso))
+    .sort((a,b)=>{
+      const aa=String(a.starttijd||'');
+      const bb=String(b.starttijd||'');
+      return aa.localeCompare(bb);
+    });
+}
+
+function renderMonthHard(){
+  const mode=$('gioAgendaMode')?.value || 'week';
+  if(mode!=='maand') return;
+
+  const box=$('gioDashboardAgenda');
+  if(!box || busy) return;
+
+  busy=true;
+  ensureStyle();
+
+  const now=new Date();
+  now.setHours(12,0,0,0);
+
+  const y=now.getFullYear();
+  const m=now.getMonth();
+
+  const first=new Date(y,m,1,12);
+  const last=new Date(y,m+1,0,12);
+
+  const start=new Date(first);
+  start.setDate(start.getDate()-((start.getDay()+6)%7));
+
+  const end=new Date(last);
+  end.setDate(end.getDate()+(6-((end.getDay()+6)%7)));
+
+  const todayIso=isoLocal(now);
+  const weekdays=['ma','di','wo','do','vr','za','zo'];
+
+  let html=`<div class="gioMonth047Wrap">
+    <div class="gioMonth047Title">
+      <span>${first.toLocaleDateString('nl-NL',{month:'long',year:'numeric'})}</span>
+    </div>
+    <div class="gioMonth047Grid">
+      ${weekdays.map(w=>`<div class="gioMonth047Week">${w}</div>`).join('')}`;
+
+  for(let d=new Date(start); d<=end; d.setDate(d.getDate()+1)){
+    const iso=isoLocal(d);
+    const currentMonth=d.getMonth()===m;
+    const ev=eventsFor(iso);
+
+    html+=`<div class="gioMonth047Day ${currentMonth?'':'outside'} ${iso===todayIso?'today':''}">
+      <div class="gioMonth047Date">${d.toLocaleDateString('nl-NL',{
+        weekday:'short',day:'numeric',month:'short'
+      })}</div>
+      ${
+        ev.length
+        ? ev.map(x=>`<div class="gioMonth047Event">
+            ${x.starttijd ? esc(x.starttijd)+' ' : ''}${esc(x.project || x.klant || 'Planning')}
+            <small>${esc(x.klant || '')}${x.status ? ' • '+esc(x.status) : ''}</small>
+          </div>`).join('')
+        : '<div class="gioMonth047Empty">Geen planning</div>'
+      }
+    </div>`;
+  }
+
+  html+='</div></div>';
+  box.innerHTML=html;
+  busy=false;
+}
+
+function enforceMonth(){
+  if(($('gioAgendaMode')?.value || 'week')==='maand'){
+    setTimeout(renderMonthHard,0);
+    setTimeout(renderMonthHard,50);
+  }
+}
+
+function init(){
+  ensureStyle();
+
+  const mode=$('gioAgendaMode');
+  if(mode){
+    mode.addEventListener('change',()=>{
+      if(mode.value==='maand'){
+        setTimeout(renderMonthHard,0);
+        setTimeout(renderMonthHard,100);
+      }
+    }, true);
+  }
+
+  const box=$('gioDashboardAgenda');
+  if(box){
+    const obs=new MutationObserver(()=>{
+      if(busy) return;
+      if(($('gioAgendaMode')?.value || 'week')==='maand'){
+        const hasMonth=!!box.querySelector('.gioMonth047Grid');
+        if(!hasMonth) setTimeout(renderMonthHard,0);
+      }
+    });
+    obs.observe(box,{childList:true,subtree:true});
+  }
+
+  enforceMonth();
+  try{localStorage.setItem('gioMobileBuild','DEV 047 - MONTH HARD OVERRIDE')}catch(e){}
+}
+
+document.readyState==='loading'
+  ? document.addEventListener('DOMContentLoaded',()=>setTimeout(init,2000))
+  : setTimeout(init,2000);
+})();
