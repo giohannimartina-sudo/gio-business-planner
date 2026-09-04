@@ -549,3 +549,52 @@ document.readyState==='loading'
   ? document.addEventListener('DOMContentLoaded',()=>setTimeout(init,1800))
   : setTimeout(init,1800);
 })();
+
+/* DEV 046 - Maandagenda met echte datums */
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function isoLocal(d){const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');return `${y}-${m}-${day}`}
+function ensureStyle(){
+ if($('gioMonthAgenda046Style'))return;
+ const st=document.createElement('style');st.id='gioMonthAgenda046Style';st.textContent=`
+ #gioDashboardAgenda .gioMonth046{width:100%;overflow-x:auto;padding-bottom:6px}
+ #gioDashboardAgenda .gioMonth046Grid{display:grid;grid-template-columns:repeat(7,minmax(135px,1fr));gap:7px;min-width:980px}
+ #gioDashboardAgenda .gioMonth046Weekday{background:#f4c400;color:#111;font-weight:900;text-align:center;padding:8px 5px;border-radius:8px;text-transform:capitalize}
+ #gioDashboardAgenda .gioMonth046Day{min-height:150px;background:#f8fafc;color:#111827;border:1px solid #d1d5db;border-radius:12px;padding:0 7px 7px;overflow:hidden}
+ #gioDashboardAgenda .gioMonth046Day.other{background:#e5e7eb;opacity:.62}
+ #gioDashboardAgenda .gioMonth046Date{margin:0 -7px 7px;padding:7px 8px;background:#111827;color:#fff;font-weight:900;font-size:13px;border-radius:11px 11px 0 0}
+ #gioDashboardAgenda .gioMonth046Day.today .gioMonth046Date{background:#f4c400;color:#111}
+ #gioDashboardAgenda .gioMonth046Event{display:block;width:100%;margin:5px 0;padding:7px;border-radius:8px;border-left:5px solid #f4c400;background:#172033;color:#fff!important;font-size:11px;line-height:1.25;font-weight:800;white-space:normal;overflow-wrap:anywhere}
+ #gioDashboardAgenda .gioMonth046Event *{color:#fff!important}
+ #gioDashboardAgenda .gioMonth046Event small{display:block;margin-top:3px;font-size:9px;opacity:1}
+ #gioDashboardAgenda .gioMonth046Empty{color:#6b7280;font-size:10px}
+ @media(max-width:800px){#gioDashboardAgenda .gioMonth046Grid{min-width:945px;grid-template-columns:repeat(7,minmax(130px,1fr))}}
+ `;document.head.appendChild(st)
+}
+function itemCoversDate(x,iso){const s=x.startdatum||x.datum||'',e=x.einddatum||s;return !!s&&s<=iso&&e>=iso}
+function monthEventsFor(iso){return (window.data?.planning||[]).filter(x=>itemCoversDate(x,iso)).sort((a,b)=>String(a.starttijd||'').localeCompare(String(b.starttijd||'')))}
+function renderMonth(){
+ const box=$('gioDashboardAgenda');if(!box)return;
+ const now=new Date();now.setHours(12,0,0,0);const year=now.getFullYear(),month=now.getMonth();
+ const first=new Date(year,month,1,12),last=new Date(year,month+1,0,12);
+ const start=new Date(first);start.setDate(start.getDate()-((start.getDay()+6)%7));
+ const end=new Date(last);end.setDate(end.getDate()+(6-((end.getDay()+6)%7)));
+ const weekdays=['ma','di','wo','do','vr','za','zo'];
+ let html='<div class="gioMonth046"><div class="gioMonth046Grid">'+weekdays.map(d=>`<div class="gioMonth046Weekday">${d}</div>`).join('');
+ const todayIso=isoLocal(now);
+ for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
+   const iso=isoLocal(d),inMonth=d.getMonth()===month,events=monthEventsFor(iso);
+   html+=`<div class="gioMonth046Day ${inMonth?'':'other'} ${iso===todayIso?'today':''}">
+    <div class="gioMonth046Date">${d.toLocaleDateString('nl-NL',{weekday:'short',day:'numeric',month:'short'})}</div>
+    ${events.length?events.map(x=>`<div class="gioMonth046Event">${x.starttijd?esc(x.starttijd)+' ':''}${esc(x.project||x.klant||'Planning')}<small>${esc(x.klant||'')}${x.status?' • '+esc(x.status):''}</small></div>`).join(''):'<div class="gioMonth046Empty">Geen planning</div>'}
+   </div>`;
+ }
+ box.innerHTML=html+'</div></div>';
+}
+function correctView(){ensureStyle();if(($('gioAgendaMode')?.value||'week')==='maand')renderMonth()}
+function hook(){const old=window.renderGioDashboardAgenda;if(typeof old==='function'&&!old.__dev046){window.renderGioDashboardAgenda=function(){const r=old.apply(this,arguments);setTimeout(correctView,0);return r};window.renderGioDashboardAgenda.__dev046=true}}
+function init(){hook();ensureStyle();$('gioAgendaMode')?.addEventListener('change',()=>setTimeout(correctView,0));if(($('gioAgendaMode')?.value||'week')==='maand')renderMonth();try{localStorage.setItem('gioMobileBuild','DEV 046 - MONTH AGENDA')}catch(e){}}
+document.readyState==='loading'?document.addEventListener('DOMContentLoaded',()=>setTimeout(init,1900)):setTimeout(init,1900);
+})();
