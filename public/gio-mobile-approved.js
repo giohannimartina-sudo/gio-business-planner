@@ -82,6 +82,126 @@
     const date = document.getElementById('gioApprovedDate');
     if(date) date.textContent = d.toLocaleDateString('nl-NL',{
       weekday:'long',day:'numeric',month:'long',year:'numeric'
+
+      /* DEV 044 - Dashboard agenda week leesbaarheid */
+(function(){
+'use strict';
+
+function css(){
+ if(document.getElementById('gioAgendaReadability044'))return;
+ const s=document.createElement('style');
+ s.id='gioAgendaReadability044';
+ s.textContent=`
+ #gioDashboardAgenda{width:100%;max-width:100%;overflow:hidden}
+ #gioDashboardAgenda .gioAgendaGrid{
+   display:grid!important;
+   grid-template-columns:repeat(7,minmax(0,1fr))!important;
+   gap:8px!important;
+   width:100%!important;
+   min-width:0!important;
+ }
+ #gioDashboardAgenda .gioAgendaDay{
+   min-width:0!important;
+   min-height:150px!important;
+   padding:9px!important;
+   overflow:hidden!important;
+   background:#f8fafc!important;
+   color:#111827!important;
+   border:1px solid #d1d5db!important;
+ }
+ #gioDashboardAgenda .gioAgendaDay>b{
+   display:block!important;
+   min-height:38px!important;
+   padding-bottom:7px!important;
+   margin-bottom:7px!important;
+   border-bottom:1px solid #d1d5db!important;
+   color:#111827!important;
+   font-size:13px!important;
+   line-height:1.25!important;
+   font-weight:900!important;
+ }
+ #gioDashboardAgenda .gioEvent{
+   display:block!important;
+   width:100%!important;
+   max-width:100%!important;
+   margin:5px 0!important;
+   padding:7px 7px!important;
+   overflow:hidden!important;
+   white-space:normal!important;
+   overflow-wrap:anywhere!important;
+   line-height:1.25!important;
+   font-size:12px!important;
+   font-weight:800!important;
+   background:#172033!important;
+   color:#fff!important;
+   border-left:5px solid #f4c400!important;
+ }
+ #gioDashboardAgenda .gioEvent small{
+   display:block!important;
+   margin-top:3px!important;
+   color:#e5e7eb!important;
+   opacity:1!important;
+   font-size:10px!important;
+   font-weight:700!important;
+ }
+ #gioDashboardAgenda .gioEvent.late{background:#991b1b!important;color:#fff!important}
+ #gioDashboardAgenda .gioEvent.done{background:#166534!important;color:#fff!important}
+ @media(max-width:1100px){
+   #gioDashboardAgenda{overflow-x:auto!important;padding-bottom:6px}
+   #gioDashboardAgenda .gioAgendaGrid{min-width:840px!important}
+ }
+ @media(max-width:800px){
+   #gioDashboardAgenda .gioAgendaGrid{min-width:760px!important}
+   #gioDashboardAgenda .gioAgendaDay{min-height:135px!important}
+ }
+ `;
+ document.head.appendChild(s);
+}
+
+function improveHeaders(){
+ const days=[...document.querySelectorAll('#gioDashboardAgenda .gioAgendaDay')];
+ if(!days.length)return;
+ days.forEach(day=>{
+   const b=day.querySelector(':scope > b');
+   if(!b)return;
+   const txt=(b.textContent||'').trim();
+   if(!txt)return;
+   // Keep existing date information, but make bare numeric/ISO headers more readable.
+   const iso=txt.match(/\b(20\d{2})-(\d{2})-(\d{2})\b/);
+   if(iso){
+     const d=new Date(`${iso[1]}-${iso[2]}-${iso[3]}T12:00:00`);
+     b.textContent=d.toLocaleDateString('nl-NL',{weekday:'short',day:'numeric',month:'short'});
+   }
+ });
+}
+
+function run(){
+ css();
+ improveHeaders();
+}
+
+function hook(){
+ const old=window.renderGioDashboardAgenda;
+ if(typeof old==='function'&&!old.__readable044){
+   window.renderGioDashboardAgenda=function(){
+     const r=old.apply(this,arguments);
+     setTimeout(run,0);
+     return r;
+   };
+   window.renderGioDashboardAgenda.__readable044=true;
+ }
+ run();
+}
+
+function init(){
+ hook();
+ new MutationObserver(()=>run()).observe(document.body,{childList:true,subtree:true});
+ try{localStorage.setItem('gioMobileBuild','DEV 044 - AGENDA READABLE')}catch(e){}
+}
+document.readyState==='loading'
+ ? document.addEventListener('DOMContentLoaded',()=>setTimeout(init,1800))
+ : setTimeout(init,1800);
+})();
     });
   }
 
