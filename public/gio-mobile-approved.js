@@ -832,3 +832,142 @@ document.readyState==='loading'
   ? document.addEventListener('DOMContentLoaded',()=>setTimeout(init,2000))
   : setTimeout(init,2000);
 })();
+/* DEV 048 - Agenda maand stabilisatie: geen flikkeren */
+(function(){
+'use strict';
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({
+  '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+}[c]));
+
+let monthRendering = false;
+let lastMonthHtml = '';
+
+function isoLocal(d){
+  const y=d.getFullYear();
+  const m=String(d.getMonth()+1).padStart(2,'0');
+  const day=String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
+
+function itemOnDate(x, iso){
+  const s=x.startdatum || x.datum || '';
+  const e=x.einddatum || s;
+  return !!s && s<=iso && e>=iso;
+}
+
+function eventsFor(iso){
+  return (window.data?.planning || [])
+    .filter(x => itemOnDate(x, iso))
+    .sort((a,b)=>String(a.starttijd||'').localeCompare(String(b.starttijd||'')));
+}
+
+function buildMonthHtml(){
+  const now=new Date();
+  now.setHours(12,0,0,0);
+
+  const y=now.getFullYear();
+  const m=now.getMonth();
+
+  const first=new Date(y,m,1,12);
+  const last=new Date(y,m+1,0,12);
+
+  const start=new Date(first);
+  start.setDate(start.getDate()-((start.getDay()+6)%7));
+
+  const end=new Date(last);
+  end.setDate(end.getDate()+(6-((end.getDay()+6)%7)));
+
+  const todayIso=isoLocal(now);
+  const weekdays=['ma','di','wo','do','vr','za','zo'];
+
+  let html=`<div class="gioMonth047Wrap">
+    <div class="gioMonth047Title">
+      <span>${first.toLocaleDateString('nl-NL',{month:'long',year:'numeric'})}</span>
+    </div>
+    <div class="gioMonth047Grid">
+      ${weekdays.map(w=>`<div class="gioMonth047Week">${w}</div>`).join('')}`;
+
+  for(let d=new Date(start); d<=end; d.setDate(d.getDate()+1)){
+    const iso=isoLocal(d);
+    const currentMonth=d.getMonth()===m;
+    const ev=eventsFor(iso);
+
+    html+=`<div class="gioMonth047Day ${currentMonth?'':'outside'} ${iso===todayIso?'today':''}">
+      <div class="gioMonth047Date">${d.toLocaleDateString('nl-NL',{
+        weekday:'short',day:'numeric',month:'short'
+      })}</div>
+      ${
+        ev.length
+        ? ev.map(x=>`<div class="gioMonth047Event">
+            ${x.starttijd ? esc(x.starttijd)+' ' : ''}${esc(x.project || x.klant || 'Planning')}
+            <small>${esc(x.klant || '')}${x.status ? ' • '+esc(x.status) : ''}</small>
+          </div>`).join('')
+        : '<div class="gioMonth047Empty">Geen planning</div>'
+      }
+    </div>`;
+  }
+
+  return html+'</div></div>';
+}
+
+function renderMonthStable(force=false){
+  if(($('gioAgendaMode')?.value || 'week')!=='maand') return;
+
+  const box=$('gioDashboardAgenda');
+  if(!box || monthRendering) return;
+
+  const html=buildMonthHtml();
+  if(!force && html===lastMonthHtml && box.querySelector('.gioMonth047Grid')) return;
+
+  monthRendering=true;
+  lastMonthHtml=html;
+  box.innerHTML=html;
+  monthRendering=false;
+}
+
+function installStableRenderer(){
+  if(window.renderGioDashboardAgenda?.__dev048) return;
+
+  const previous = window.renderGioDashboardAgenda;
+  window.renderGioDashboardAgenda=function(){
+    const mode=$('gioAgendaMode')?.value || 'week';
+
+    if(mode==='maand'){
+      renderMonthStable();
+      return;
+    }
+
+    return previous?.apply(this,arguments);
+  };
+
+  window.renderGioDashboardAgenda.__dev048=true;
+}
+
+function init(){
+  installStableRenderer();
+
+  const mode=$('gioAgendaMode');
+  if(mode){
+    mode.onchange=function(){
+      if(mode.value==='maand'){
+        lastMonthHtml='';
+        renderMonthStable(true);
+      }else{
+        window.renderGioDashboardAgenda();
+      }
+    };
+  }
+
+  if((mode?.value || 'week')==='maand'){
+    renderMonthStable(true);
+  }
+
+  try{localStorage.setItem('gioMobileBuild','DEV 048 - AGENDA STABLE')}catch(e){}
+}
+
+document.readyState==='loading'
+  ? document.addEventListener('DOMContentLoaded',()=>setTimeout(init,2200))
+  : setTimeout(init,2200);
+})();
