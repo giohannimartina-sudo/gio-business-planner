@@ -195,14 +195,14 @@ export default function Home() {
 
     // Definitieve stabiele agenda wordt als laatste geladen.
     const agendaCss = doc.createElement('link');
-    agendaCss.id = 'gio-agenda-047-stable-css';
+    agendaCss.id = 'gio-agenda-pro-css';
     agendaCss.rel = 'stylesheet';
-    agendaCss.href = '/gio-agenda-047-stable.css?v=001';
+    agendaCss.href = '/gio-agenda-pro.css?v=100';
     doc.head.appendChild(agendaCss);
 
     const agendaFinal = doc.createElement('script');
-    agendaFinal.id = 'gio-agenda-047-stable-js';
-    agendaFinal.src = '/gio-agenda-047-stable.js?v=001';
+    agendaFinal.id = 'gio-agenda-pro-js';
+    agendaFinal.src = '/gio-agenda-pro.js?v=100';
     doc.body.appendChild(agendaFinal);
   }, []);
 
