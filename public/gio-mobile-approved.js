@@ -580,3 +580,209 @@ document.readyState==='loading'
   : init();
 
 })();
+
+/* DEV 052 - AGENDA DEFINITIEF FIXED: WEEK + MAAND + DESKTOP DRAG & DROP
+   VERVANGT DEV 045 EN DEV 051.
+   Eén renderer. Geen MutationObserver. Geen render-loop. */
+(function(){
+'use strict';
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({
+  '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+}[c]));
+
+let draggedId = '';
+
+function desktop(){ return window.matchMedia('(min-width:801px)').matches; }
+function isoLocal(d){ return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-'); }
+function fromIso(s){ return new Date(`${s}T12:00:00`); }
+function mondayOf(date){ const d=new Date(date); d.setHours(12,0,0,0); d.setDate(d.getDate()-((d.getDay()+6)%7)); return d; }
+function addDays(iso,n){ const d=fromIso(iso); d.setDate(d.getDate()+n); return isoLocal(d); }
+function dayDiff(a,b){ return Math.max(0,Math.round((fromIso(b)-fromIso(a))/86400000)); }
+function coversDate(x,iso){ const start=x.startdatum||x.datum||'', end=x.einddatum||start; return !!start && start<=iso && end>=iso; }
+function planningFor(iso){ return (window.data?.planning||[]).filter(x=>coversDate(x,iso)).sort((a,b)=>String(a.starttijd||'').localeCompare(String(b.starttijd||''))); }
+
+function ensureStyle(){
+  if($('gioAgenda052Style')) return;
+  const st=document.createElement('style');
+  st.id='gioAgenda052Style';
+  st.textContent=`
+    #gioDashboardAgenda{width:100%;max-width:100%;overflow-x:auto!important;padding-bottom:6px}
+    #gioDashboardAgenda .g52week,#gioDashboardAgenda .g52month{display:grid;grid-template-columns:repeat(7,minmax(135px,1fr));gap:8px;min-width:980px}
+    #gioDashboardAgenda .g52day{background:#f8fafc;color:#111827;border:1px solid #d1d5db;border-radius:14px;overflow:hidden}
+    #gioDashboardAgenda .g52week .g52day{min-height:165px;padding:0 8px 8px}
+    #gioDashboardAgenda .g52weekhead{margin:0 -8px 8px;padding:9px 8px;background:#f4c400;color:#111;font-size:13px;font-weight:900;border-radius:13px 13px 0 0;white-space:nowrap}
+    #gioDashboardAgenda .g52monthtitle{color:#fff;font-size:18px;font-weight:900;margin:4px 0 10px;text-transform:capitalize}
+    #gioDashboardAgenda .g52weekday{background:#f4c400;color:#111;font-weight:900;text-align:center;padding:8px 4px;border-radius:8px}
+    #gioDashboardAgenda .g52month .g52day{min-height:145px;padding:0 7px 7px}
+    #gioDashboardAgenda .g52day.outside{background:#e5e7eb;opacity:.55}
+    #gioDashboardAgenda .g52date{margin:0 -7px 7px;padding:8px;background:#111827;color:#fff;font-size:13px;font-weight:900;border-radius:11px 11px 0 0}
+    #gioDashboardAgenda .g52day.today .g52date{background:#f4c400;color:#111}
+    #gioDashboardAgenda .g52event{margin:5px 0;padding:8px;border-radius:9px;border-left:5px solid #f4c400;background:#172033;color:#fff!important;font-size:12px;line-height:1.3;font-weight:800;overflow-wrap:anywhere;user-select:none}
+    #gioDashboardAgenda .g52event *,#gioDashboardAgenda .g52event small{color:#fff!important;opacity:1!important}
+    #gioDashboardAgenda .g52event small{display:block;margin-top:3px;font-size:10px;font-weight:700}
+    #gioDashboardAgenda .g52empty{color:#6b7280;font-size:10px}
+    @media(min-width:801px){
+      #gioDashboardAgenda .g52event[draggable="true"]{cursor:grab}
+      #gioDashboardAgenda .g52event.dragging{opacity:.45!important;cursor:grabbing}
+      #gioDashboardAgenda .g52drop.over{outline:3px solid #f4c400;outline-offset:-3px;background:#fff8cf!important}
+    }
+    @media(max-width:800px){
+      #gioDashboardAgenda .g52week,#gioDashboardAgenda .g52month{min-width:945px;grid-template-columns:repeat(7,minmax(130px,1fr))}
+    }
+  `;
+  document.head.appendChild(st);
+}
+
+function eventHtml(x){
+  const title=x.project||x.klant||'Planning';
+  const meta=[x.klant||'',x.status||''].filter(Boolean).join(' • ');
+  const draggable=desktop()?` draggable="true" data-plan-id="${esc(x.id)}"`:'';
+  return `<div class="g52event"${draggable}>${x.starttijd?esc(x.starttijd)+' ':''}${esc(title)}${meta?`<small>${esc(meta)}</small>`:''}</div>`;
+}
+
+function renderWeek(box){
+  const monday=mondayOf(new Date());
+  let html='<div class="g52week">';
+  for(let i=0;i<7;i++){
+    const d=new Date(monday); d.setDate(monday.getDate()+i);
+    const iso=isoLocal(d), list=planningFor(iso);
+    html+=`<div class="g52day g52drop" data-date="${iso}">
+      <div class="g52weekhead">${d.toLocaleDateString('nl-NL',{weekday:'short',day:'numeric',month:'short'})}</div>
+      ${list.length?list.map(eventHtml).join(''):'<div class="g52empty">Geen planning</div>'}
+    </div>`;
+  }
+  box.innerHTML=html+'</div>';
+}
+
+function renderMonth(box){
+  const now=new Date(); now.setHours(12,0,0,0);
+  const year=now.getFullYear(), month=now.getMonth();
+  const first=new Date(year,month,1,12), last=new Date(year,month+1,0,12), start=mondayOf(first);
+  const end=new Date(last); end.setDate(end.getDate()+(6-((end.getDay()+6)%7)));
+  const today=isoLocal(now), weekdays=['ma','di','wo','do','vr','za','zo'];
+  let html=`<div class="g52monthtitle">${first.toLocaleDateString('nl-NL',{month:'long',year:'numeric'})}</div>
+  <div class="g52month">${weekdays.map(w=>`<div class="g52weekday">${w}</div>`).join('')}`;
+  for(let d=new Date(start); d<=end; d.setDate(d.getDate()+1)){
+    const iso=isoLocal(d), list=planningFor(iso);
+    html+=`<div class="g52day g52drop ${d.getMonth()===month?'':'outside'} ${iso===today?'today':''}" data-date="${iso}">
+      <div class="g52date">${d.toLocaleDateString('nl-NL',{weekday:'short',day:'numeric',month:'short'})}</div>
+      ${list.length?list.map(eventHtml).join(''):'<div class="g52empty">Geen planning</div>'}
+    </div>`;
+  }
+  box.innerHTML=html+'</div>';
+}
+
+function renderAgenda(){
+  const box=$('gioDashboardAgenda');
+  if(!box) return;
+  ensureStyle();
+  if(($('gioAgendaMode')?.value||'week')==='maand') renderMonth(box); else renderWeek(box);
+  bindDragDrop();
+}
+
+function movePlanning(id,targetDate){
+  const item=(window.data?.planning||[]).find(x=>String(x.id)===String(id));
+  if(!item) return;
+  const oldStart=item.startdatum||item.datum||'';
+  if(!oldStart||oldStart===targetDate) return;
+  const oldEnd=item.einddatum||oldStart;
+  const duration=dayDiff(oldStart,oldEnd);
+  item.startdatum=targetDate;
+  item.datum=targetDate;
+  item.einddatum=addDays(targetDate,duration);
+  if(!Array.isArray(item.historie)) item.historie=[];
+  item.historie.unshift({tijd:new Date().toISOString(),actie:`Planning verplaatst van ${oldStart} naar ${targetDate}`});
+  try{window.save?.();}catch(e){}
+  try{window.gioRenderPlanningPro?.();}catch(e){}
+  renderAgenda();
+  toast(`Planning verplaatst naar ${fromIso(targetDate).toLocaleDateString('nl-NL',{day:'numeric',month:'long'})}`);
+}
+
+function bindDragDrop(){
+  if(!desktop()) return;
+  document.querySelectorAll('#gioDashboardAgenda .g52event[draggable="true"]').forEach(el=>{
+    el.addEventListener('dragstart',e=>{
+      draggedId=el.dataset.planId||'';
+      el.classList.add('dragging');
+      e.dataTransfer.effectAllowed='move';
+      try{e.dataTransfer.setData('text/plain',draggedId);}catch(_){}
+    });
+    el.addEventListener('dragend',()=>{
+      draggedId='';
+      el.classList.remove('dragging');
+      document.querySelectorAll('#gioDashboardAgenda .g52drop.over').forEach(x=>x.classList.remove('over'));
+    });
+  });
+  document.querySelectorAll('#gioDashboardAgenda .g52drop').forEach(cell=>{
+    cell.addEventListener('dragover',e=>{
+      if(!draggedId) return;
+      e.preventDefault();
+      e.dataTransfer.dropEffect='move';
+      cell.classList.add('over');
+    });
+    cell.addEventListener('dragleave',()=>cell.classList.remove('over'));
+    cell.addEventListener('drop',e=>{
+      e.preventDefault();
+      cell.classList.remove('over');
+      const id=draggedId||e.dataTransfer.getData('text/plain');
+      if(id&&cell.dataset.date) movePlanning(id,cell.dataset.date);
+    });
+  });
+}
+
+function toast(text){
+  let t=$('gioAgenda052Toast');
+  if(!t){
+    t=document.createElement('div');
+    t.id='gioAgenda052Toast';
+    Object.assign(t.style,{position:'fixed',right:'22px',bottom:'22px',zIndex:'999999',background:'#111827',color:'#fff',border:'1px solid #f4c400',borderRadius:'12px',padding:'12px 16px',fontWeight:'800',boxShadow:'0 10px 30px #0006'});
+    document.body.appendChild(t);
+  }
+  t.textContent=text;
+  t.style.display='block';
+  clearTimeout(t._timer);
+  t._timer=setTimeout(()=>t.style.display='none',2200);
+}
+
+let gio052BootAttempts=0;
+let gio052Installed=false;
+
+function init(){
+  if(gio052Installed) return true;
+
+  const mode=$('gioAgendaMode');
+  const box=$('gioDashboardAgenda');
+  if(!mode || !box) return false;
+
+  gio052Installed=true;
+
+  const fresh=mode.cloneNode(true);
+  fresh.removeAttribute('onchange');
+  mode.replaceWith(fresh);
+
+  window.renderGioDashboardAgenda=renderAgenda;
+  fresh.addEventListener('change',renderAgenda);
+
+  renderAgenda();
+
+  try{localStorage.setItem('gioMobileBuild','DEV 052 - AGENDA DEFINITIEF FIXED');}catch(e){}
+  return true;
+}
+
+function boot(){
+  if(init()) return;
+  gio052BootAttempts++;
+  if(gio052BootAttempts < 40){
+    setTimeout(boot,250);
+  }else{
+    console.error('DEV 052: Agenda DOM niet gevonden.');
+  }
+}
+
+document.readyState==='loading'
+  ? document.addEventListener('DOMContentLoaded',boot,{once:true})
+  : boot();
+
+})();
