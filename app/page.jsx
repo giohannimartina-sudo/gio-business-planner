@@ -31,21 +31,25 @@ export default function Home() {
     personnel.src = '/gio-personnel-pro.js?v=032';
     personnel.defer = true;
     doc.body.appendChild(personnel);
+
     const menu = doc.createElement('script');
     menu.id='gio-smart-menu-js';
     menu.src='/gio-smart-menu.js?v=032';
     menu.defer=true;
     doc.body.appendChild(menu);
+
     const master=document.createElement('script');
     master.id='gio-master-dashboard-js';
     master.src='/gio-master-dashboard.js?v=032';
     master.defer=true;
     doc.body.appendChild(master);
+
     const dossier=document.createElement('script');
     dossier.id='gio-project-dossier-js';
     dossier.src='/gio-project-dossier.js?v=032';
     dossier.defer=true;
     doc.body.appendChild(dossier);
+
     const scanner=document.createElement('script');
     scanner.id='gio-receipt-scanner-js';
     scanner.src='/gio-receipt-scanner.js?v=032';
@@ -99,36 +103,43 @@ export default function Home() {
     guard.src = '/gio-data-guard.js?v=032';
     guard.defer = true;
     doc.body.appendChild(guard);
+
     const stock = doc.createElement('script');
     stock.id='gio-stock-pro-js';
     stock.src='/gio-stock-pro.js?v=032';
     stock.defer=true;
     doc.body.appendChild(stock);
+
     const expenses=document.createElement('script');
     expenses.id='gio-expenses-pro-js';
     expenses.src='/gio-expenses-pro.js?v=032';
     expenses.defer=true;
     doc.body.appendChild(expenses);
+
     const planningPro=document.createElement('script');
     planningPro.id='gio-planning-pro-js';
     planningPro.src='/gio-planning-pro.js?v=032';
     planningPro.defer=true;
     doc.body.appendChild(planningPro);
+
     const hoursPro=document.createElement('script');
     hoursPro.id='gio-hours-pro-js';
     hoursPro.src='/gio-hours-pro.js?v=032';
     hoursPro.defer=true;
     doc.body.appendChild(hoursPro);
+
     const materialsPro=document.createElement('script');
     materialsPro.id='gio-materials-pro-js';
     materialsPro.src='/gio-materials-pro.js?v=032';
     materialsPro.defer=true;
     doc.body.appendChild(materialsPro);
+
     const projectArchive=document.createElement('script');
     projectArchive.id='gio-project-archive-js';
     projectArchive.src='/gio-project-archive.js?v=032';
     projectArchive.defer=true;
     doc.body.appendChild(projectArchive);
+
     const analyticsPro=document.createElement('script');
     analyticsPro.id='gio-analytics-pro-js';
     analyticsPro.src='/gio-analytics-pro.js?v=032';
@@ -140,30 +151,36 @@ export default function Home() {
     remindersPro.src = '/gio-reminders-pro.js?v=032';
     remindersPro.defer = true;
     doc.body.appendChild(remindersPro);
+
     const worklinkMaster=document.createElement('script');
     worklinkMaster.src='/gio-worklink-master-pro.js?v=032';
     worklinkMaster.defer=true;
     doc.body.appendChild(worklinkMaster);
+
     const liveReady=document.createElement('script');
     liveReady.id='gio-live-readiness-pro-js';
     liveReady.src='/gio-live-readiness-pro.js?v=032';
     liveReady.defer=true;
     doc.body.appendChild(liveReady);
+
     const paymentsPro=document.createElement('script');
     paymentsPro.id='gio-payments-pro-js';
     paymentsPro.src='/gio-payments-pro.js?v=032';
     paymentsPro.defer=true;
     doc.body.appendChild(paymentsPro);
+
     const brandingPro=document.createElement('script');
     brandingPro.id='gio-branding-studio-pro-js';
     brandingPro.src='/gio-branding-studio-pro.js?v=032';
     brandingPro.defer=true;
     doc.body.appendChild(brandingPro);
+
     const todoAppointmentsPro=document.createElement('script');
     todoAppointmentsPro.id='gio-todo-appointments-pro-js';
     todoAppointmentsPro.src='/gio-todo-appointments-pro.js?v=032';
     todoAppointmentsPro.defer=true;
     doc.body.appendChild(todoAppointmentsPro);
+
     const todoFix=document.createElement('script');
     todoFix.id='gio-todo-visible-fix-js';
     todoFix.src='/gio-todo-visible-fix.js?v=035';
@@ -176,22 +193,17 @@ export default function Home() {
     cloudPro.defer=true;
     doc.body.appendChild(cloudPro);
 
+    // Definitieve stabiele agenda wordt als laatste geladen.
+    const agendaCss = doc.createElement('link');
+    agendaCss.id = 'gio-agenda-stable-final-css';
+    agendaCss.rel = 'stylesheet';
+    agendaCss.href = '/gio-agenda-stable-final.css?v=001';
+    doc.head.appendChild(agendaCss);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    const agendaFinal = doc.createElement('script');
+    agendaFinal.id = 'gio-agenda-stable-final-js';
+    agendaFinal.src = '/gio-agenda-stable-final.js?v=001';
+    doc.body.appendChild(agendaFinal);
   }, []);
 
   return (

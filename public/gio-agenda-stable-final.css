@@ -1,0 +1,138 @@
+/* GIO Agenda Stable Final */
+#gioDashboardAgenda{
+  width:100%;
+  max-width:100%;
+  overflow-x:auto!important;
+  padding-bottom:6px;
+}
+
+#gioDashboardAgenda .gioAgendaFinalWeek,
+#gioDashboardAgenda .gioAgendaFinalMonth{
+  display:grid!important;
+  grid-template-columns:repeat(7,minmax(135px,1fr))!important;
+  gap:8px!important;
+  min-width:980px!important;
+  margin-top:12px!important;
+}
+
+#gioDashboardAgenda .gioAgendaFinalDay{
+  display:block!important;
+  background:#f8fafc!important;
+  color:#111827!important;
+  border:1px solid #d1d5db!important;
+  border-radius:14px!important;
+  overflow:hidden!important;
+  box-shadow:none!important;
+}
+
+#gioDashboardAgenda .gioAgendaFinalWeek .gioAgendaFinalDay{
+  min-height:165px!important;
+  padding:0 8px 8px!important;
+}
+
+#gioDashboardAgenda .gioAgendaFinalHead{
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  margin:0 -8px 8px!important;
+  padding:9px 8px!important;
+  background:#f4c400!important;
+  color:#111!important;
+  font-size:13px!important;
+  line-height:1.2!important;
+  font-weight:900!important;
+  border-radius:13px 13px 0 0!important;
+  white-space:nowrap!important;
+}
+
+#gioDashboardAgenda .gioAgendaFinalMonthTitle{
+  display:block!important;
+  color:#fff!important;
+  font-size:18px!important;
+  line-height:1.25!important;
+  font-weight:900!important;
+  margin:4px 0 10px!important;
+  text-transform:capitalize!important;
+}
+
+#gioDashboardAgenda .gioAgendaFinalWeekday{
+  display:block!important;
+  background:#f4c400!important;
+  color:#111!important;
+  font-weight:900!important;
+  text-align:center!important;
+  padding:8px 4px!important;
+  border-radius:8px!important;
+}
+
+#gioDashboardAgenda .gioAgendaFinalMonth .gioAgendaFinalDay{
+  min-height:145px!important;
+  padding:0 7px 7px!important;
+}
+
+#gioDashboardAgenda .gioAgendaFinalDay.outside{
+  background:#e5e7eb!important;
+  opacity:.58!important;
+}
+
+#gioDashboardAgenda .gioAgendaFinalDate{
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  margin:0 -7px 7px!important;
+  padding:8px!important;
+  background:#111827!important;
+  color:#fff!important;
+  font-size:13px!important;
+  line-height:1.2!important;
+  font-weight:900!important;
+  border-radius:11px 11px 0 0!important;
+}
+
+#gioDashboardAgenda .gioAgendaFinalDay.today .gioAgendaFinalDate{
+  background:#f4c400!important;
+  color:#111!important;
+}
+
+#gioDashboardAgenda .gioAgendaFinalEvent{
+  display:block!important;
+  box-sizing:border-box!important;
+  width:100%!important;
+  margin:5px 0!important;
+  padding:8px!important;
+  border-radius:9px!important;
+  border-left:5px solid #f4c400!important;
+  background:#172033!important;
+  color:#fff!important;
+  font-size:12px!important;
+  line-height:1.3!important;
+  font-weight:800!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  overflow:hidden!important;
+}
+
+#gioDashboardAgenda .gioAgendaFinalEvent *,
+#gioDashboardAgenda .gioAgendaFinalEvent small{
+  color:#fff!important;
+  opacity:1!important;
+}
+
+#gioDashboardAgenda .gioAgendaFinalEvent.done{
+  background:#15803d!important;
+}
+
+#gioDashboardAgenda .gioAgendaFinalEmpty{
+  display:block!important;
+  color:#4b5563!important;
+  font-size:11px!important;
+  padding:3px 0!important;
+}
+
+@media(max-width:800px){
+  #gioDashboardAgenda .gioAgendaFinalWeek,
+  #gioDashboardAgenda .gioAgendaFinalMonth{
+    min-width:945px!important;
+    grid-template-columns:repeat(7,minmax(130px,1fr))!important;
+  }
+}
