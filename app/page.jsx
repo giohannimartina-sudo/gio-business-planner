@@ -192,6 +192,23 @@ export default function Home() {
     cloudPro.src='/gio-cloud-sync-pro.js?v=032';
     cloudPro.defer=true;
     doc.body.appendChild(cloudPro);
+
+    // Agenda PRO wordt bewust PAS als laatste overgenomen.
+    // Dit voorkomt dat oudere dynamisch geladen modules de agenda daarna terugtekenen.
+    window.setTimeout(() => {
+      if (doc.getElementById('gio-agenda-takeover-js')) return;
+
+      const agendaCss = doc.createElement('link');
+      agendaCss.id = 'gio-agenda-takeover-css';
+      agendaCss.rel = 'stylesheet';
+      agendaCss.href = '/gio-agenda-takeover.css?v=100';
+      doc.head.appendChild(agendaCss);
+
+      const agenda = doc.createElement('script');
+      agenda.id = 'gio-agenda-takeover-js';
+      agenda.src = '/gio-agenda-takeover.js?v=100';
+      doc.body.appendChild(agenda);
+    }, 5000);
   }, []);
 
   return (
