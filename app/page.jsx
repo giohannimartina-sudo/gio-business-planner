@@ -206,6 +206,14 @@ export default function Home() {
       agenda.src = '/gio-agenda-vertical-pro.js?v=001';
       doc.body.appendChild(agenda);
     }, 5000);
+
+    window.setTimeout(() => {
+      if (doc.getElementById('gio-gmartina-documents-pro-js')) return;
+      const gm = doc.createElement('script');
+      gm.id = 'gio-gmartina-documents-pro-js';
+      gm.src = '/gio-gmartina-documents-pro.js?v=001';
+      doc.body.appendChild(gm);
+    }, 5600);
   }, []);
 
   return (
