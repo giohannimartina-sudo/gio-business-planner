@@ -214,6 +214,15 @@ export default function Home() {
       gm.src = '/gio-gmartina-documents-pro.js?v=003';
       doc.body.appendChild(gm);
     }, 5600);
+
+    // AI Offerte Assistent PRO - testmodule
+    window.setTimeout(() => {
+      if (doc.getElementById('gio-ai-offerte-assistent-js')) return;
+      const aiOffer = doc.createElement('script');
+      aiOffer.id = 'gio-ai-offerte-assistent-js';
+      aiOffer.src = '/gio-ai-offerte-assistent.js?v=001';
+      doc.body.appendChild(aiOffer);
+    }, 6100);
   }, []);
 
   return (
