@@ -211,7 +211,7 @@ export default function Home() {
       if (doc.getElementById('gio-gmartina-documents-pro-js')) return;
       const gm = doc.createElement('script');
       gm.id = 'gio-gmartina-documents-pro-js';
-      gm.src = '/gio-gmartina-documents-pro.js?v=002';
+      gm.src = '/gio-gmartina-documents-pro.js?v=003';
       doc.body.appendChild(gm);
     }, 5600);
   }, []);
