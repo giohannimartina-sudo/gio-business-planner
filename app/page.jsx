@@ -241,6 +241,15 @@ export default function Home() {
       stability.src = '/gio-stability-live-ready-004.js?v=004';
       doc.body.appendChild(stability);
     }, 7100);
+
+    // Definitieve automatische Live Ready controle
+    window.setTimeout(() => {
+      if (doc.getElementById('gio-final-live-test-005-js')) return;
+      const finalTest = doc.createElement('script');
+      finalTest.id = 'gio-final-live-test-005-js';
+      finalTest.src = '/gio-final-live-test-005.js?v=005';
+      doc.body.appendChild(finalTest);
+    }, 7600);
   }, []);
 
   return (
