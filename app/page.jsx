@@ -223,6 +223,15 @@ export default function Home() {
       aiOffer.src = '/gio-ai-offerte-assistent.js?v=002';
       doc.body.appendChild(aiOffer);
     }, 6100);
+
+    // Google Maps Routes voor KM Registratie PRO
+    window.setTimeout(() => {
+      if (doc.getElementById('gio-km-routes-pro-js')) return;
+      const kmRoutes = doc.createElement('script');
+      kmRoutes.id = 'gio-km-routes-pro-js';
+      kmRoutes.src = '/gio-km-routes-pro.js?v=003';
+      doc.body.appendChild(kmRoutes);
+    }, 6600);
   }, []);
 
   return (
