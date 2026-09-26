@@ -232,6 +232,15 @@ export default function Home() {
       kmRoutes.src = '/gio-km-routes-pro.js?v=003';
       doc.body.appendChild(kmRoutes);
     }, 6600);
+
+    // Laatste stabiliteitslaag: facturen/betalingen + integriteitscontrole
+    window.setTimeout(() => {
+      if (doc.getElementById('gio-stability-live-ready-004-js')) return;
+      const stability = doc.createElement('script');
+      stability.id = 'gio-stability-live-ready-004-js';
+      stability.src = '/gio-stability-live-ready-004.js?v=004';
+      doc.body.appendChild(stability);
+    }, 7100);
   }, []);
 
   return (
