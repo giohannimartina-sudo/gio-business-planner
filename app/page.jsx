@@ -220,7 +220,7 @@ export default function Home() {
       if (doc.getElementById('gio-ai-offerte-assistent-js')) return;
       const aiOffer = doc.createElement('script');
       aiOffer.id = 'gio-ai-offerte-assistent-js';
-      aiOffer.src = '/gio-ai-offerte-assistent.js?v=001';
+      aiOffer.src = '/gio-ai-offerte-assistent.js?v=002';
       doc.body.appendChild(aiOffer);
     }, 6100);
   }, []);

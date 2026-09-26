@@ -2,99 +2,42 @@
 'use strict';
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const eur=v=>new Intl.NumberFormat('nl-NL',{style:'currency',currency:'EUR'}).format(+v||0);
-let draft={regels:[],materialen:[],uitgangspunten:[],titel:'',werklocatie:'',werkduur:''};
-
-function uid(){return Math.random().toString(36).slice(2,8)+Date.now().toString(36).slice(-4)}
-function number(s){return +(String(s||'').replace(',','.'))||0}
-function line(desc,aantal,eenheid,prijs,btw=21){return{id:uid(),omschrijving:desc,aantal:number(aantal),eenheid,prijs:number(prijs),btw}}
-function material(desc,qty,amount,btw=21){return{id:uid(),omschrijving:desc,hoeveelheid:qty,bedrag:number(amount),btw}}
-function totals(){
- let ex=0,tax=0;
- draft.regels.forEach(x=>{const b=x.aantal*x.prijs;ex+=b;tax+=b*x.btw/100});
- draft.materialen.forEach(x=>{ex+=x.bedrag;tax+=x.bedrag*x.btw/100});
- return{ex,tax,total:ex+tax}
+let msgs=[],draft=null,busy=false;
+function ctx(){const klant=$('gioOfferClient')?.value||'',project=$('gioOfferProject')?.value||'',k=(data?.klanten||[]).find(x=>x.naam===klant)||{};return{klant,project,adres:k.adres||'',plaats:k.plaats||'',uurloon:data?.uurloon||35}}
+function render(){const b=$('gioAiChatMessages');if(!b)return;b.innerHTML=msgs.map(m=>`<div class="gioChatMsg ${m.role}"><b>${m.role==='user'?'Jij':'ChatGPT'}</b><div>${esc(m.content).replace(/\\n/g,'<br>')}</div></div>`).join('');b.scrollTop=b.scrollHeight;const p=$('gioAiPlace');if(p)p.disabled=!draft}
+async function send(){
+ if(busy)return;const i=$('gioAiInput'),v=i?.value.trim();if(!v)return;
+ msgs.push({role:'user',content:v});i.value='';render();busy=true;const btn=$('gioAiSend');if(btn){btn.disabled=true;btn.textContent='ChatGPT denkt…'}
+ try{const r=await fetch('/api/offerte-ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:msgs,context:ctx()})});const j=await r.json();if(!r.ok)throw new Error(j.error+(j.detail?' — '+j.detail:''));msgs.push({role:'assistant',content:j.reply||'Concept bijgewerkt.'});if(j.offerDraft)draft=j.offerDraft}
+ catch(e){msgs.push({role:'assistant',content:'Er ging iets mis: '+e.message})}
+ finally{busy=false;if(btn){btn.disabled=false;btn.textContent='Verstuur'}render()}
 }
-function parse(text){
- const t=text.toLowerCase().replace(/€/g,' euro ');
- const m2=(t.match(/(\d+(?:[.,]\d+)?)\s*m[²2]/)||[])[1];
- const meter=(t.match(/(\d+(?:[.,]\d+)?)\s*(?:strekkende\s*)?m(?:eter)?\b/)||[])[1];
- const priceM2=(t.match(/(?:€|euro)?\s*(\d+(?:[.,]\d+)?)\s*(?:per|\/)\s*m[²2]/)||[])[1];
- const city=(text.match(/\b(?:in|te)\s+([A-ZÀ-Ý][A-Za-zÀ-ÿ-]+)(?:[,.]|$)/)||[])[1];
-
- draft={regels:[],materialen:[],uitgangspunten:[],titel:'Werkzaamheden',werklocatie:city||'',werkduur:''};
-
- if(t.includes('laminaat')){
-   draft.titel='Laminaatvloer';
-   if(m2) draft.regels.push(line('Laminaat leggen',m2,'m²',priceM2||14.50));
- }
- if(t.includes('ondervloer')&&m2) draft.regels.push(line('Ondervloer leggen',m2,'m²',2.50));
- if((t.includes('plint')||t.includes('plinten'))&&meter) draft.regels.push(line('Hoge plinten monteren',meter,'m',6.50));
- if(t.includes('afkit')&&meter) draft.regels.push(line('Hoge plinten afkitten',meter,'m',2.00));
- if(t.includes('rijkost')||t.includes('reiskost')) draft.regels.push(line('Rijkosten',1,'vast',30));
- if(t.includes('airless')||t.includes('spuiten')){
-   draft.titel='Airless spuitwerk';
-   if(m2) draft.regels.push(line('Wanden airless spuiten – 2 lagen',m2,'m²',10.50));
- }
- if(t.includes('plint')) draft.materialen.push(material('Plinten / afwerking','richtbudget',150));
- if(t.includes('kit')) draft.materialen.push(material('Kit / kleinmateriaal','richtbudget',45));
-
- if(!draft.regels.length){
-   draft.regels.push(line('Arbeid / werkzaamheden',1,'vast',0));
- }
- draft.uitgangspunten=[
-   'De calculatie is gebaseerd op de opgegeven hoeveelheden en werkzaamheden.',
-   'Meerwerk en niet opgenomen werkzaamheden worden vooraf besproken.',
-   'Definitieve materiaalkeuze kan het materiaalbedrag wijzigen.'
- ];
- render();
-}
-function render(){
- const b=$('gioAiOfferDraft');if(!b)return;
- const t=totals();
- b.innerHTML=`<div class="gioAiOfferSummary"><b>${esc(draft.titel||'Concept')}</b><span>Concept totaal: ${eur(t.total)}</span></div>
- <h4>Werkzaamheden</h4>${draft.regels.map((x,i)=>`<div class="gioAiRow"><input value="${esc(x.omschrijving)}" oninput="gioAiEditLine(${i},'omschrijving',this.value)"><input type="number" step=".01" value="${x.aantal}" oninput="gioAiEditLine(${i},'aantal',this.value)"><input value="${esc(x.eenheid)}" oninput="gioAiEditLine(${i},'eenheid',this.value)"><input type="number" step=".01" value="${x.prijs}" oninput="gioAiEditLine(${i},'prijs',this.value)"><button onclick="gioAiDeleteLine(${i})">✕</button></div>`).join('')}
- <button class="btn2" onclick="gioAiAddLine()">+ Werkregel</button>
- <h4>Materialen</h4>${draft.materialen.map((x,i)=>`<div class="gioAiMat"><input value="${esc(x.omschrijving)}" oninput="gioAiEditMat(${i},'omschrijving',this.value)"><input value="${esc(x.hoeveelheid)}" oninput="gioAiEditMat(${i},'hoeveelheid',this.value)"><input type="number" step=".01" value="${x.bedrag}" oninput="gioAiEditMat(${i},'bedrag',this.value)"><button onclick="gioAiDeleteMat(${i})">✕</button></div>`).join('')}
- <button class="btn2" onclick="gioAiAddMat()">+ Materiaal</button>
- <h4>Uitgangspunten</h4><textarea id="gioAiTerms">${esc(draft.uitgangspunten.join('\n'))}</textarea>
- <div class="gioAiTotal"><span>Excl. BTW ${eur(t.ex)}</span><span>BTW ${eur(t.tax)}</span><b>Totaal ${eur(t.total)}</b></div>
- <div class="gioAiActions"><button class="btn" onclick="gioAiPlaceOffer()">✨ Plaats in offerte</button><button class="btn2" onclick="gioAiClear()">Leegmaken</button></div>`;
-}
-window.gioAiEditLine=(i,k,v)=>{draft.regels[i][k]=['omschrijving','eenheid'].includes(k)?v:number(v);render()}
-window.gioAiDeleteLine=i=>{draft.regels.splice(i,1);render()}
-window.gioAiAddLine=()=>{draft.regels.push(line('',1,'st',0));render()}
-window.gioAiEditMat=(i,k,v)=>{draft.materialen[i][k]=['omschrijving','hoeveelheid'].includes(k)?v:number(v);render()}
-window.gioAiDeleteMat=i=>{draft.materialen.splice(i,1);render()}
-window.gioAiAddMat=()=>{draft.materialen.push(material('','',0));render()}
-window.gioAiClear=()=>{draft={regels:[],materialen:[],uitgangspunten:[],titel:'',werklocatie:'',werkduur:''};$('gioAiPrompt').value='';render()}
-window.gioAiBuild=()=>{const text=$('gioAiPrompt')?.value.trim();if(!text)return alert('Beschrijf eerst de klus.');parse(text)}
-window.gioAiPlaceOffer=()=>{
- if(typeof window.gioNewOffer!=='function')return alert('Offerte PRO is nog niet geladen.');
- window.gioNewOffer();
+function place(){
+ if(!draft)return alert('Maak eerst samen met ChatGPT een concept.');
+ if(typeof gioNewOffer!=='function')return alert('Offerte PRO is niet geladen.');
+ gioNewOffer();
  setTimeout(()=>{
-   if($('gioOfferTitle'))$('gioOfferTitle').value=draft.titel||'Werkzaamheden';
-   if($('gioOfferIntro'))$('gioOfferIntro').value='Offerte samengesteld met de Offerte Assistent. Controleer alle gegevens voor verzending.';
-   if($('gioOfferLocation'))$('gioOfferLocation').value=draft.werklocatie||'';
-   if($('gioOfferTerms'))$('gioOfferTerms').value=$('gioAiTerms')?.value||draft.uitgangspunten.join('\n');
-   window.__gioAiOfferDraft=JSON.parse(JSON.stringify(draft));
-   alert('Concept is klaargezet in Offerte PRO. Controleer klant, project, regels en bedragen voordat je opslaat.');
-   $('gioOfferForm')?.scrollIntoView({behavior:'smooth',block:'start'});
- },80);
-};
-
-function inject(){
- const form=$('gioOfferForm');if(!form||$('gioAiOfferAssistant'))return false;
- const card=document.createElement('div');card.id='gioAiOfferAssistant';card.className='card gioAiCard';
- card.innerHTML=`<h2>✨ AI Offerte Assistent PRO <small style="font-size:12px">TEST</small></h2>
- <p>Beschrijf de klus zoals je hem aan mij zou uitleggen. De assistent maakt eerst een controleerbaar concept.</p>
- <textarea id="gioAiPrompt" rows="5" placeholder="Bijv. 40 m² laminaat leggen, ondervloer, 30 meter plinten monteren en afkitten, rijkosten naar Gouda..."></textarea>
- <div class="gioAiActions"><button class="btn" onclick="gioAiBuild()">✨ Maak concept</button></div><div id="gioAiOfferDraft"></div>`;
- form.parentNode.insertBefore(card,form);
- const st=document.createElement('style');st.textContent=`
- .gioAiCard{border:1px solid #c99a2e!important}.gioAiCard h2{color:#f4c400}.gioAiRow{display:grid;grid-template-columns:2fr .6fr .6fr .8fr 40px;gap:6px;margin:6px 0}.gioAiMat{display:grid;grid-template-columns:2fr 1fr .8fr 40px;gap:6px;margin:6px 0}.gioAiOfferSummary,.gioAiTotal,.gioAiActions{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin:10px 0}.gioAiTotal{padding:10px;border-top:1px solid #c99a2e;border-bottom:1px solid #c99a2e}@media(max-width:800px){.gioAiRow,.gioAiMat{grid-template-columns:1fr 1fr}}`;
- document.head.appendChild(st);render();return true;
+  if($('gioOfferTitle'))$('gioOfferTitle').value=draft.title||'Werkzaamheden';
+  if($('gioOfferIntro'))$('gioOfferIntro').value=draft.intro||'';
+  if($('gioOfferLocation'))$('gioOfferLocation').value=draft.workLocation||'';
+  if($('gioOfferDuration'))$('gioOfferDuration').value=draft.duration||'';
+  if($('gioOfferTerms'))$('gioOfferTerms').value=(draft.assumptions||[]).join('\n');
+  window.__gioChatGPTOfferDraft=JSON.parse(JSON.stringify(draft));
+  const n=document.createElement('div');n.className='gioAiNotice';n.innerHTML='<b>✨ ChatGPT-concept klaar.</b> Controleer alle werkzaamheden, materialen, tarieven, BTW en klantgegevens vóór opslaan of exporteren.';$('gioOfferForm')?.prepend(n);
+  alert('Concept staat klaar in Offerte PRO. Controleer alles voordat je opslaat.');
+  $('gioOfferForm')?.scrollIntoView({behavior:'smooth',block:'start'});
+ },120)
 }
-let tries=0;(function boot(){if(inject())return;if(++tries<50)setTimeout(boot,250)})();
-try{localStorage.setItem('gioAiOfferBuild','AI OFFERTE ASSISTENT TEST 001')}catch(e){}
+function inject(){
+ const old=$('gioAiOfferAssistant');if(old)old.remove();
+ const f=$('gioOfferForm');if(!f||$('gioChatGPTOffer'))return false;
+ const c=document.createElement('div');c.id='gioChatGPTOffer';c.className='card gioChatCard';
+ c.innerHTML=`<div class="gioChatHead"><div><h2>✨ ChatGPT Offerte & Calculatie Assistent PRO</h2><small>Bespreek de klus zoals je dat in ChatGPT doet.</small></div><button class="btn2" onclick="gioAiNew()">Nieuw gesprek</button></div><div id="gioAiChatMessages" class="gioChatMessages"></div><div class="gioChatCompose"><textarea id="gioAiInput" rows="3" placeholder="Bijv. Ik moet 40 m² laminaat leggen in Gouda. Help mij de klus calculeren."></textarea><button id="gioAiSend" class="btn" onclick="gioAiSend()">Verstuur</button></div><div class="gioChatActions"><button id="gioAiPlace" class="btn" onclick="gioAiPlace()" disabled>✨ Plaats in offerte</button></div>`;
+ f.parentNode.insertBefore(c,f);
+ const st=document.createElement('style');st.textContent=`.gioChatCard{border:1px solid #c99a2e!important}.gioChatHead,.gioChatActions{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.gioChatHead h2,.gioChatMsg b{color:#f4c400}.gioChatMessages{max-height:430px;overflow:auto;background:#0c0e12;border-radius:12px;padding:8px;margin:12px 0}.gioChatMsg{padding:10px 12px;margin:7px 0;border-radius:12px;line-height:1.45}.gioChatMsg.user{background:#252a33;margin-left:12%}.gioChatMsg.assistant{background:#151922;border-left:3px solid #c99a2e;margin-right:8%}.gioChatCompose{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end}.gioAiNotice{background:#fff5c9;color:#111;border:1px solid #c99a2e;padding:10px;border-radius:9px;margin-bottom:10px}@media(max-width:800px){.gioChatCompose{grid-template-columns:1fr}.gioChatMsg.user,.gioChatMsg.assistant{margin-left:0;margin-right:0}}`;document.head.appendChild(st);
+ msgs=[{role:'assistant',content:'Vertel me over de klus. Ik denk met je mee over werkzaamheden, materiaal, hoeveelheden, tarieven, rijkosten en voorwaarden. We maken samen eerst een calculatie; jij bepaalt wanneer hij klaar is voor de offerte.'}];render();return true
+}
+window.gioAiSend=send;window.gioAiPlace=place;window.gioAiNew=()=>{msgs=[];draft=null;msgs.push({role:'assistant',content:'Nieuw gesprek gestart. Vertel me over de klus.'});render()};
+document.addEventListener('keydown',e=>{if(e.target?.id==='gioAiInput'&&e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}});
+let n=0;(function boot(){if(inject())return;if(++n<60)setTimeout(boot,250)})();
 })();
