@@ -250,6 +250,15 @@ export default function Home() {
       finalTest.src = '/gio-final-live-test-005.js?v=005';
       doc.body.appendChild(finalTest);
     }, 7600);
+
+    // Veilige compatibiliteitsimport voor bestaande/live MASTER-backups
+    window.setTimeout(() => {
+      if (doc.getElementById('gio-safe-master-import-006-js')) return;
+      const safeImport = doc.createElement('script');
+      safeImport.id = 'gio-safe-master-import-006-js';
+      safeImport.src = '/gio-safe-master-import-006.js?v=006';
+      doc.body.appendChild(safeImport);
+    }, 8100);
   }, []);
 
   return (
