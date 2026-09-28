@@ -1,0 +1,28 @@
+
+/* GIO Agenda Verticaal PRO — gebaseerd op aangeleverde Excel maandkalender */
+#gioDashboardAgenda{width:100%;overflow:auto!important;padding-bottom:8px}
+#gioDashboardAgenda .gvToolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:4px 0 12px}
+#gioDashboardAgenda .gvTitle{font-size:20px;font-weight:900;color:#fff;text-transform:capitalize}
+#gioDashboardAgenda .gvNav{display:flex;gap:7px}
+#gioDashboardAgenda .gvNav button{border:1px solid #f4c400;background:#111827;color:#fff;border-radius:9px;padding:8px 11px;font-weight:900;cursor:pointer}
+#gioDashboardAgenda .gvNav button:hover{background:#f4c400;color:#111}
+
+#gioDashboardAgenda .gvTable{width:100%!important;min-width:1050px!important;border-collapse:separate!important;border-spacing:4px!important;background:transparent!important;table-layout:fixed!important}
+#gioDashboardAgenda .gvTable th{background:#f4c400!important;color:#111!important;border:0!important;border-radius:8px!important;padding:10px 7px!important;font-size:12px!important;text-align:center!important;font-weight:900!important}
+#gioDashboardAgenda .gvTable th:first-child{width:78px!important}
+#gioDashboardAgenda .gvTable td{background:#f8fafc!important;color:#111827!important;border:1px solid #d1d5db!important;border-radius:8px!important;padding:6px!important;height:54px!important;vertical-align:top!important;white-space:normal!important;overflow:hidden!important}
+#gioDashboardAgenda .gvDate{background:#111827!important;color:#fff!important;text-align:center!important;font-weight:900!important;font-size:14px!important;vertical-align:middle!important}
+#gioDashboardAgenda tr.today .gvDate{background:#f4c400!important;color:#111!important}
+#gioDashboardAgenda td.gvActiveDay{background:#fff8cf!important;border-color:#f4c400!important}
+#gioDashboardAgenda .gvEvent{display:block!important;background:#172033!important;color:#fff!important;border-left:4px solid #f4c400!important;border-radius:7px!important;padding:6px!important;margin:2px 0!important;font-size:10px!important;line-height:1.25!important;font-weight:800!important;overflow-wrap:anywhere!important}
+#gioDashboardAgenda .gvEvent *{color:#fff!important}
+#gioDashboardAgenda .gvEvent.done{background:#166534!important}
+#gioDashboardAgenda .gvEvent.late{background:#991b1b!important}
+#gioDashboardAgenda .gvEmpty{color:#9ca3af!important;font-size:9px!important;text-align:center!important;padding-top:8px!important}
+#gioDashboardAgenda .gvWeekList{display:grid!important;grid-template-columns:100px 1fr!important;gap:6px!important;min-width:760px!important}
+#gioDashboardAgenda .gvWeekDate{background:#f4c400!important;color:#111!important;border-radius:8px!important;padding:10px!important;font-weight:900!important;text-align:center!important}
+#gioDashboardAgenda .gvWeekEvents{background:#f8fafc!important;border:1px solid #d1d5db!important;border-radius:8px!important;padding:6px!important;min-height:50px!important}
+@media(max-width:800px){
+ #gioDashboardAgenda .gvTable{min-width:950px!important}
+ #gioDashboardAgenda .gvWeekList{min-width:700px!important}
+}
