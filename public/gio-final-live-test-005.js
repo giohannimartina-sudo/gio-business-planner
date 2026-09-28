@@ -5,14 +5,19 @@ const eur=v=>new Intl.NumberFormat('nl-NL',{style:'currency',currency:'EUR'}).fo
 function calc(lines){let ex=0,tax=0;(lines||[]).forEach(l=>{const b=(+l.aantal||0)*(+l.prijs||0);ex+=b;tax+=b*(+l.btw||0)/100});return{ex,tax,total:ex+tax}}
 function T(name,ok,detail){return{name,ok:!!ok,detail}}
 function integrity(){
- if(!window.data)return['Data-object ontbreekt'];
- const issues=[],projects=new Set((data.projecten||[]).map(p=>p.naam||p.project||p.titel).filter(Boolean)),clients=new Set((data.klanten||[]).map(k=>k.naam||k.name).filter(Boolean));
- (data.uren||[]).forEach((x,i)=>{const p=x.project||x.projectNaam;if(p&&!projects.has(p))issues.push(`Uren ${i+1}: project ontbreekt (${p})`)});
- (data.materiaal||[]).forEach((x,i)=>{const p=x.project||x.projectNaam;if(p&&!projects.has(p))issues.push(`Materiaal ${i+1}: project ontbreekt (${p})`)});
- (data.offertes||[]).forEach((x,i)=>{if(x.klant&&!clients.has(x.klant))issues.push(`Offerte ${x.nummer||i+1}: klant ontbreekt`);if(x.project&&!projects.has(x.project))issues.push(`Offerte ${x.nummer||i+1}: project ontbreekt`)});
- (data.facturen||[]).forEach((x,i)=>{if(x.klant&&!clients.has(x.klant))issues.push(`Factuur ${x.nummer||i+1}: klant ontbreekt`);if(x.project&&!projects.has(x.project))issues.push(`Factuur ${x.nummer||i+1}: project ontbreekt`)});
- (data.klantBetalingen||[]).forEach((x,i)=>{if(x.factuurId&&!(data.facturen||[]).some(f=>String(f.id)===String(x.factuurId)))issues.push(`Betaling ${i+1}: factuur ontbreekt`);if(x.project&&!projects.has(x.project))issues.push(`Betaling ${i+1}: project ontbreekt`)});
- (data.ritten||[]).forEach((x,i)=>{if(x.project&&!projects.has(x.project))issues.push(`Rit ${i+1}: project ontbreekt`)});
+ let d=null;
+ try{
+  const raw=localStorage.getItem('gioTestBetaald')||localStorage.getItem('gioBusinessPlannerData');
+  if(raw)d=JSON.parse(raw);
+ }catch(e){}
+ if(!d||typeof d!=='object')return['PRO-opslag kon niet worden gelezen'];
+ const issues=[],projects=new Set((d.projecten||[]).map(p=>p.naam||p.project||p.titel).filter(Boolean)),clients=new Set((d.klanten||[]).map(k=>k.naam||k.name).filter(Boolean));
+ (d.uren||[]).forEach((x,i)=>{const p=x.project||x.projectNaam;if(p&&!projects.has(p))issues.push(`Uren ${i+1}: project ontbreekt (${p})`)});
+ (d.materiaal||[]).forEach((x,i)=>{const p=x.project||x.projectNaam;if(p&&!projects.has(p))issues.push(`Materiaal ${i+1}: project ontbreekt (${p})`)});
+ (d.offertes||[]).forEach((x,i)=>{if(x.klant&&!clients.has(x.klant))issues.push(`Offerte ${x.nummer||x.nr||i+1}: klant ontbreekt`);if(x.project&&!projects.has(x.project))issues.push(`Offerte ${x.nummer||x.nr||i+1}: project ontbreekt`)});
+ (d.facturen||[]).forEach((x,i)=>{if(x.klant&&!clients.has(x.klant))issues.push(`Factuur ${x.nummer||x.factuurnummer||i+1}: klant ontbreekt`);if(x.project&&!projects.has(x.project))issues.push(`Factuur ${x.nummer||x.factuurnummer||i+1}: project ontbreekt`)});
+ (d.klantBetalingen||[]).forEach((x,i)=>{if(x.factuurId&&!(d.facturen||[]).some(f=>String(f.id)===String(x.factuurId)))issues.push(`Betaling ${i+1}: factuur ontbreekt`);if(x.project&&!projects.has(x.project))issues.push(`Betaling ${i+1}: project ontbreekt`)});
+ (d.ritten||d.kmRegistraties||[]).forEach((x,i)=>{if(x.project&&!projects.has(x.project))issues.push(`Rit ${i+1}: project ontbreekt`)});
  return issues;
 }
 async function run(){
