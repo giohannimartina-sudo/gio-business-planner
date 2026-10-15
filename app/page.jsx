@@ -22,7 +22,7 @@ export default function Home() {
 
     const trips = doc.createElement('script');
     trips.id = 'gio-trips-js';
-    trips.src = '/gio-trips-pro.js?v=032';
+    trips.src = '/gio-trips-pro.js?v=034';
     trips.defer = true;
     doc.body.appendChild(trips);
 
@@ -250,24 +250,6 @@ export default function Home() {
       finalTest.src = '/gio-final-live-test-005.js?v=005';
       doc.body.appendChild(finalTest);
     }, 7600);
-
-    // Veilige compatibiliteitsimport voor bestaande/live MASTER-backups
-    window.setTimeout(() => {
-      if (doc.getElementById('gio-safe-master-import-007-js')) return;
-      const safeImport = doc.createElement('script');
-      safeImport.id = 'gio-safe-master-import-007-js';
-      safeImport.src = '/gio-safe-master-import-007.js?v=007';
-      doc.body.appendChild(safeImport);
-    }, 8100);
-
-    // Definitieve reparatie Stabiliteit & Back-up PRO
-    window.setTimeout(() => {
-      if (doc.getElementById('gio-backup-fix-008-js')) return;
-      const backupFix = doc.createElement('script');
-      backupFix.id = 'gio-backup-fix-008-js';
-      backupFix.src = '/gio-backup-fix-008.js?v=008';
-      doc.body.appendChild(backupFix);
-    }, 8600);
   }, []);
 
   return (
