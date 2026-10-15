@@ -31,7 +31,28 @@ function fill(){const c=(data.klanten||[]).map(x=>x.naam||'').filter(Boolean),p=
 function active(){const r=data.activeRit;$('ritActief').innerHTML=r?`<div class="gioTripActive"><b>🟢 Rit actief</b><br>${esc(r.voertuig)} • ${esc(r.soort)} • ${r.beginstand} km</div>`:''}
 window.gioRitStart=()=>{ensure();const v=$('ritVoertuig').value.trim(),b=+$('ritBegin').value||0;if(!v||!b){alert('Vul voertuig en beginstand in');return}const l=lastOdo(v);if(l&&l!==b&&!confirm(`Laatste eindstand was ${l}. Toch doorgaan?`))return;data.activeRit={id:String(Date.now()),voertuig:v,soort:$('ritSoort').value,datum:$('ritDatum').value||today(),starttijd:now(),beginstand:b,van:$('ritVan').value,naar:$('ritNaar').value,klant:$('ritKlant').value,project:$('ritProject').value,doel:$('ritDoel').value,tarief:+$('ritTarief').value||0,historie:[{tijd:new Date().toISOString(),actie:'Gestart'}]};save();active()}
 function saveRit(r){if(!data.ritten.some(x=>String(x.id)===String(r.id)))data.ritten.unshift(r);if(r.soort==='Zakelijk'&&r.km>0){const id='rit:'+r.id;const x={id,ritId:r.id,bron:'rittenregistratie',datum:r.datum,klant:r.klant||'',project:r.project||'',van:r.van||'',naar:r.naar||'',km:r.km,tarief:r.tarief||0,bedrag:r.km*(r.tarief||0),omschrijving:r.doel||'KM-vergoeding'};const i=data.kmRegistraties.findIndex(v=>String(v.id)===id);if(i<0)data.kmRegistraties.push(x);else data.kmRegistraties[i]=x}}
-window.gioRitStop=()=>{ensure();const r=data.activeRit;if(!r)return alert('Geen actieve rit');const raw=$('ritEind').value.trim();if(!raw)return alert('Vul de eindstand in');const e=Number(raw.replace(',','.'));if(!Number.isFinite(e)||e<Number(r.beginstand))return alert('Ongeldige eindstand');const done={...r,eindstand:e,eindtijd:$('ritEindtijd').value||now(),km:e-Number(r.beginstand),tarief:Number($('ritTarief').value)||r.tarief||0,afwijking:$('ritAfwijking').value,priveOmweg:Number($('ritPriveOmweg').value)||0,historie:[...(r.historie||[]),{tijd:new Date().toISOString(),actie:'KM UIT'}]};saveRit(done);data.activeRit=null;save();$('ritEind').value='';active();gioRenderRitten()};
+window.gioRitStop=()=>{
+  if(!ensure())return alert('KM-gegevens zijn niet geladen.');
+  const r=data.activeRit;
+  if(!r)return alert('Geen actieve rit.');
+  const raw=String($('ritEind')?.value??'').trim().replace(',','.');
+  const e=Number(raw),begin=Number(String(r.beginstand).replace(',','.'));
+  if(!raw||!Number.isFinite(e)||!Number.isFinite(begin)||e<begin)return alert('Vul een geldige eindstand in.');
+  const rate=Number(String($('ritTarief')?.value||r.tarief||'0.23').replace(',','.'));
+  const done={...r,eindstand:e,eindtijd:$('ritEindtijd')?.value||now(),km:Math.round((e-begin)*10)/10,tarief:Number.isFinite(rate)?rate:0.23,afwijking:$('ritAfwijking')?.value||'',priveOmweg:Number($('ritPriveOmweg')?.value)||0,historie:[...(r.historie||[]),{tijd:new Date().toISOString(),actie:'KM UIT'}]};
+  try{
+    saveRit(done);
+    data.activeRit=null;
+    save();
+    active();
+    gioRenderRitten();
+    if($('ritEind'))$('ritEind').value='';
+    alert('Rit opgeslagen: '+done.km.toFixed(1)+' km, € '+(done.km*done.tarief).toFixed(2));
+  }catch(err){
+    console.error('GIO KM UIT opslaan mislukt',err);
+    alert('KM UIT kon niet worden opgeslagen: '+(err?.message||String(err))+' — maak eerst een backup.');
+  }
+};
 window.gioRitReset=()=>{if(!data.activeRit)return alert('Geen actieve rit');if(!confirm('Actieve rit resetten zonder nieuwe registratie?'))return;data.activeRit=null;save();active()};
 window.gioRitHandmatig=()=>{ensure();const b=$('manBegin').value.trim(),e=$('manEind').value.trim();let km=Number($('manKm').value);if(!km&&b&&e)km=Number(e)-Number(b);if(!Number.isFinite(km)||km<=0)return alert('Vul een geldig aantal kilometers in');const r={id:'M'+Date.now(),handmatig:true,datum:$('manDatum').value||today(),voertuig:$('manVoertuig').value||'Niet ingevuld',soort:$('manSoort').value,beginstand:b||'',eindstand:e||'',km,tarief:Number($('manTarief').value)||0,van:$('manVan').value,naar:$('manNaar').value,klant:$('manKlant').value,project:$('manProject').value,doel:$('manDoel').value,historie:[{tijd:new Date().toISOString(),actie:'Handmatig'}]};saveRit(r);save();gioRenderRitten();alert('Handmatige rit opgeslagen')};
 
