@@ -3,7 +3,7 @@
 'use strict';
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function ensure(){if(!window.data)return false;if(!Array.isArray(data.ritten))data.ritten=[];if(!Array.isArray(data.kmRegistraties))data.kmRegistraties=[];if(!data.activeRit)data.activeRit=null;return true}
+function ensure(){if(typeof data === "undefined" || !data)return false;if(!Array.isArray(data.ritten))data.ritten=[];if(!Array.isArray(data.kmRegistraties))data.kmRegistraties=[];if(!data.activeRit)data.activeRit=null;return true}
 function today(){return new Date().toISOString().slice(0,10)}
 function now(){return new Date().toTimeString().slice(0,5)}
 function lastOdo(v){const a=(data.ritten||[]).filter(r=>r.voertuig===v).sort((x,y)=>(x.datum+x.eindtijd).localeCompare(y.datum+y.eindtijd));return a.length?+a[a.length-1].eindstand||0:0}

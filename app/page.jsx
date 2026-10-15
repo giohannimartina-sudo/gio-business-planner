@@ -22,7 +22,7 @@ export default function Home() {
 
     const trips = doc.createElement('script');
     trips.id = 'gio-trips-js';
-    trips.src = '/gio-trips-pro.js?v=035';
+    trips.src = '/gio-trips-pro.js?v=036';
     trips.defer = true;
     doc.body.appendChild(trips);
 
